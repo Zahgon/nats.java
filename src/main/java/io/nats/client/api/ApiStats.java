@@ -10,12 +10,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.support.JsonValue;
 import io.nats.client.support.JsonValueUtils;
-
 import static io.nats.client.support.ApiConstants.*;
 
 /**
@@ -24,8 +22,11 @@ import static io.nats.client.support.ApiConstants.*;
 public class ApiStats {
 
     private final int level;
+
     private final long total;
+
     private final long errors;
+
     private final long inFlight;
 
     ApiStats(JsonValue vApiStats) {
@@ -40,7 +41,7 @@ public class ApiStats {
      * @return the level
      */
     public int getLevel() {
-        return level;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -48,7 +49,7 @@ public class ApiStats {
      * @return the total requests
      */
     public long getTotalApiRequests() {
-        return total;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -56,7 +57,7 @@ public class ApiStats {
      * @return the error count
      */
     public long getErrorCount() {
-        return errors;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -64,7 +65,7 @@ public class ApiStats {
      * @return inflight API requests
      */
     public long getInFlight() {
-        return inFlight;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -74,7 +75,7 @@ public class ApiStats {
      */
     @Deprecated
     public int getTotal() {
-        return (int)total;
+        return (int) total;
     }
 
     /**
@@ -84,6 +85,6 @@ public class ApiStats {
      */
     @Deprecated
     public int getErrors() {
-        return (int)errors;
+        return (int) errors;
     }
 }

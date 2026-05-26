@@ -22,12 +22,17 @@ import java.util.Base64;
  * This is a utility class for making digesting data.
  */
 public class Digester {
+
     public static final String DEFAULT_DIGEST_ALGORITHM = "SHA-256";
+
     public static final Charset DEFAULT_STRING_ENCODING = StandardCharsets.UTF_8;
 
     private final Charset stringCharset;
+
     private final Base64.Encoder encoder;
+
     private final MessageDigest digest;
+
     private String digestValue;
 
     public Digester() throws NoSuchAlgorithmException {
@@ -45,62 +50,46 @@ public class Digester {
     public Digester(String digestAlgorithm, Charset stringCharset, Base64.Encoder encoder) throws NoSuchAlgorithmException {
         this.stringCharset = stringCharset == null ? DEFAULT_STRING_ENCODING : stringCharset;
         this.encoder = encoder == null ? Base64.getUrlEncoder() : encoder;
-        this.digest = MessageDigest.getInstance(
-            digestAlgorithm == null ? DEFAULT_DIGEST_ALGORITHM : digestAlgorithm);
+        this.digest = MessageDigest.getInstance(digestAlgorithm == null ? DEFAULT_DIGEST_ALGORITHM : digestAlgorithm);
     }
 
     public Digester update(String input) {
-        digest.update(input.getBytes(stringCharset));
-        digestValue = null;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public Digester update(byte[] input) {
-        digest.update(input);
-        digestValue = null;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public Digester update(byte[] input, int offset, int len) {
-        digest.update(input, offset, len);
-        digestValue = null;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public Digester reset() {
-        digest.reset();
-        digestValue = null;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public Digester reset(String input) {
-        return reset().update(input);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public Digester reset(byte[] input) {
-        return reset().update(input);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public Digester reset(byte[] input, int offset, int len) {
-        return reset().update(input, offset, len);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public String getDigestValue() {
-        if (digestValue == null) {
-            digestValue = encoder.encodeToString(digest.digest());
-        }
-        return digestValue;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public String getDigestEntry() {
-        return digest.getAlgorithm() + "=" + getDigestValue();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public boolean matches(String digestEntry) {
-        String algo = digest.getAlgorithm().toUpperCase();
-        if (!digestEntry.toUpperCase().startsWith(algo)) {
-            return false;
-        }
-        return getDigestValue().equals(digestEntry.substring(algo.length() + 1)); // + 1 for equals
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

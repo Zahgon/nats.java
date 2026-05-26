@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import io.nats.client.*;
@@ -18,17 +17,17 @@ import io.nats.client.api.*;
 import io.nats.client.api.Error;
 import io.nats.client.support.JsonUtils;
 import io.nats.client.support.Validator;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
 import java.util.List;
-
 import static io.nats.client.support.Validator.validateNotNull;
 import static io.nats.client.support.Validator.validateStreamName;
 
 public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStreamManagement {
-    private NatsJetStream js; // this is lazy init'ed
+
+    // this is lazy init'ed
+    private NatsJetStream js;
 
     public NatsJetStreamManagement(NatsConnection connection, JetStreamOptions jsOptions) throws IOException {
         super(connection, jsOptions);
@@ -39,8 +38,7 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
      */
     @Override
     public AccountStatistics getAccountStatistics() throws IOException, JetStreamApiException {
-        Message resp = makeRequestResponseRequired(JSAPI_ACCOUNT_INFO, null, getTimeout());
-        return new AccountStatistics(resp).throwOnHasError();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -48,7 +46,7 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
      */
     @Override
     public StreamInfo addStream(StreamConfiguration config) throws IOException, JetStreamApiException {
-        return addOrUpdateStream(config, JSAPI_STREAM_CREATE);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -56,7 +54,7 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
      */
     @Override
     public StreamInfo updateStream(StreamConfiguration config) throws IOException, JetStreamApiException {
-        return addOrUpdateStream(config, JSAPI_STREAM_UPDATE);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private StreamInfo addOrUpdateStream(StreamConfiguration config, String template) throws IOException, JetStreamApiException {
@@ -72,10 +70,7 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
      */
     @Override
     public boolean deleteStream(String streamName) throws IOException, JetStreamApiException {
-        validateNotNull(streamName, "Stream Name");
-        String subj = String.format(JSAPI_STREAM_DELETE, streamName);
-        Message resp = makeRequestResponseRequired(subj, null, getTimeout());
-        return new SuccessApiResponse(resp).throwOnHasError().getSuccess();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -83,8 +78,7 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
      */
     @Override
     public StreamInfo getStreamInfo(String streamName) throws IOException, JetStreamApiException {
-        validateNotNull(streamName, "Stream Name");
-        return _getStreamInfo(streamName, null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -92,8 +86,7 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
      */
     @Override
     public StreamInfo getStreamInfo(String streamName, StreamInfoOptions options) throws IOException, JetStreamApiException {
-        validateNotNull(streamName, "Stream Name");
-        return _getStreamInfo(streamName, options);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -101,10 +94,7 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
      */
     @Override
     public PurgeResponse purgeStream(String streamName) throws IOException, JetStreamApiException {
-        validateNotNull(streamName, "Stream Name");
-        String subj = String.format(JSAPI_STREAM_PURGE, streamName);
-        Message resp = makeRequestResponseRequired(subj, null, getTimeout());
-        return new PurgeResponse(resp).throwOnHasError();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -112,12 +102,7 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
      */
     @Override
     public PurgeResponse purgeStream(String streamName, PurgeOptions options) throws IOException, JetStreamApiException {
-        validateNotNull(streamName, "Stream Name");
-        validateNotNull(options, "Purge Options");
-        String subj = String.format(JSAPI_STREAM_PURGE, streamName);
-        byte[] body = options.toJson().getBytes(StandardCharsets.UTF_8);
-        Message resp = makeRequestResponseRequired(subj, body, getTimeout());
-        return new PurgeResponse(resp).throwOnHasError();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -125,9 +110,7 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
      */
     @Override
     public ConsumerInfo addOrUpdateConsumer(String streamName, ConsumerConfiguration config) throws IOException, JetStreamApiException {
-        validateStreamName(streamName, true);
-        validateNotNull(config, "Config");
-        return _createConsumer(streamName, config, ConsumerCreateRequest.Action.CreateOrUpdate);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -135,9 +118,7 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
      */
     @Override
     public ConsumerInfo createConsumer(String streamName, ConsumerConfiguration config) throws IOException, JetStreamApiException {
-        validateStreamName(streamName, true);
-        validateNotNull(config, "Config");
-        return _createConsumer(streamName, config, ConsumerCreateRequest.Action.Create);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -145,9 +126,7 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
      */
     @Override
     public ConsumerInfo updateConsumer(String streamName, ConsumerConfiguration config) throws IOException, JetStreamApiException {
-        validateStreamName(streamName, true);
-        validateNotNull(config, "Config");
-        return _createConsumer(streamName, config, ConsumerCreateRequest.Action.Update);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -155,11 +134,7 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
      */
     @Override
     public boolean deleteConsumer(String streamName, String consumerName) throws IOException, JetStreamApiException {
-        validateNotNull(streamName, "Stream Name");
-        validateNotNull(consumerName, "Consumer Name");
-        String subj = String.format(JSAPI_CONSUMER_DELETE, streamName, consumerName);
-        Message resp = makeRequestResponseRequired(subj, null, getTimeout());
-        return new SuccessApiResponse(resp).throwOnHasError().getSuccess();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -167,12 +142,7 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
      */
     @Override
     public ConsumerPauseResponse pauseConsumer(String streamName, String consumerName, ZonedDateTime pauseUntil) throws IOException, JetStreamApiException {
-        validateNotNull(streamName, "Stream Name");
-        validateNotNull(consumerName, "Consumer Name");
-        String subj = String.format(JSAPI_CONSUMER_PAUSE, streamName, consumerName);
-        ConsumerPauseRequest pauseRequest = new ConsumerPauseRequest(pauseUntil);
-        Message resp = makeRequestResponseRequired(subj, pauseRequest.serialize(), getTimeout());
-        return new ConsumerPauseResponse(resp).throwOnHasError();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -180,12 +150,7 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
      */
     @Override
     public boolean resumeConsumer(String streamName, String consumerName) throws IOException, JetStreamApiException {
-        validateNotNull(streamName, "Stream Name");
-        validateNotNull(consumerName, "Consumer Name");
-        String subj = String.format(JSAPI_CONSUMER_PAUSE, streamName, consumerName);
-        Message resp = makeRequestResponseRequired(subj, null, getTimeout());
-        ConsumerPauseResponse response = new ConsumerPauseResponse(resp).throwOnHasError();
-        return !response.isPaused();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -193,7 +158,7 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
      */
     @Override
     public ConsumerInfo getConsumerInfo(String streamName, String consumerName) throws IOException, JetStreamApiException {
-        return super._getConsumerInfo(streamName, consumerName);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -201,7 +166,7 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
      */
     @Override
     public List<String> getConsumerNames(String streamName) throws IOException, JetStreamApiException {
-        return getConsumerNames(streamName, null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     // TODO FUTURE resurface this api publicly when server supports
@@ -221,13 +186,7 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
      */
     @Override
     public List<ConsumerInfo> getConsumers(String streamName) throws IOException, JetStreamApiException {
-        String subj = String.format(JSAPI_CONSUMER_LIST, streamName);
-        ConsumerListReader clg = new ConsumerListReader();
-        while (clg.hasMore()) {
-            Message resp = makeRequestResponseRequired(subj, clg.nextJson(), getTimeout());
-            clg.process(resp);
-        }
-        return clg.getConsumers();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -235,7 +194,7 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
      */
     @Override
     public List<String> getStreamNames() throws IOException, JetStreamApiException {
-        return _getStreamNames(null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -243,7 +202,7 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
      */
     @Override
     public List<String> getStreamNames(String subjectFilter) throws IOException, JetStreamApiException {
-        return _getStreamNames(subjectFilter);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -251,17 +210,12 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
      */
     @Override
     public List<StreamInfo> getStreams() throws IOException, JetStreamApiException {
-        return getStreams(null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public List<StreamInfo> getStreams(String subjectFilter) throws IOException, JetStreamApiException {
-        StreamListReader slr = new StreamListReader();
-        while (slr.hasMore()) {
-            Message resp = makeRequestResponseRequired(JSAPI_STREAM_LIST, slr.nextJson(subjectFilter), getTimeout());
-            slr.process(resp);
-        }
-        return cacheStreamInfo(slr.getStreams());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -269,12 +223,12 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
      */
     @Override
     public MessageInfo getMessage(String streamName, long seq) throws IOException, JetStreamApiException {
-        return _getMessage(streamName, MessageGetRequest.forSequence(seq));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public MessageInfo getMessage(String streamName, MessageGetRequest messageGetRequest) throws IOException, JetStreamApiException {
-        return _getMessage(streamName, messageGetRequest);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -282,7 +236,7 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
      */
     @Override
     public MessageInfo getLastMessage(String streamName, String subject) throws IOException, JetStreamApiException {
-        return _getMessage(streamName, MessageGetRequest.lastForSubject(subject));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -290,7 +244,7 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
      */
     @Override
     public MessageInfo getFirstMessage(String streamName, String subject) throws IOException, JetStreamApiException {
-        return _getMessage(streamName, MessageGetRequest.firstForSubject(subject));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -298,7 +252,7 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
      */
     @Override
     public MessageInfo getFirstMessage(String streamName, ZonedDateTime startTime) throws IOException, JetStreamApiException {
-        return _getMessage(streamName, MessageGetRequest.firstForStartTime(startTime));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -306,7 +260,7 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
      */
     @Override
     public MessageInfo getFirstMessage(String streamName, ZonedDateTime startTime, String subject) throws IOException, JetStreamApiException {
-        return _getMessage(streamName, MessageGetRequest.firstForStartTimeAndSubject(startTime, subject));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -314,7 +268,7 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
      */
     @Override
     public MessageInfo getNextMessage(String streamName, long seq, String subject) throws IOException, JetStreamApiException {
-        return _getMessage(streamName, MessageGetRequest.nextForSubject(seq, subject));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private MessageInfo _getMessage(String streamName, MessageGetRequest messageGetRequest) throws IOException, JetStreamApiException {
@@ -326,8 +280,7 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
             if (messageGetRequest.isLastBySubject()) {
                 subject = String.format(JSAPI_DIRECT_GET_LAST, streamName, messageGetRequest.getLastBySubject());
                 payload = null;
-            }
-            else{
+            } else {
                 subject = String.format(JSAPI_DIRECT_GET, streamName);
                 payload = messageGetRequest.serialize();
             }
@@ -336,8 +289,7 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
                 throw new JetStreamApiException(Error.convert(resp.getStatus()));
             }
             return new MessageInfo(resp, streamName, true);
-        }
-        else {
+        } else {
             String getSubject = String.format(JSAPI_MSG_GET, streamName);
             Message resp = makeRequestResponseRequired(getSubject, messageGetRequest.serialize(), getTimeout());
             return new MessageInfo(resp, streamName, false).throwOnHasError();
@@ -349,7 +301,7 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
      */
     @Override
     public boolean deleteMessage(String streamName, long seq) throws IOException, JetStreamApiException {
-        return deleteMessage(streamName, seq, true);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -357,11 +309,7 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
      */
     @Override
     public boolean deleteMessage(String streamName, long seq, boolean erase) throws IOException, JetStreamApiException {
-        validateNotNull(streamName, "Stream Name");
-        String subj = String.format(JSAPI_MSG_DELETE, streamName);
-        MessageDeleteRequest mdr = new MessageDeleteRequest(seq, erase);
-        Message resp = makeRequestResponseRequired(subj, mdr.serialize(), getTimeout());
-        return new SuccessApiResponse(resp).throwOnHasError().getSuccess();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -369,13 +317,7 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
      */
     @Override
     public boolean unpinConsumer(String streamName, String consumerName, String consumerGroup) throws IOException, JetStreamApiException {
-        validateNotNull(streamName, "Stream Name");
-        validateNotNull(consumerName, "Consumer Name");
-        validateNotNull(consumerGroup, "Consumer Group");
-        String subj = String.format(JSAPI_CONSUMER_UNPIN, streamName, consumerName);
-        byte[] payload = String.format("{\"group\":\"%s\"}", consumerGroup).getBytes();
-        Message resp = makeRequestResponseRequired(subj, payload, getTimeout());
-        return new SuccessApiResponse(resp).throwOnHasError().getSuccess();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -383,7 +325,7 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
      */
     @Override
     public ConsumerInfo resetConsumer(String streamName, String consumerName) throws IOException, JetStreamApiException {
-        return resetConsumer(streamName, consumerName, -1);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -391,12 +333,7 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
      */
     @Override
     public ConsumerInfo resetConsumer(String streamName, String consumerName, long sequence) throws IOException, JetStreamApiException {
-        validateNotNull(streamName, "Stream Name");
-        validateNotNull(consumerName, "Consumer Name");
-        String subj = String.format(JSAPI_CONSUMER_RESET, streamName, consumerName);
-        byte[] payload = (sequence < 1 ? JsonUtils.EMPTY_JSON : String.format("{\"seq\":%d}", sequence)).getBytes(StandardCharsets.ISO_8859_1);
-        Message resp = makeRequestResponseRequired(subj, payload, getTimeout());
-        return new ConsumerInfo(resp).throwOnHasError();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -404,31 +341,26 @@ public class NatsJetStreamManagement extends NatsJetStreamImpl implements JetStr
      */
     @Override
     public JetStream jetStream() {
-        if (js == null) {
-            js = new NatsJetStream(this);
-        }
-        return js;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public KeyValue keyValue(String bucketName) throws IOException {
-        Validator.validateBucketName(bucketName, true);
-        return new NatsKeyValue(bucketName, null, null, this);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public KeyValueManagement keyValueManagement() throws IOException {
-        return new NatsKeyValueManagement(null, null, this);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public ObjectStore objectStore(String bucketName) throws IOException {
-        Validator.validateBucketName(bucketName, true);
-        return new NatsObjectStore(bucketName, null, null, this);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public ObjectStoreManagement objectStoreManagement() throws IOException {
-        return new NatsObjectStoreManagement(null, null, this);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

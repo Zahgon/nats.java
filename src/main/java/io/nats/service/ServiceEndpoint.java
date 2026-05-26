@@ -10,16 +10,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.service;
 
 import io.nats.client.Dispatcher;
 import io.nats.client.support.JsonValue;
 import io.nats.client.support.Validator;
-
 import java.util.Map;
 import java.util.function.Supplier;
-
 import static io.nats.client.support.NatsConstants.DOT;
 
 /**
@@ -35,10 +32,15 @@ import static io.nats.client.support.NatsConstants.DOT;
  * </p>
  */
 public class ServiceEndpoint {
+
     private final Group group;
+
     private final Endpoint endpoint;
+
     private final ServiceMessageHandler handler;
+
     private final Dispatcher dispatcher;
+
     private final Supplier<JsonValue> statsDataSupplier;
 
     private ServiceEndpoint(Builder b, Endpoint endpoint) {
@@ -63,7 +65,7 @@ public class ServiceEndpoint {
      * @return the endpoint name
      */
     public String getName() {
-        return endpoint.getName();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -71,7 +73,7 @@ public class ServiceEndpoint {
      * @return the endpoint subject
      */
     public String getSubject() {
-        return group == null ? endpoint.getSubject() : group.getSubject() + DOT + endpoint.getSubject();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -79,7 +81,7 @@ public class ServiceEndpoint {
      * @return the queueGroup
      */
     public String getQueueGroup() {
-        return endpoint.getQueueGroup();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -87,7 +89,7 @@ public class ServiceEndpoint {
      * @return the group name or null if there is no group
      */
     public String getGroupName() {
-        return group == null ? null : group.getName();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -95,27 +97,27 @@ public class ServiceEndpoint {
      * @return the copy of endpoint metadata
      */
     public Map<String, String> getMetadata() {
-        return endpoint.getMetadata();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected Group getGroup() {
-        return group;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected Endpoint getEndpoint() {
-        return endpoint;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected ServiceMessageHandler getHandler() {
-        return handler;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected Dispatcher getDispatcher() {
-        return dispatcher;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected Supplier<JsonValue> getStatsDataSupplier() {
-        return statsDataSupplier;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -123,23 +125,29 @@ public class ServiceEndpoint {
      * @return the instance
      */
     public static Builder builder() {
-        return new Builder();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Build an ServiceEndpoint using a fluent builder.
      */
     public static class Builder {
+
         private Group group;
+
         private ServiceMessageHandler handler;
+
         private Dispatcher dispatcher;
+
         private Supplier<JsonValue> statsDataSupplier;
+
         private Endpoint.Builder endpointBuilder = Endpoint.builder();
 
         /**
          * Construct an instance of the builder
          */
-        public Builder() {}
+        public Builder() {
+        }
 
         /**
          * Set the {@link Group} for this ServiceEndpoint
@@ -147,8 +155,7 @@ public class ServiceEndpoint {
          * @return the ServiceEndpoint.Builder
          */
         public Builder group(Group group) {
-            this.group = group;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -158,8 +165,7 @@ public class ServiceEndpoint {
          * @return the ServiceEndpoint.Builder
          */
         public Builder endpoint(Endpoint endpoint) {
-            endpointBuilder = Endpoint.builder().endpoint(endpoint);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -168,8 +174,7 @@ public class ServiceEndpoint {
          * @return the ServiceEndpoint.Builder
          */
         public Builder endpointName(String name) {
-            endpointBuilder.name(name);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -178,8 +183,7 @@ public class ServiceEndpoint {
          * @return the ServiceEndpoint.Builder
          */
         public Builder endpointSubject(String subject) {
-            endpointBuilder.subject(subject);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -188,8 +192,7 @@ public class ServiceEndpoint {
          * @return the ServiceEndpoint.Builder
          */
         public Builder endpointQueueGroup(String queueGroup) {
-            endpointBuilder.queueGroup(queueGroup);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -198,8 +201,7 @@ public class ServiceEndpoint {
          * @return the ServiceEndpoint.Builder
          */
         public Builder endpointMetadata(Map<String, String> metadata) {
-            endpointBuilder.metadata(metadata);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -208,8 +210,7 @@ public class ServiceEndpoint {
          * @return the ServiceEndpoint.Builder
          */
         public Builder handler(ServiceMessageHandler handler) {
-            this.handler = handler;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -218,8 +219,7 @@ public class ServiceEndpoint {
          * @return the ServiceEndpoint.Builder
          */
         public Builder dispatcher(Dispatcher dispatcher) {
-            this.dispatcher = dispatcher;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -228,8 +228,7 @@ public class ServiceEndpoint {
          * @return the ServiceEndpoint.Builder
          */
         public Builder statsDataSupplier(Supplier<JsonValue> statsDataSupplier) {
-            this.statsDataSupplier = statsDataSupplier;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -237,9 +236,7 @@ public class ServiceEndpoint {
          * @return the ServiceEndpoint instance
          */
         public ServiceEndpoint build() {
-            Endpoint endpoint = endpointBuilder.build();
-            Validator.required(handler, "Message Handler");
-            return new ServiceEndpoint(this, endpoint);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

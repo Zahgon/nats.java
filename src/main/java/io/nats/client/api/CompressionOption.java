@@ -10,11 +10,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import org.jspecify.annotations.Nullable;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,11 +20,11 @@ import java.util.Map;
  * Stream compression policies.
  */
 public enum CompressionOption {
+
     /**
      * No compress
      */
     None("none"),
-
     /**
      * S2 compression
      */
@@ -40,7 +38,7 @@ public enum CompressionOption {
 
     @Override
     public String toString() {
-        return policy;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private static final Map<String, CompressionOption> strEnumHash = new HashMap<>();
@@ -58,6 +56,6 @@ public enum CompressionOption {
      */
     @Nullable
     public static CompressionOption get(String value) {
-        return strEnumHash.get(value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

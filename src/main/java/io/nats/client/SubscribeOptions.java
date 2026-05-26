@@ -10,14 +10,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client;
 
 import io.nats.client.api.AckPolicy;
 import io.nats.client.api.ConsumerConfiguration;
-
 import java.time.Duration;
-
 import static io.nats.client.support.NatsJetStreamClientError.*;
 import static io.nats.client.support.Validator.*;
 
@@ -25,70 +22,63 @@ import static io.nats.client.support.Validator.*;
  * The SubscribeOptions is the base class for PushSubscribeOptions and PullSubscribeOptions
  */
 public abstract class SubscribeOptions {
+
     /**
      * Constant for the default ordered heartbeat time in milliseconds
      */
     public static final long DEFAULT_ORDERED_HEARTBEAT = 5000;
 
     protected final String stream;
+
     protected final boolean pull;
+
     protected final boolean bind;
+
     protected final boolean fastBind;
+
     protected final boolean ordered;
+
     protected final long messageAlarmTime;
+
     protected final ConsumerConfiguration consumerConfig;
-    protected final long pendingMessageLimit; // Only applicable for non-dispatched (sync) push consumers.
-    protected final long pendingByteLimit; // Only applicable for non-dispatched (sync) push consumers.
+
+    // Only applicable for non-dispatched (sync) push consumers.
+    protected final long pendingMessageLimit;
+
+    // Only applicable for non-dispatched (sync) push consumers.
+    protected final long pendingByteLimit;
+
     protected final String name;
 
-    protected SubscribeOptions(Builder<?, ?> builder, boolean isPull,
-                               String deliverSubject, String deliverGroup,
-                               long pendingMessageLimit, long pendingByteLimit) {
-
+    protected SubscribeOptions(Builder<?, ?> builder, boolean isPull, String deliverSubject, String deliverGroup, long pendingMessageLimit, long pendingByteLimit) {
         pull = isPull;
         fastBind = builder.fastBind;
         bind = fastBind || builder.bind;
         ordered = builder.ordered;
         messageAlarmTime = builder.messageAlarmTime;
-
         if (ordered && bind) {
             throw JsSoOrderedNotAllowedWithBind.instance();
         }
-
-        stream = validateStreamName(builder.stream, bind); // required when bind mode
-
+        // required when bind mode
+        stream = validateStreamName(builder.stream, bind);
         // read the consumer names and do basic validation
         // A1. validate name input
-        String ccName = validateMustMatchIfBothSupplied(
-            builder.name,
-            builder.cc == null ? null : builder.cc.getName(),
-            JsSoNameMismatch);
+        String ccName = validateMustMatchIfBothSupplied(builder.name, builder.cc == null ? null : builder.cc.getName(), JsSoNameMismatch);
         // B1. Must be a valid consumer name if supplied
         ccName = validateConsumerName(ccName, false);
-
         // A2. validate durable input
-        String ccDurable = validateMustMatchIfBothSupplied(
-            builder.durable,
-            builder.cc == null ? null : builder.cc.getDurable(),
-            JsSoDurableMismatch);
-
+        String ccDurable = validateMustMatchIfBothSupplied(builder.durable, builder.cc == null ? null : builder.cc.getDurable(), JsSoDurableMismatch);
         // B2. Must be a valid consumer name if supplied
         ccDurable = validateDurable(ccDurable, false);
-
         // C. name must match durable if both supplied
         name = validateMustMatchIfBothSupplied(ccName, ccDurable, JsConsumerNameDurableMismatch);
-
         if (bind && name == null) {
             throw JsSoNameOrDurableRequiredForBind.instance();
         }
-
         deliverGroup = validateMustMatchIfBothSupplied(deliverGroup, builder.cc == null ? null : builder.cc.getDeliverGroup(), JsSoDeliverGroupMismatch);
-
         deliverSubject = validateMustMatchIfBothSupplied(deliverSubject, builder.cc == null ? null : builder.cc.getDeliverSubject(), JsSoDeliverSubjectMismatch);
-
         this.pendingMessageLimit = pendingMessageLimit;
         this.pendingByteLimit = pendingByteLimit;
-
         if (ordered) {
             validateNotSupplied(deliverGroup, JsSoOrderedNotAllowedWithDeliverGroup);
             validateNotSupplied(ccDurable, JsSoOrderedNotAllowedWithDurable);
@@ -115,26 +105,13 @@ public abstract class SubscribeOptions {
                     }
                 }
             }
-            ConsumerConfiguration.Builder b = ConsumerConfiguration.builder(builder.cc)
-                .ackPolicy(AckPolicy.None)
-                .maxDeliver(1)
-                .ackWait(Duration.ofHours(22))
-                .name(ccName)
-                .memStorage(true)
-                .numReplicas(1);
-
+            ConsumerConfiguration.Builder b = ConsumerConfiguration.builder(builder.cc).ackPolicy(AckPolicy.None).maxDeliver(1).ackWait(Duration.ofHours(22)).name(ccName).memStorage(true).numReplicas(1);
             if (!pull) {
                 b.flowControl(hb);
             }
             consumerConfig = b.build();
-        }
-        else {
-            consumerConfig = ConsumerConfiguration.builder(builder.cc)
-                .name(ccName)
-                .durable(ccDurable)
-                .deliverSubject(deliverSubject)
-                .deliverGroup(deliverGroup)
-                .build();
+        } else {
+            consumerConfig = ConsumerConfiguration.builder(builder.cc).name(ccName).durable(ccDurable).deliverSubject(deliverSubject).deliverGroup(deliverGroup).build();
         }
     }
 
@@ -143,7 +120,7 @@ public abstract class SubscribeOptions {
      * @return the name of the stream.
      */
     public String getStream() {
-        return stream;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -151,7 +128,7 @@ public abstract class SubscribeOptions {
      * @return the durable consumer name
      */
     public String getDurable() {
-        return consumerConfig.getDurable();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -159,7 +136,7 @@ public abstract class SubscribeOptions {
      * @return the name
      */
     public String getName() {
-        return name;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -167,7 +144,7 @@ public abstract class SubscribeOptions {
      * @return the pull flag
      */
     public boolean isPull() {
-        return pull;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -175,7 +152,7 @@ public abstract class SubscribeOptions {
      * @return the bind flag
      */
     public boolean isBind() {
-        return bind;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -184,7 +161,7 @@ public abstract class SubscribeOptions {
      * @return the fast bind flag
      */
     public boolean isFastBind() {
-        return fastBind;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -192,7 +169,7 @@ public abstract class SubscribeOptions {
      * @return the ordered flag
      */
     public boolean isOrdered() {
-        return ordered;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -201,7 +178,7 @@ public abstract class SubscribeOptions {
      * @return the message alarm time
      */
     public long getMessageAlarmTime() {
-        return messageAlarmTime;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -209,7 +186,7 @@ public abstract class SubscribeOptions {
      * @return the consumer configuration.
      */
     public ConsumerConfiguration getConsumerConfiguration() {
-        return consumerConfig;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -217,7 +194,7 @@ public abstract class SubscribeOptions {
      * @return the message limit
      */
     public long getPendingMessageLimit() {
-        return pendingMessageLimit;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -225,21 +202,12 @@ public abstract class SubscribeOptions {
      * @return the byte limit
      */
     public long getPendingByteLimit() {
-        return pendingByteLimit;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "{" +
-            "name='" + name + '\'' +
-            ", stream='" + stream + '\'' +
-            ", pull='" + pull + '\'' +
-            ", bind=" + bind +
-            ", fastBind=" + fastBind +
-            ", ordered=" + ordered +
-            ", messageAlarmTime=" + messageAlarmTime +
-            ", " + consumerConfig +
-            '}';
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -249,13 +217,21 @@ public abstract class SubscribeOptions {
      * @param <SO> The resulting option type
      */
     protected static abstract class Builder<B, SO> {
+
         protected String stream;
+
         protected boolean bind;
+
         protected boolean fastBind;
+
         protected String durable;
+
         protected String name;
+
         protected ConsumerConfiguration cc;
+
         protected long messageAlarmTime = -1;
+
         protected boolean ordered;
 
         protected abstract B getThis();
@@ -267,8 +243,7 @@ public abstract class SubscribeOptions {
          * @return the builder
          */
         public B stream(String stream) {
-            this.stream = validateStreamName(stream, false);
-            return getThis();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -281,9 +256,9 @@ public abstract class SubscribeOptions {
          * @param bind whether to bind or not
          */
         public B bind(boolean bind) {
-            this.bind = bind;
-            return getThis();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
+
         /**
          * Sets the durable name for the consumer.
          * Null or empty clears the field.
@@ -291,8 +266,7 @@ public abstract class SubscribeOptions {
          * @return the builder
          */
         public B durable(String durable) {
-            this.durable = validateDurable(durable, false);
-            return getThis();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -302,8 +276,7 @@ public abstract class SubscribeOptions {
          * @return the builder
          */
         public B name(String name) {
-            this.name = validateConsumerName(name, false);
-            return getThis();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -314,8 +287,7 @@ public abstract class SubscribeOptions {
          * @return the builder
          */
         public B configuration(ConsumerConfiguration configuration) {
-            this.cc = configuration;
-            return getThis();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -326,8 +298,7 @@ public abstract class SubscribeOptions {
          * @return the builder
          */
         public B messageAlarmTime(long messageAlarmTime) {
-            this.messageAlarmTime = messageAlarmTime;
-            return getThis();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**

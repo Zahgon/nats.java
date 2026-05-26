@@ -10,11 +10,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import org.jspecify.annotations.Nullable;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,22 +20,30 @@ import java.util.Map;
  * The delivery policy for this consumer, the point in the stream from which to receive messages
  */
 public enum DeliverPolicy {
-    /** all messages */
+
+    /**
+     * all messages
+     */
     All("all"),
-
-    /** start at the last message */
+    /**
+     * start at the last message
+     */
     Last("last"),
-
-    /** start at any new messages */
+    /**
+     * start at any new messages
+     */
     New("new"),
-
-    /** by start sequence */
+    /**
+     * by start sequence
+     */
     ByStartSequence("by_start_sequence"),
-
-    /** by start time */
+    /**
+     * by start time
+     */
     ByStartTime("by_start_time"),
-
-    /** last per subject */
+    /**
+     * last per subject
+     */
     LastPerSubject("last_per_subject");
 
     private final String policy;
@@ -48,7 +54,7 @@ public enum DeliverPolicy {
 
     @Override
     public String toString() {
-        return policy;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private static final Map<String, DeliverPolicy> strEnumHash = new HashMap<>();
@@ -66,6 +72,6 @@ public enum DeliverPolicy {
      */
     @Nullable
     public static DeliverPolicy get(String value) {
-        return strEnumHash.get(value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

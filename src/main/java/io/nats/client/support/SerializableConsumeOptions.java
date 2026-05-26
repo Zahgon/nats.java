@@ -10,17 +10,15 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.support;
 
 import io.nats.client.ConsumeOptions;
-
 import java.io.IOException;
 import java.io.Serializable;
-
 import static io.nats.client.ConsumeOptions.DEFAULT_CONSUME_OPTIONS;
 
 public class SerializableConsumeOptions implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     private transient ConsumeOptions co;
@@ -38,11 +36,11 @@ public class SerializableConsumeOptions implements Serializable {
     }
 
     public void setConsumeOptions(ConsumeOptions co) {
-        this.co = co;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public ConsumeOptions getConsumeOptions() {
-        return co;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private void writeObject(java.io.ObjectOutputStream out) throws IOException {

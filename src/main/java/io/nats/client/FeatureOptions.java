@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client;
 
 import java.time.Duration;
@@ -31,7 +30,7 @@ public abstract class FeatureOptions {
      * @return the options
      */
     public JetStreamOptions getJetStreamOptions() {
-        return jso;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -45,16 +44,15 @@ public abstract class FeatureOptions {
         private JetStreamOptions.Builder jsoBuilder;
 
         protected abstract B getThis();
-        
+
         protected Builder() {
             jsoBuilder = JetStreamOptions.builder();
         }
-        
+
         protected Builder(FeatureOptions oso) {
             if (oso != null) {
                 jsoBuilder = JetStreamOptions.builder(oso.jso);
-            }
-            else {
+            } else {
                 jsoBuilder = JetStreamOptions.builder();
             }
         }
@@ -65,8 +63,7 @@ public abstract class FeatureOptions {
          * @return the builder.
          */
         public B jetStreamOptions(JetStreamOptions jso) {
-            jsoBuilder = JetStreamOptions.builder(jso);
-            return getThis();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -75,8 +72,7 @@ public abstract class FeatureOptions {
          * @return the builder
          */
         public B jsRequestTimeout(Duration requestTimeout) {
-            jsoBuilder.requestTimeout(requestTimeout);
-            return getThis();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -87,8 +83,7 @@ public abstract class FeatureOptions {
          * @return the builder.
          */
         public B jsPrefix(String prefix) {
-            jsoBuilder.prefix(prefix);
-            return getThis();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -100,8 +95,7 @@ public abstract class FeatureOptions {
          * @return the builder.
          */
         public B jsDomain(String domain) {
-            jsoBuilder.domain(domain);
-            return getThis();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**

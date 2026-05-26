@@ -10,11 +10,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.support;
 
 import java.nio.charset.Charset;
-
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
@@ -22,6 +20,7 @@ import static java.nio.charset.StandardCharsets.US_ASCII;
  * A base for "builder" classes
  */
 public abstract class BuilderBase {
+
     /**
      * The default character set
      */
@@ -67,13 +66,7 @@ public abstract class BuilderBase {
      * @param allocationSizeSuggestion the suggestion
      */
     protected void _setAllocationSize(int allocationSizeSuggestion) {
-        int dcas = _defaultCharsetAllocationSize();
-        if (allocationSizeSuggestion <= dcas) {
-            allocationSize = dcas;
-        }
-        else {
-            allocationSize = bufferAllocSize(allocationSizeSuggestion, ALLOCATION_BOUNDARY);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -136,7 +129,7 @@ public abstract class BuilderBase {
      * @return the allocation size
      */
     public int getAllocationSize() {
-        return allocationSize;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private int _defaultCharsetAllocationSize() {
@@ -150,8 +143,6 @@ public abstract class BuilderBase {
      * @return the allocation size
      */
     public static int bufferAllocSize(int atLeast, int blockSize) {
-        return atLeast < blockSize
-            ? blockSize
-            : ((atLeast + blockSize) / blockSize) * blockSize;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

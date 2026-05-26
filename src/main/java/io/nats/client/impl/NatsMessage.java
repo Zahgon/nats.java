@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import io.nats.client.Connection;
@@ -18,12 +17,10 @@ import io.nats.client.Message;
 import io.nats.client.Subscription;
 import io.nats.client.support.ByteArrayBuilder;
 import io.nats.client.support.Status;
-
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.concurrent.TimeoutException;
-
 import static io.nats.client.support.NatsConstants.*;
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -33,12 +30,16 @@ public class NatsMessage implements Message {
     protected static final String NOT_A_JET_STREAM_MESSAGE = "Message is not a JetStream message";
 
     protected String subject;
+
     protected String replyTo;
+
     protected byte[] data;
+
     protected Headers headers;
 
     // incoming specific : subject, replyTo, data and these fields
     protected String sid;
+
     protected int controlLineLength;
 
     // protocol specific : just this field
@@ -46,13 +47,16 @@ public class NatsMessage implements Message {
 
     // housekeeping
     protected int sizeInBytes;
+
     protected int headerLen;
+
     protected int dataLen;
 
     protected NatsSubscription subscription;
 
     // for accumulate
     protected NatsMessage next;
+
     protected boolean flushImmediatelyAfterPublish;
 
     // ack tracking
@@ -62,7 +66,7 @@ public class NatsMessage implements Message {
     // Constructors - Prefer to use Builder
     // ----------------------------------------------------------------------------------------------------
     protected NatsMessage() {
-        this((byte[])null);
+        this((byte[]) null);
     }
 
     protected NatsMessage(byte[] data) {
@@ -70,12 +74,14 @@ public class NatsMessage implements Message {
         dataLen = this.data.length;
     }
 
-    @Deprecated // utf8-mode is ignored
+    // utf8-mode is ignored
+    @Deprecated
     public NatsMessage(String subject, String replyTo, byte[] data, boolean utf8mode) {
         this(subject, replyTo, null, data);
     }
 
-    @Deprecated // utf8-mode is ignored
+    // utf8-mode is ignored
+    @Deprecated
     public NatsMessage(String subject, String replyTo, Headers headers, byte[] data, boolean utf8mode) {
         this(subject, replyTo, headers, data);
     }
@@ -102,89 +108,37 @@ public class NatsMessage implements Message {
     // Client and Message Internal Methods
     // ----------------------------------------------------------------------------------------------------
     boolean isProtocol() {
-        return false; // overridden in NatsMessage.ProtocolMessage
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     boolean isFilterOnStop() {
-        return false; // overridden in NatsMessage.ProtocolMessage
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private static final Headers EMPTY_READ_ONLY = new Headers(null, true, null);
 
     protected void calculate() {
-        int replyToLen = replyTo == null ? 0 : replyTo.length();
-
-        // headers get frozen (read only) at this point
-        if (headers == null) {
-            headerLen = 0;
-        }
-        else if (headers.isEmpty()) {
-            headers = EMPTY_READ_ONLY;
-            headerLen = 0;
-        }
-        else {
-            headers = headers.isReadOnly() ? headers : new Headers(headers, true, null);
-            headerLen = headers.serializedLength();
-        }
-
-        int headerAndDataLen = headerLen + dataLen;
-
-        // initialize the builder with a reasonable length, preventing resize in 99.9% of the cases
-        // 32 for misc + subject length doubled in case of utf8 mode + replyToLen + totLen (headerLen + dataLen)
-        ByteArrayBuilder bab = new ByteArrayBuilder(32 + (subject.length() * 2) + replyToLen + headerAndDataLen, UTF_8);
-
-        // protocol come first
-        if (headerLen > 0) {
-            bab.append(HPUB_SP_BYTES, 0, HPUB_SP_BYTES_LEN);
-        }
-        else {
-            bab.append(PUB_SP_BYTES, 0, PUB_SP_BYTES_LEN);
-        }
-
-        // next comes the subject
-        bab.append(subject.getBytes(UTF_8)).append(SP);
-
-        // reply to if it's there
-        if (replyToLen > 0) {
-            bab.append(replyTo.getBytes(UTF_8)).append(SP);
-        }
-
-        // header length if there are headers
-        if (headerLen > 0) {
-            bab.append(Integer.toString(headerLen).getBytes(ISO_8859_1)).append(SP);
-        }
-
-        // payload length
-        bab.append(Integer.toString(headerAndDataLen).getBytes(ISO_8859_1));
-
-        protocolBab = bab;
-        controlLineLength = protocolBab.length() + 2; // One CRLF. This is just how controlLineLength is defined.
-        sizeInBytes = controlLineLength + headerAndDataLen + 2; // The 2nd CRLFs
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     ByteArrayBuilder getProtocolBab() {
-        calculate();
-        return protocolBab;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     long getSizeInBytes() {
-        calculate();
-        return sizeInBytes;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     byte[] getProtocolBytes() {
-        calculate();
-        return protocolBab.toByteArray();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     int getPayloadSize() {
-        calculate();
-        return dataLen + headerLen;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     int getControlLineLength() {
-        calculate();
-        return controlLineLength;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -193,19 +147,15 @@ public class NatsMessage implements Message {
      * @return the length of the header
      */
     int copyNotEmptyHeaders(int destPosition, byte[] dest) {
-        calculate();
-        if (headerLen > 0) {
-            return headers.serializeToArray(destPosition, dest);
-        }
-        return 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void setSubscription(NatsSubscription sub) {
-        subscription = sub;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     NatsSubscription getNatsSubscription() {
-        return subscription;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     // ----------------------------------------------------------------------------------------------------
@@ -216,7 +166,7 @@ public class NatsMessage implements Message {
      */
     @Override
     public String getSID() {
-        return sid;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -224,7 +174,7 @@ public class NatsMessage implements Message {
      */
     @Override
     public Connection getConnection() {
-        return subscription == null ? null : subscription.connection;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -232,7 +182,7 @@ public class NatsMessage implements Message {
      */
     @Override
     public String getSubject() {
-        return subject;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -240,7 +190,7 @@ public class NatsMessage implements Message {
      */
     @Override
     public String getReplyTo() {
-        return replyTo;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -248,7 +198,7 @@ public class NatsMessage implements Message {
      */
     @Override
     public boolean hasHeaders() {
-        return headers != null && !headers.isEmpty();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -256,7 +206,7 @@ public class NatsMessage implements Message {
      */
     @Override
     public Headers getHeaders() {
-        return headers;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -264,7 +214,7 @@ public class NatsMessage implements Message {
      */
     @Override
     public boolean isStatusMessage() {
-        return false;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -272,7 +222,7 @@ public class NatsMessage implements Message {
      */
     @Override
     public Status getStatus() {
-        return null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -280,7 +230,7 @@ public class NatsMessage implements Message {
      */
     @Override
     public byte[] getData() {
-        return data;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -288,7 +238,7 @@ public class NatsMessage implements Message {
      */
     @Override
     public boolean isUtf8mode() {
-        return false;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -296,12 +246,12 @@ public class NatsMessage implements Message {
      */
     @Override
     public Subscription getSubscription() {
-        return subscription;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public AckType lastAck() {
-        return lastAck;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -309,7 +259,7 @@ public class NatsMessage implements Message {
      */
     @Override
     public void ack() {
-        // do nothing. faster. saves checking whether a message is jetstream or not
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -317,7 +267,7 @@ public class NatsMessage implements Message {
      */
     @Override
     public void ackSync(Duration d) throws InterruptedException, TimeoutException {
-        // do nothing. faster. saves checking whether a message is jetstream or not
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -325,7 +275,7 @@ public class NatsMessage implements Message {
      */
     @Override
     public void nak() {
-        // do nothing. faster. saves checking whether a message is jetstream or not
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -333,7 +283,7 @@ public class NatsMessage implements Message {
      */
     @Override
     public void nakWithDelay(Duration nakDelay) {
-        // do nothing. faster. saves checking whether a message is jetstream or not
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -341,7 +291,7 @@ public class NatsMessage implements Message {
      */
     @Override
     public void nakWithDelay(long nakDelayMillis) {
-        // do nothing. faster. saves checking whether a message is jetstream or not
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -349,7 +299,7 @@ public class NatsMessage implements Message {
      */
     @Override
     public void inProgress() {
-        // do nothing. faster. saves checking whether a message is jetstream or not
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -357,7 +307,7 @@ public class NatsMessage implements Message {
      */
     @Override
     public void term() {
-        // do nothing. faster. saves checking whether a message is jetstream or not
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -365,7 +315,7 @@ public class NatsMessage implements Message {
      */
     @Override
     public NatsJetStreamMetaData metaData() {
-        throw new IllegalStateException(NOT_A_JET_STREAM_MESSAGE);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -373,7 +323,7 @@ public class NatsMessage implements Message {
      */
     @Override
     public boolean isJetStream() {
-        return false;  // overridden in NatsJetStreamMessage
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -381,34 +331,16 @@ public class NatsMessage implements Message {
      */
     @Override
     public long consumeByteCount() {
-        return subject == null ? 0 : subject.length()
-            + headerLen
-            + dataLen
-            + (replyTo == null ? 0 : replyTo.length());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        if (subject == null) {
-            return getClass().getSimpleName() + " | " + protocolBytesToString();
-        }
-        return getClass().getSimpleName() + " |" + subject + "|" + replyToString() + "|" + dataToString() + "|";
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     String toDetailString() {
-        return "NatsMessage:" +
-                "\n  subject='" + subject + '\'' +
-                "\n  replyTo='" + replyToString() + '\'' +
-                "\n  data=" + dataToString() +
-                "\n  headers=" + headersToString() +
-                "\n  sid='" + sid + '\'' +
-                "\n  protocolBytes=" + protocolBytesToString() +
-                "\n  sizeInBytes=" + sizeInBytes +
-                "\n  headerLen=" + headerLen +
-                "\n  dataLen=" + dataLen +
-                "\n  subscription=" + subscription +
-                "\n  next=" + nextToString();
-
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private String headersToString() {
@@ -444,7 +376,7 @@ public class NatsMessage implements Message {
     // Standard Builder
     // ----------------------------------------------------------------------------------------------------
     public static Builder builder() {
-        return new Builder();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -452,9 +384,13 @@ public class NatsMessage implements Message {
      * as an option for client use developers instead of the normal constructor
      */
     public static class Builder {
+
         private String subject;
+
         private String replyTo;
+
         private Headers headers;
+
         private byte[] data;
 
         /**
@@ -464,8 +400,7 @@ public class NatsMessage implements Message {
          * @return the builder
          */
         public Builder subject(final String subject) {
-            this.subject = subject;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -475,8 +410,7 @@ public class NatsMessage implements Message {
          * @return the builder
          */
         public Builder replyTo(final String replyTo) {
-            this.replyTo = replyTo;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -486,8 +420,7 @@ public class NatsMessage implements Message {
          * @return the builder
          */
         public Builder headers(final Headers headers) {
-            this.headers = headers;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -498,10 +431,7 @@ public class NatsMessage implements Message {
          * @return the builder
          */
         public Builder data(final String data) {
-            if (data != null) {
-                this.data = data.getBytes(StandardCharsets.UTF_8);
-            }
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -512,8 +442,7 @@ public class NatsMessage implements Message {
          * @return the builder
          */
         public Builder data(final String data, final Charset charset) {
-            this.data = data.getBytes(charset);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -523,8 +452,7 @@ public class NatsMessage implements Message {
          * @return the builder
          */
         public Builder data(final byte[] data) {
-            this.data = data;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -544,7 +472,7 @@ public class NatsMessage implements Message {
          * @return the {@code NatsMessage}
          */
         public NatsMessage build() {
-            return new NatsMessage(subject, replyTo, headers, data);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

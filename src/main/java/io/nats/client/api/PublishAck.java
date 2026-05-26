@@ -17,9 +17,7 @@ import io.nats.client.Message;
 import io.nats.client.support.JsonValueUtils;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import java.io.IOException;
-
 import static io.nats.client.support.ApiConstants.*;
 
 /**
@@ -28,15 +26,20 @@ import static io.nats.client.support.ApiConstants.*;
 public class PublishAck extends ApiResponse<PublishAck> {
 
     private final String stream;
+
     private final long seq;
+
     private final String domain;
+
     private final boolean duplicate;
+
     private final String val;
+
     private final String batchId;
+
     private final int batchSize;
 
     /**
-     *
      * This signature is public for testing purposes and is not intended to be used externally
      * @param msg the message containing the Pub Ack Json <a href="https://github.com/nats-io/jsm.go/blob/main/schemas/jetstream/api/v1/pub_ack_response.json">pub_ack_response.json</a>
      * @throws IOException various IO exception such as timeout or interruption
@@ -65,7 +68,7 @@ public class PublishAck extends ApiResponse<PublishAck> {
      * @return the sequence number for the stored message.
      */
     public long getSeqno() {
-        return seq;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -74,7 +77,7 @@ public class PublishAck extends ApiResponse<PublishAck> {
      */
     @NonNull
     public String getStream() {
-        return stream;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -83,7 +86,7 @@ public class PublishAck extends ApiResponse<PublishAck> {
      */
     @Nullable
     public String getDomain() {
-        return domain;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -91,7 +94,7 @@ public class PublishAck extends ApiResponse<PublishAck> {
      * @return true if the message is a duplicate, false otherwise.
      */
     public boolean isDuplicate() {
-        return duplicate;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -100,7 +103,7 @@ public class PublishAck extends ApiResponse<PublishAck> {
      */
     @Nullable
     public String getVal() {
-        return val;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -109,7 +112,7 @@ public class PublishAck extends ApiResponse<PublishAck> {
      */
     @Nullable
     public String getBatchId() {
-        return batchId;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -117,6 +120,6 @@ public class PublishAck extends ApiResponse<PublishAck> {
      * @return the size of the batch
      */
     public int getBatchSize() {
-        return batchSize;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.support.JsonValue;
@@ -21,7 +20,7 @@ import io.nats.client.support.JsonValue;
 public class MirrorInfo extends SourceInfoBase {
 
     static MirrorInfo optionalInstance(JsonValue vMirror) {
-        return vMirror == null ? null : new MirrorInfo(vMirror);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     MirrorInfo(JsonValue vMirror) {
@@ -30,6 +29,6 @@ public class MirrorInfo extends SourceInfoBase {
 
     @Override
     public String toString() {
-        return "MirrorInfo " + super.toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

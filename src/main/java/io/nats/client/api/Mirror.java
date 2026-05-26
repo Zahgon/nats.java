@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.support.JsonValue;
@@ -22,7 +21,7 @@ import io.nats.client.support.JsonValue;
 public class Mirror extends SourceBase {
 
     static Mirror optionalInstance(JsonValue vMirror) {
-        return vMirror == null ? null : new Mirror(vMirror);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     Mirror(JsonValue vMirror) {
@@ -38,7 +37,7 @@ public class Mirror extends SourceBase {
      * @return the instance
      */
     public static Builder builder() {
-        return new Builder();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -47,22 +46,24 @@ public class Mirror extends SourceBase {
      * @return the instance
      */
     public static Builder builder(Mirror mirror) {
-        return new Builder(mirror);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * The builder for a Mirror
      */
     public static class Builder extends SourceBaseBuilder<Builder> {
+
         @Override
         Builder getThis() {
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
          * Construct a builder
          */
-        public Builder() {}
+        public Builder() {
+        }
 
         /**
          * Construct a builder with a copy of all the information in the source mirror
@@ -77,7 +78,7 @@ public class Mirror extends SourceBase {
          * @return the Mirror
          */
         public Mirror build() {
-            return new Mirror(this);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

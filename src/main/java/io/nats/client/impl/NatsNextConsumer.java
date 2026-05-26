@@ -10,57 +10,46 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import io.nats.client.JetStreamApiException;
 import io.nats.client.Message;
 import io.nats.client.PullRequestOptions;
 import io.nats.client.api.ConsumerInfo;
-
 import java.io.IOException;
-
 import static io.nats.client.impl.NatsJetStreamSubscription.EXPIRE_ADJUSTMENT;
 
 class NatsNextConsumer extends NatsMessageConsumerBase {
+
     final long maxWaitMillis;
 
     NatsNextConsumer(SimplifiedSubscriptionMaker subscriptionMaker, ConsumerInfo cachedConsumerInfo, long maxWaitMillis) throws IOException, JetStreamApiException {
         super(cachedConsumerInfo);
         this.maxWaitMillis = maxWaitMillis;
-        long inactiveThreshold = maxWaitMillis * 110 / 100; // 10% longer than the wait
-
+        // 10% longer than the wait
+        long inactiveThreshold = maxWaitMillis * 110 / 100;
         initSub(subscriptionMaker.subscribe(null, null, null, inactiveThreshold), false);
-        setConsumerName(consumerName); // the call to subscribe sets this
-        sub._pull(PullRequestOptions.builder(1)
-            .expiresIn(maxWaitMillis - EXPIRE_ADJUSTMENT)
-            .build(), false, null);
+        // the call to subscribe sets this
+        setConsumerName(consumerName);
+        sub._pull(PullRequestOptions.builder(1).expiresIn(maxWaitMillis - EXPIRE_ADJUSTMENT).build(), false, null);
     }
 
     @Override
-    public void messageReceived(Message msg) {}
+    public void messageReceived(Message msg) {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
     @Override
     public void pullCompletedWithStatus(int messages, long bytes) {
-        stop();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void pullTerminatedByError() {
-        fullClose();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     Message getMessage() throws InterruptedException, IllegalStateException {
-        try {
-            // it is stopped if it got a status error or was
-            // terminated by error, so there is no message
-            if (stopped.get()) {
-                return null;
-            }
-            return sub.nextMessage(maxWaitMillis);
-        }
-        finally {
-            fullClose();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -10,27 +10,32 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.support.JsonValue;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import java.time.Duration;
 import java.util.List;
-
 import static io.nats.client.support.ApiConstants.*;
 import static io.nats.client.support.JsonValueUtils.*;
 
 abstract class SourceInfoBase {
+
     protected final JsonValue jv;
+
     protected final String name;
+
     protected final String filterSubject;
+
     protected final long lag;
+
     protected final Duration active;
+
     protected final External external;
+
     protected final List<SubjectTransform> subjectTransforms;
+
     protected final Error error;
 
     SourceInfoBase(JsonValue vSourceInfo) {
@@ -51,7 +56,7 @@ abstract class SourceInfoBase {
      */
     @NonNull
     public String getName() {
-        return name;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -60,7 +65,7 @@ abstract class SourceInfoBase {
      */
     @Nullable
     public String getFilterSubject() {
-        return filterSubject;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -68,7 +73,7 @@ abstract class SourceInfoBase {
      * @return the lag
      */
     public long getLag() {
-        return lag;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -77,7 +82,7 @@ abstract class SourceInfoBase {
      */
     @Nullable
     public Duration getActive() {
-        return active;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -86,7 +91,7 @@ abstract class SourceInfoBase {
      */
     @Nullable
     public External getExternal() {
-        return external;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -95,7 +100,7 @@ abstract class SourceInfoBase {
      */
     @Nullable
     public List<SubjectTransform> getSubjectTransforms() {
-        return subjectTransforms;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -104,6 +109,6 @@ abstract class SourceInfoBase {
      */
     @Nullable
     public Error getError() {
-        return error;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

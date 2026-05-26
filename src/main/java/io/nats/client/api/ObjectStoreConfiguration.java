@@ -13,10 +13,8 @@
 package io.nats.client.api;
 
 import io.nats.client.support.NatsObjectStoreUtil;
-
 import java.time.Duration;
 import java.util.Map;
-
 import static io.nats.client.support.NatsObjectStoreUtil.*;
 import static io.nats.client.support.Validator.required;
 
@@ -24,13 +22,14 @@ import static io.nats.client.support.Validator.required;
  * The ObjectStoreConfiguration class contains the configuration for an object store.
  */
 public class ObjectStoreConfiguration extends FeatureConfiguration {
+
     ObjectStoreConfiguration(StreamConfiguration sc) {
         super(sc, extractBucketName(sc.getName()));
     }
 
     @Override
     public String toString() {
-        return "ObjectStoreConfiguration" + toJson();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -38,7 +37,7 @@ public class ObjectStoreConfiguration extends FeatureConfiguration {
      * @return the sealed setting
      */
     public boolean isSealed() {
-        return sc.getSealed();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -46,7 +45,7 @@ public class ObjectStoreConfiguration extends FeatureConfiguration {
      * @return an ObjectStoreConfiguration Builder
      */
     public static ObjectStoreConfiguration.Builder builder() {
-        return new ObjectStoreConfiguration.Builder((ObjectStoreConfiguration)null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -55,7 +54,7 @@ public class ObjectStoreConfiguration extends FeatureConfiguration {
      * @return an ObjectStoreConfiguration Builder
      */
     public static ObjectStoreConfiguration.Builder builder(String name) {
-        return new ObjectStoreConfiguration.Builder(name);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -64,7 +63,7 @@ public class ObjectStoreConfiguration extends FeatureConfiguration {
      * @return an ObjectStoreConfiguration Builder
      */
     public static ObjectStoreConfiguration.Builder builder(ObjectStoreConfiguration osc) {
-        return new ObjectStoreConfiguration.Builder(osc);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -72,21 +71,19 @@ public class ObjectStoreConfiguration extends FeatureConfiguration {
      * create a default set of options if no methods are calls.
      *
      * <p>{@code new ObjectStoreConfiguration.Builder().build()} will create a new ObjectStoreConfiguration.
-     *
      */
-    public static class Builder
-        extends FeatureConfiguration.Builder<ObjectStoreConfiguration.Builder, ObjectStoreConfiguration>
-    {
+    public static class Builder extends FeatureConfiguration.Builder<ObjectStoreConfiguration.Builder, ObjectStoreConfiguration> {
+
         @Override
         protected Builder getThis() {
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
          * Default Builder
          */
         public Builder() {
-            this((ObjectStoreConfiguration)null);
+            this((ObjectStoreConfiguration) null);
         }
 
         /**
@@ -94,7 +91,7 @@ public class ObjectStoreConfiguration extends FeatureConfiguration {
          * @param name name of the store.
          */
         public Builder(String name) {
-            this((ObjectStoreConfiguration)null);
+            this((ObjectStoreConfiguration) null);
             name(name);
         }
 
@@ -106,8 +103,7 @@ public class ObjectStoreConfiguration extends FeatureConfiguration {
             if (osc == null) {
                 scBuilder = new StreamConfiguration.Builder();
                 replicas(1);
-            }
-            else {
+            } else {
                 scBuilder = new StreamConfiguration.Builder(osc.sc);
                 name = NatsObjectStoreUtil.extractBucketName(osc.sc.getName());
             }
@@ -120,7 +116,7 @@ public class ObjectStoreConfiguration extends FeatureConfiguration {
          */
         @Override
         public Builder name(String name) {
-            return super.name(name);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -130,7 +126,7 @@ public class ObjectStoreConfiguration extends FeatureConfiguration {
          */
         @Override
         public Builder description(String description) {
-            return super.description(description);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -140,7 +136,7 @@ public class ObjectStoreConfiguration extends FeatureConfiguration {
          */
         @Override
         public Builder maxBucketSize(long maxBucketSize) {
-            return super.maxBucketSize(maxBucketSize);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -150,7 +146,7 @@ public class ObjectStoreConfiguration extends FeatureConfiguration {
          */
         @Override
         public Builder ttl(Duration ttl) {
-            return super.ttl(ttl);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -160,7 +156,7 @@ public class ObjectStoreConfiguration extends FeatureConfiguration {
          */
         @Override
         public Builder storageType(StorageType storageType) {
-            return super.storageType(storageType);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -170,7 +166,7 @@ public class ObjectStoreConfiguration extends FeatureConfiguration {
          */
         @Override
         public Builder replicas(int replicas) {
-            return super.replicas(replicas);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -180,7 +176,7 @@ public class ObjectStoreConfiguration extends FeatureConfiguration {
          */
         @Override
         public Builder placement(Placement placement) {
-            return super.placement(placement);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -191,7 +187,7 @@ public class ObjectStoreConfiguration extends FeatureConfiguration {
          */
         @Override
         public Builder compression(boolean compression) {
-            return super.compression(compression);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -201,7 +197,7 @@ public class ObjectStoreConfiguration extends FeatureConfiguration {
          */
         @Override
         public Builder metadata(Map<String, String> metadata) {
-            return super.metadata(metadata);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -209,13 +205,7 @@ public class ObjectStoreConfiguration extends FeatureConfiguration {
          * @return the ObjectStoreConfiguration.
          */
         public ObjectStoreConfiguration build() {
-            name = required(name, "name");
-            scBuilder.name(toStreamName(name))
-                .subjects(toMetaStreamSubject(name), toChunkStreamSubject(name))
-                .allowRollup(true)
-                .allowDirect(true)
-                .discardPolicy(DiscardPolicy.New);
-            return new ObjectStoreConfiguration(scBuilder.build());
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

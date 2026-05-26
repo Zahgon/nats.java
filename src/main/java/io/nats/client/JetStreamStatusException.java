@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client;
 
 import io.nats.client.support.Status;
@@ -19,6 +18,7 @@ import io.nats.client.support.Status;
  * JetStreamStatusException is used to indicate an unknown status message was received.
  */
 public class JetStreamStatusException extends IllegalStateException {
+
     /**
      * A description for an exception that does not provide one
      */
@@ -59,7 +59,7 @@ public class JetStreamStatusException extends IllegalStateException {
      * @return the subscription
      */
     public JetStreamSubscription getSubscription() {
-        return sub;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -77,6 +77,6 @@ public class JetStreamStatusException extends IllegalStateException {
      * @return the status
      */
     public Status getStatus() {
-        return status;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

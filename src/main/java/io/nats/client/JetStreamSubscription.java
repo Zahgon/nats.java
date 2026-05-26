@@ -10,11 +10,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client;
 
 import io.nats.client.api.ConsumerInfo;
-
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Iterator;
@@ -35,7 +33,9 @@ public interface JetStreamSubscription extends Subscription {
      * Gets the stream name associated with the subscription.
      * @return the stream name
      */
-    default String getStreamName() { return null; }
+    default String getStreamName() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
     /**
      * Initiate pull with the specified batch size.

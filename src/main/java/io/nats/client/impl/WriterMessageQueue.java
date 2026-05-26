@@ -10,28 +10,29 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import io.nats.client.NatsSystemClock;
-
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
 import static io.nats.client.Options.MINIMUM_WRITE_QUEUE_PUSH_TIMEOUT;
 import static io.nats.client.impl.MarkerMessage.POISON_PILL;
 import static io.nats.client.support.NatsConstants.OUTPUT_QUEUE_BUSY;
 import static io.nats.client.support.NatsConstants.OUTPUT_QUEUE_IS_FULL;
 
 class WriterMessageQueue extends MessageQueueBase {
+
     protected static final long MIN_PUSH_TIMEOUT_NANOS = MINIMUM_WRITE_QUEUE_PUSH_TIMEOUT.toNanos();
 
     protected final int maxMessagesInOutgoingQueue;
+
     protected final boolean discardWhenFull;
+
     protected final Lock editLock;
+
     protected final long pushTimeoutNanos;
 
     WriterMessageQueue(Duration pushTimeout) {
@@ -47,48 +48,11 @@ class WriterMessageQueue extends MessageQueueBase {
     }
 
     boolean push(NatsMessage msg) {
-        return push(msg, false);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     boolean push(NatsMessage msg, boolean internal) {
-        try {
-            long startNanos = NatsSystemClock.nanoTime();
-            if (editLock.tryLock(pushTimeoutNanos, TimeUnit.NANOSECONDS)) {
-                try {
-                    // offer with no timeout returns true if the queue was not full
-                    if (!internal && discardWhenFull) {
-                        if (queue.offer(msg)) {
-                            sizeInBytes.getAndAdd(msg.getSizeInBytes());
-                            length.incrementAndGet();
-                            return true;
-                        }
-                        return false;
-                    }
-
-                    // offer with timeout
-                    long timeoutNanosLeft = Math.max(
-                        MIN_PUSH_TIMEOUT_NANOS,
-                        pushTimeoutNanos - (NatsSystemClock.nanoTime() - startNanos)
-                    );
-                    if (queue.offer(msg, timeoutNanosLeft, TimeUnit.NANOSECONDS)) {
-                        sizeInBytes.getAndAdd(msg.getSizeInBytes());
-                        length.incrementAndGet();
-                        return true;
-                    }
-                    throw new IllegalStateException(OUTPUT_QUEUE_IS_FULL + queue.size());
-                }
-                finally {
-                    editLock.unlock();
-                }
-            }
-            else {
-                throw new IllegalStateException(OUTPUT_QUEUE_BUSY + queue.size());
-            }
-        }
-        catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            return false;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -98,7 +62,7 @@ class WriterMessageQueue extends MessageQueueBase {
      */
     @SuppressWarnings("SameParameterValue")
     void queueMarkerMessage(MarkerMessage msg) {
-        queue.offer(msg);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     // Waits up to the timeout to try to accumulate multiple messages
@@ -111,110 +75,15 @@ class WriterMessageQueue extends MessageQueueBase {
     // Only works in writer mode, because we want to maintain order.
     // accumulate reads off the concurrent queue one at a time, so if multiple
     // readers are present, you could get out of order message delivery.
-    NatsMessage accumulate(long maxBytesToAccumulate, long maxMessagesToAccumulate, Duration timeout)
-        throws InterruptedException {
-
-        if (!isRunning()) {
-            return null;
-        }
-
-        // _poll returns null if no messages or was a POISON_PILL
-        // MarkerMessage is a termination, is not counted, but is returned
-        NatsMessage headMessage = _poll(timeout);
-        if (headMessage == null || headMessage instanceof MarkerMessage) {
-            return headMessage;
-        }
-
-        if (maxBytesToAccumulate < 1) {
-            maxBytesToAccumulate = Long.MAX_VALUE; // this just makes it easier to loop
-        }
-
-        // these will be used to call count() after the loop ends
-        long accumulatedMessages = 1;
-        long accumulatedSize = headMessage.getSizeInBytes();
-
-        // We need a cursor for the chain of messages
-        // and we return the head message
-        NatsMessage cursor = headMessage;
-
-        // If the message wants to flushImmediatelyAfterPublish, don't accumulate more
-        // If the accumulatedMessages is >= maxMessagesToAccumulate, don't accumulate more
-        while (!cursor.flushImmediatelyAfterPublish && accumulatedMessages < maxMessagesToAccumulate) {
-            // We are allowed to try more messages. Peek first to see what we are dealing with
-            NatsMessage peeked = queue.peek();
-
-            if (peeked == null) {
-                break; // no messages in the queue so we are done.
-            }
-
-            if (peeked instanceof MarkerMessage) {
-                // - Get the message out of the queue b/c we only peeked
-                // - POISON_PILL does not get added to the cursor.next chain
-                //   but all other MarkerMessages do.
-                // - We are done.
-                queue.poll();
-                if (peeked != POISON_PILL) {
-                    cursor.next = peeked;
-                }
-                break;
-            }
-
-            // How big is the message we just peeked at? Will it put us over maxBytesToAccumulate?
-            long size = peeked.getSizeInBytes();
-            if (accumulatedSize + size > maxBytesToAccumulate) {
-                break; // Too many bytes, so we are done.
-            }
-
-            // We can add the peeked message to the chain...
-            // - Get the message out of the queue b/c we only peeked
-            // - Track the message and the bytes for later counting and the while loop
-            // - Add the message to the chain
-            queue.poll();
-            accumulatedMessages++;
-            accumulatedSize += size;
-            cursor.next = peeked;
-
-            // Move the cursor. It's okay if the while terminates at it's
-            // next check, we don't need the cursor outside the loop
-            cursor = peeked;
-        }
-
-        length.addAndGet(-accumulatedMessages);
-        sizeInBytes.addAndGet(-accumulatedSize);
-        return headMessage;
+    NatsMessage accumulate(long maxBytesToAccumulate, long maxMessagesToAccumulate, Duration timeout) throws InterruptedException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void filter() {
-        if (this.isRunning()) {
-            throw new IllegalStateException("Filter is only supported when the queue is paused");
-        }
-        editLock.lock();
-        try {
-            ArrayList<NatsMessage> temp = new ArrayList<>();
-            queue.drainTo(temp);
-            for (NatsMessage cursor : temp) {
-                if (cursor.isFilterOnStop()) {
-                    sizeInBytes.addAndGet(-cursor.getSizeInBytes());
-                    length.decrementAndGet();
-                }
-                else {
-                    queue.offer(cursor);
-                }
-            }
-        }
-        finally {
-            editLock.unlock();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void clear() {
-        editLock.lock();
-        try {
-            this.queue.clear();
-            length.set(0);
-            sizeInBytes.set(0);
-        } finally {
-            editLock.unlock();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

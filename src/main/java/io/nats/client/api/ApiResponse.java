@@ -10,16 +10,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.JetStreamApiException;
 import io.nats.client.Message;
 import io.nats.client.support.*;
 import org.jspecify.annotations.Nullable;
-
 import java.time.ZonedDateTime;
-
 import static io.nats.client.support.ApiConstants.ERROR;
 import static io.nats.client.support.ApiConstants.TYPE;
 import static io.nats.client.support.JsonValueUtils.*;
@@ -46,6 +43,7 @@ public abstract class ApiResponse<T> {
     protected final JsonValue jv;
 
     private final String type;
+
     private Error error;
 
     /**
@@ -62,18 +60,7 @@ public abstract class ApiResponse<T> {
      * @return the JsonValue of the parsed JSON
      */
     protected static JsonValue parseMessage(Message msg) {
-        if (msg == null) {
-            return null;
-        }
-        try {
-            return JsonParser.parse(msg.getData());
-        }
-        catch (JsonParseException e) {
-            return JsonValueUtils.mapBuilder()
-                .put(ERROR, new Error(500, "Error parsing: " + e.getMessage()))
-                .put(TYPE, PARSE_ERROR_TYPE)
-                .toJsonValue();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -83,13 +70,7 @@ public abstract class ApiResponse<T> {
      * @param <R> the type of the return value
      */
     protected <R> R invalidJson(R retVal) {
-        // only set the error if it's not already set.
-        // this can easily happen when the original response is a real error
-        // but the parsing continues
-        if (error == null) {
-            error = new Error(500, "Invalid JSON for " + getClass().getSimpleName());
-        }
-        return retVal;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -99,8 +80,7 @@ public abstract class ApiResponse<T> {
      * @return the value of the key
      */
     protected String nullStringIsError(JsonValue jv, String key) {
-        String s = readString(jv, key);
-        return s == null ? invalidJson("") : s;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -111,8 +91,7 @@ public abstract class ApiResponse<T> {
      */
     @SuppressWarnings("SameParameterValue")
     protected ZonedDateTime nullDateIsError(JsonValue jv, String key) {
-        ZonedDateTime zdt = readDate(jv, key);
-        return zdt == null ? invalidJson(DateTimeUtils.DEFAULT_TIME) : zdt;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -124,8 +103,7 @@ public abstract class ApiResponse<T> {
      */
     @SuppressWarnings("SameParameterValue")
     protected JsonValue nullValueIsError(JsonValue jv, String key, JsonValue errorValue) {
-        JsonValue v = readValue(jv, key);
-        return v == null ? invalidJson(errorValue) : v;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -137,16 +115,15 @@ public abstract class ApiResponse<T> {
         if (jv == null) {
             error = null;
             type = null;
-        }
-        else {
+        } else {
             error = Error.optionalInstance(readValue(jv, ERROR));
             String temp = readString(jv, TYPE);
             if (temp == null) {
                 type = NO_TYPE;
-            }
-            else {
+            } else {
                 type = temp;
-                jv.map.remove(TYPE); // just so it's not in the toString, it's very long and the object name will be there
+                // just so it's not in the toString, it's very long and the object name will be there
+                jv.map.remove(TYPE);
             }
         }
     }
@@ -177,10 +154,7 @@ public abstract class ApiResponse<T> {
      */
     @SuppressWarnings("unchecked")
     public T throwOnHasError() throws JetStreamApiException {
-        if (error != null) {
-            throw new JetStreamApiException(error);
-        }
-        return (T)this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -189,7 +163,7 @@ public abstract class ApiResponse<T> {
      */
     @Nullable
     public JsonValue getJv() {
-        return jv;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -197,7 +171,7 @@ public abstract class ApiResponse<T> {
      * @return true if the response has an error
      */
     public boolean hasError() {
-        return error != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -206,7 +180,7 @@ public abstract class ApiResponse<T> {
      */
     @Nullable
     public String getType() {
-        return type;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -214,7 +188,7 @@ public abstract class ApiResponse<T> {
      * @return the code
      */
     public int getErrorCode() {
-        return error == null ? Error.NOT_SET : error.getCode();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -222,7 +196,7 @@ public abstract class ApiResponse<T> {
      * @return the code
      */
     public int getApiErrorCode() {
-        return error == null ? Error.NOT_SET : error.getApiErrorCode();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -231,7 +205,7 @@ public abstract class ApiResponse<T> {
      */
     @Nullable
     public String getDescription() {
-        return error == null ? null : error.getDescription();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -240,7 +214,7 @@ public abstract class ApiResponse<T> {
      */
     @Nullable
     public String getError() {
-        return error == null ? null : error.toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -249,13 +223,11 @@ public abstract class ApiResponse<T> {
      */
     @Nullable
     public Error getErrorObject() {
-        return error;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return jv == null
-            ? JsonUtils.toKey(getClass()) + "\":null"
-            : jv.toString(getClass());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

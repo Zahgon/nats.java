@@ -10,14 +10,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import io.nats.client.*;
 import io.nats.client.api.*;
 import io.nats.client.support.DateTimeUtils;
 import io.nats.client.support.Validator;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
@@ -25,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
-
 import static io.nats.client.support.NatsConstants.DOT;
 import static io.nats.client.support.NatsConstants.GREATER_THAN;
 import static io.nats.client.support.NatsJetStreamConstants.JS_SEQUENCE_TEMPORARILY_UNKNOWN;
@@ -36,8 +33,11 @@ import static io.nats.client.support.Validator.*;
 public class NatsKeyValue extends NatsFeatureBase implements KeyValue {
 
     private final String bucketName;
+
     private final String streamSubject;
+
     private final String readPrefix;
+
     private final String writePrefix;
 
     NatsKeyValue(String bucketName, NatsConnection connection, KeyValueOptions kvo, NatsJetStreamManagement jsm) throws IOException {
@@ -46,15 +46,13 @@ public class NatsKeyValue extends NatsFeatureBase implements KeyValue {
         streamName = toStreamName(bucketName);
         StreamInfo si;
         try {
-             si = this.jsm.getStreamInfo(streamName);
+            si = this.jsm.getStreamInfo(streamName);
         } catch (JetStreamApiException e) {
             // can't throw directly, that would be a breaking change
             throw new IOException(e);
         }
-
         streamSubject = toStreamSubject(bucketName);
         String readTemp = toKeyPrefix(bucketName);
-
         String writeTemp;
         Mirror m = si.getConfiguration().getMirror();
         if (m != null) {
@@ -62,29 +60,25 @@ public class NatsKeyValue extends NatsFeatureBase implements KeyValue {
             String mExtApi = m.getExternal() == null ? null : m.getExternal().getApi();
             if (mExtApi == null) {
                 writeTemp = toKeyPrefix(bName);
-            }
-            else {
+            } else {
                 readTemp = toKeyPrefix(bName);
                 writeTemp = mExtApi + DOT + toKeyPrefix(bName);
             }
-        }
-        else if (kvo == null || kvo.getJetStreamOptions().isDefaultPrefix()) {
+        } else if (kvo == null || kvo.getJetStreamOptions().isDefaultPrefix()) {
             writeTemp = readTemp;
-        }
-        else {
+        } else {
             writeTemp = kvo.getJetStreamOptions().getPrefix() + readTemp;
         }
-
         readPrefix = readTemp;
         writePrefix = writeTemp;
     }
 
     String readSubject(String key) {
-        return readPrefix + key;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     String writeSubject(String key) {
-        return writePrefix + key;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -92,7 +86,7 @@ public class NatsKeyValue extends NatsFeatureBase implements KeyValue {
      */
     @Override
     public String getBucketName() {
-        return bucketName;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -100,7 +94,7 @@ public class NatsKeyValue extends NatsFeatureBase implements KeyValue {
      */
     @Override
     public KeyValueEntry get(String key) throws IOException, JetStreamApiException {
-        return existingOnly(_get(validateNonWildcardKvKeyRequired(key)));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -108,27 +102,19 @@ public class NatsKeyValue extends NatsFeatureBase implements KeyValue {
      */
     @Override
     public KeyValueEntry get(String key, long revision) throws IOException, JetStreamApiException {
-        return existingOnly(_get(validateNonWildcardKvKeyRequired(key), revision));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     KeyValueEntry existingOnly(KeyValueEntry kve) {
-        return kve == null || kve.getOperation() != KeyValueOperation.PUT ? null : kve;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     KeyValueEntry _get(String key) throws IOException, JetStreamApiException {
-        MessageInfo mi = _getLast(readSubject(key));
-        return mi == null ? null : new KeyValueEntry(mi);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     KeyValueEntry _get(String key, long revision) throws IOException, JetStreamApiException {
-        MessageInfo mi = _getBySeq(revision);
-        if (mi != null) {
-            KeyValueEntry kve = new KeyValueEntry(mi);
-            if (key.equals(kve.getKey())) {
-                return kve;
-            }
-        }
-        return null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -136,7 +122,7 @@ public class NatsKeyValue extends NatsFeatureBase implements KeyValue {
      */
     @Override
     public long put(String key, byte[] value) throws IOException, JetStreamApiException {
-        return _write(key, value, null, null).getSeqno();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -144,7 +130,7 @@ public class NatsKeyValue extends NatsFeatureBase implements KeyValue {
      */
     @Override
     public long put(String key, String value) throws IOException, JetStreamApiException {
-        return _write(key, value.getBytes(StandardCharsets.UTF_8), null, null).getSeqno();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -152,7 +138,7 @@ public class NatsKeyValue extends NatsFeatureBase implements KeyValue {
      */
     @Override
     public long put(String key, Number value) throws IOException, JetStreamApiException {
-        return _write(key, value.toString().getBytes(StandardCharsets.ISO_8859_1), null, null).getSeqno();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -160,31 +146,12 @@ public class NatsKeyValue extends NatsFeatureBase implements KeyValue {
      */
     @Override
     public long create(String key, byte[] value) throws IOException, JetStreamApiException {
-        return create(key, value, null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public long create(String key, byte[] value, MessageTtl messageTtl) throws IOException, JetStreamApiException {
-        validateNonWildcardKvKeyRequired(key);
-        try {
-            return _update(key, value, 0, messageTtl);
-        }
-        catch (JetStreamApiException e) {
-            int code = e.getApiErrorCode();
-            if (code == JS_WRONG_LAST_SEQUENCE || code == JS_SEQUENCE_TEMPORARILY_UNKNOWN) {
-                // must check if the last message for this subject is a delete or purge
-                // if it was, it's okay to "create" it, as long as someone doesn't create in the meantime
-                // which is why I use the revision, which must be greater than zero b/c I just tried zero
-                KeyValueEntry kve = _get(key);
-                if (kve != null && kve.getOperation() != KeyValueOperation.PUT) {
-                    long revision = kve.getRevision();
-                    if (revision > 0) {
-                        return _update(key, value, revision, messageTtl);
-                    }
-                }
-            }
-            throw e;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -192,8 +159,7 @@ public class NatsKeyValue extends NatsFeatureBase implements KeyValue {
      */
     @Override
     public long update(String key, byte[] value, long expectedRevision) throws IOException, JetStreamApiException {
-        validateNonWildcardKvKeyRequired(key);
-        return _update(key, value, expectedRevision, null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private long _update(String key, byte[] value, long expectedRevision, MessageTtl messageTtl) throws IOException, JetStreamApiException {
@@ -205,7 +171,7 @@ public class NatsKeyValue extends NatsFeatureBase implements KeyValue {
      */
     @Override
     public long update(String key, String value, long expectedRevision) throws IOException, JetStreamApiException {
-        return update(key, value.getBytes(StandardCharsets.UTF_8), expectedRevision);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -213,7 +179,7 @@ public class NatsKeyValue extends NatsFeatureBase implements KeyValue {
      */
     @Override
     public void delete(String key) throws IOException, JetStreamApiException {
-        _write(key, null, getDeleteHeaders(), null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -221,7 +187,7 @@ public class NatsKeyValue extends NatsFeatureBase implements KeyValue {
      */
     @Override
     public void delete(String key, long expectedRevision) throws IOException, JetStreamApiException {
-        _write(key, null, getDeleteHeaders(), getPublishOptions(expectedRevision, null));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -229,7 +195,7 @@ public class NatsKeyValue extends NatsFeatureBase implements KeyValue {
      */
     @Override
     public void purge(String key) throws IOException, JetStreamApiException {
-        _write(key, null, getPurgeHeaders(), null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -237,7 +203,7 @@ public class NatsKeyValue extends NatsFeatureBase implements KeyValue {
      */
     @Override
     public void purge(String key, long expectedRevision) throws IOException, JetStreamApiException {
-        _write(key, null, getPurgeHeaders(), getPublishOptions(expectedRevision, null));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -245,7 +211,7 @@ public class NatsKeyValue extends NatsFeatureBase implements KeyValue {
      */
     @Override
     public void purge(String key, MessageTtl messageTtl) throws IOException, JetStreamApiException {
-        _write(key, null, getPurgeHeaders(), getPublishOptions(-1, messageTtl));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -253,7 +219,7 @@ public class NatsKeyValue extends NatsFeatureBase implements KeyValue {
      */
     @Override
     public void purge(String key, long expectedRevision, MessageTtl messageTtl) throws IOException, JetStreamApiException {
-        _write(key, null, getPurgeHeaders(), getPublishOptions(expectedRevision, messageTtl));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private PublishAck _write(String key, byte[] data, Headers h, PublishOptions popts) throws IOException, JetStreamApiException {
@@ -263,40 +229,32 @@ public class NatsKeyValue extends NatsFeatureBase implements KeyValue {
 
     @Override
     public NatsKeyValueWatchSubscription watch(String key, KeyValueWatcher watcher, KeyValueWatchOption... watchOptions) throws IOException, JetStreamApiException, InterruptedException {
-        validateKvKeyWildcardAllowedRequired(key);
-        validateNotNull(watcher, "Watcher is required");
-        return new NatsKeyValueWatchSubscription(this, Collections.singletonList(key), watcher, -1, watchOptions);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public NatsKeyValueWatchSubscription watch(String key, KeyValueWatcher watcher, long fromRevision, KeyValueWatchOption... watchOptions) throws IOException, JetStreamApiException, InterruptedException {
-        validateKvKeyWildcardAllowedRequired(key);
-        validateNotNull(watcher, "Watcher is required");
-        return new NatsKeyValueWatchSubscription(this, Collections.singletonList(key), watcher, fromRevision, watchOptions);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public NatsKeyValueWatchSubscription watch(List<String> keys, KeyValueWatcher watcher, KeyValueWatchOption... watchOptions) throws IOException, JetStreamApiException, InterruptedException {
-        validateKvKeysWildcardAllowedRequired(keys);
-        validateNotNull(watcher, "Watcher is required");
-        return new NatsKeyValueWatchSubscription(this, keys, watcher, -1, watchOptions);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public NatsKeyValueWatchSubscription watch(List<String> keys, KeyValueWatcher watcher, long fromRevision, KeyValueWatchOption... watchOptions) throws IOException, JetStreamApiException, InterruptedException {
-        validateKvKeysWildcardAllowedRequired(keys);
-        validateNotNull(watcher, "Watcher is required");
-        return new NatsKeyValueWatchSubscription(this, keys, watcher, fromRevision, watchOptions);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public NatsKeyValueWatchSubscription watchAll(KeyValueWatcher watcher, KeyValueWatchOption... watchOptions) throws IOException, JetStreamApiException, InterruptedException {
-        return new NatsKeyValueWatchSubscription(this, Collections.singletonList(GREATER_THAN), watcher, -1, watchOptions);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public NatsKeyValueWatchSubscription watchAll(KeyValueWatcher watcher, long fromRevision, KeyValueWatchOption... watchOptions) throws IOException, JetStreamApiException, InterruptedException {
-        return new NatsKeyValueWatchSubscription(this, Collections.singletonList(GREATER_THAN), watcher, fromRevision, watchOptions);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -304,21 +262,17 @@ public class NatsKeyValue extends NatsFeatureBase implements KeyValue {
      */
     @Override
     public List<String> keys() throws IOException, JetStreamApiException, InterruptedException {
-        return _keys(Collections.singletonList(readSubject(GREATER_THAN)));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public List<String> keys(String filter) throws IOException, JetStreamApiException, InterruptedException {
-        return _keys(Collections.singletonList(readSubject(filter)));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public List<String> keys(List<String> filters) throws IOException, JetStreamApiException, InterruptedException {
-        List<String> readSubjectFilters = new ArrayList<>(filters.size());
-        for (String f : filters) {
-            readSubjectFilters.add(readSubject(f));
-        }
-        return _keys(readSubjectFilters);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private List<String> _keys(List<String> readSubjectFilters) throws IOException, JetStreamApiException, InterruptedException {
@@ -337,7 +291,7 @@ public class NatsKeyValue extends NatsFeatureBase implements KeyValue {
      */
     @Override
     public LinkedBlockingQueue<KeyResult> consumeKeys() {
-        return _consumeKeys(Collections.singletonList(readSubject(GREATER_THAN)));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -345,7 +299,7 @@ public class NatsKeyValue extends NatsFeatureBase implements KeyValue {
      */
     @Override
     public LinkedBlockingQueue<KeyResult> consumeKeys(String filter) {
-        return _consumeKeys(Collections.singletonList(readSubject(filter)));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -353,16 +307,12 @@ public class NatsKeyValue extends NatsFeatureBase implements KeyValue {
      */
     @Override
     public LinkedBlockingQueue<KeyResult> consumeKeys(List<String> filters) {
-        List<String> readSubjectFilters = new ArrayList<>(filters.size());
-        for (String f : filters) {
-            readSubjectFilters.add(readSubject(f));
-        }
-        return _consumeKeys(readSubjectFilters);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private LinkedBlockingQueue<KeyResult> _consumeKeys(List<String> readSubjectFilters) {
         LinkedBlockingQueue<KeyResult> q = new LinkedBlockingQueue<>();
-        js.conn.getOptions().getExecutor().submit( () -> {
+        js.conn.getOptions().getExecutor().submit(() -> {
             try {
                 visitSubject(readSubjectFilters, DeliverPolicy.LastPerSubject, true, false, m -> {
                     KeyValueOperation op = getOperation(m.getHeaders());
@@ -371,16 +321,13 @@ public class NatsKeyValue extends NatsFeatureBase implements KeyValue {
                     }
                 });
                 q.offer(new KeyResult());
-            }
-            catch (IOException | JetStreamApiException e) {
+            } catch (IOException | JetStreamApiException e) {
                 q.offer(new KeyResult(e));
-            }
-            catch (InterruptedException e) {
+            } catch (InterruptedException e) {
                 q.offer(new KeyResult(e));
                 Thread.currentThread().interrupt();
             }
         });
-
         return q;
     }
 
@@ -389,10 +336,7 @@ public class NatsKeyValue extends NatsFeatureBase implements KeyValue {
      */
     @Override
     public List<KeyValueEntry> history(String key) throws IOException, JetStreamApiException, InterruptedException {
-        validateNonWildcardKvKeyRequired(key);
-        List<KeyValueEntry> list = new ArrayList<>();
-        visitSubject(readSubject(key), DeliverPolicy.All, false, true, m -> list.add(new KeyValueEntry(m)));
-        return list;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -400,7 +344,7 @@ public class NatsKeyValue extends NatsFeatureBase implements KeyValue {
      */
     @Override
     public void purgeDeletes() throws IOException, JetStreamApiException, InterruptedException {
-        purgeDeletes(null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -408,46 +352,7 @@ public class NatsKeyValue extends NatsFeatureBase implements KeyValue {
      */
     @Override
     public void purgeDeletes(KeyValuePurgeOptions options) throws IOException, JetStreamApiException, InterruptedException {
-        long dmThresh = options == null
-            ? KeyValuePurgeOptions.DEFAULT_THRESHOLD_MILLIS
-            : options.getDeleteMarkersThresholdMillis();
-
-        ZonedDateTime limit;
-        if (dmThresh < 0) {
-            limit = DateTimeUtils.fromNow(600000); // long enough in the future to clear all
-        }
-        else if (dmThresh == 0) {
-            limit = DateTimeUtils.fromNow(KeyValuePurgeOptions.DEFAULT_THRESHOLD_MILLIS);
-        }
-        else {
-            limit = DateTimeUtils.fromNow(-dmThresh);
-        }
-
-        List<String> keep0List = new ArrayList<>();
-        List<String> keep1List = new ArrayList<>();
-        visitSubject(streamSubject, DeliverPolicy.LastPerSubject, true, false, m -> {
-            KeyValueEntry kve = new KeyValueEntry(m);
-            if (kve.getOperation() != KeyValueOperation.PUT) {
-                if (kve.getCreated().isAfter(limit)) {
-                    keep1List.add(new BucketAndKey(m).key);
-                }
-                else {
-                    keep0List.add(new BucketAndKey(m).key);
-                }
-            }
-        });
-
-        for (String key : keep0List) {
-            jsm.purgeStream(streamName, PurgeOptions.subject(readSubject(key)));
-        }
-
-        for (String key : keep1List) {
-            PurgeOptions po = PurgeOptions.builder()
-                .subject(readSubject(key))
-                .keep(1)
-                .build();
-            jsm.purgeStream(streamName, po);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -455,6 +360,6 @@ public class NatsKeyValue extends NatsFeatureBase implements KeyValue {
      */
     @Override
     public KeyValueStatus getStatus() throws IOException, JetStreamApiException, InterruptedException {
-        return new KeyValueStatus(jsm.getStreamInfo(streamName));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

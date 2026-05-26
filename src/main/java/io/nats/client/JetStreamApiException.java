@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client;
 
 import io.nats.client.api.ApiResponse;
@@ -22,6 +21,7 @@ import org.jspecify.annotations.NonNull;
  * related to JetStream.
  */
 public class JetStreamApiException extends Exception {
+
     /**
      * The error that this exception represents if there is one
      */
@@ -53,7 +53,7 @@ public class JetStreamApiException extends Exception {
      * @return the code
      */
     public int getErrorCode() {
-        return error.getCode();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -61,7 +61,7 @@ public class JetStreamApiException extends Exception {
      * @return the code
      */
     public int getApiErrorCode() {
-        return error.getApiErrorCode();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -69,6 +69,6 @@ public class JetStreamApiException extends Exception {
      * @return the description
      */
     public String getErrorDescription() {
-        return error.getDescription();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -10,12 +10,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.support.JsonValue;
 import io.nats.client.support.JsonValueUtils;
-
 import java.util.List;
 
 /**
@@ -24,7 +22,7 @@ import java.util.List;
 public class Source extends SourceBase {
 
     static List<Source> optionalListOf(JsonValue vSources) {
-        return JsonValueUtils.optionalListOf(vSources, Source::new);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     Source(JsonValue vSource) {
@@ -40,7 +38,7 @@ public class Source extends SourceBase {
      * @return the builder
      */
     public static Builder builder() {
-        return new Builder();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -49,22 +47,24 @@ public class Source extends SourceBase {
      * @return the builder
      */
     public static Builder builder(Source source) {
-        return new Builder(source);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * The builder for a Source
      */
     public static class Builder extends SourceBaseBuilder<Builder> {
+
         @Override
         Builder getThis() {
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
          * Construct an instance of the builder
          */
-        public Builder() {}
+        public Builder() {
+        }
 
         /**
          * Construct an instance of the builder copying an existing source
@@ -79,7 +79,7 @@ public class Source extends SourceBase {
          * @return the Source
          */
         public Source build() {
-            return new Source(this);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

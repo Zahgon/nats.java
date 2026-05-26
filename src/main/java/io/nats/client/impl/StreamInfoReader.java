@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import io.nats.client.JetStreamApiException;
@@ -19,7 +18,6 @@ import io.nats.client.api.StreamInfo;
 import io.nats.client.api.StreamInfoOptions;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import static io.nats.client.support.ApiConstants.DELETED_DETAILS;
 import static io.nats.client.support.ApiConstants.SUBJECTS_FILTER;
 import static io.nats.client.support.JsonUtils.*;
@@ -27,6 +25,7 @@ import static io.nats.client.support.JsonUtils.*;
 class StreamInfoReader {
 
     private StreamInfo streamInfo;
+
     private ListRequestEngine engine;
 
     StreamInfoReader() {
@@ -34,31 +33,18 @@ class StreamInfoReader {
     }
 
     void process(@NonNull Message msg) throws JetStreamApiException {
-        engine = new ListRequestEngine(msg);
-        StreamInfo si = new StreamInfo(msg);
-        if (streamInfo == null) {
-            streamInfo = si;
-        }
-        else {
-            streamInfo.getStreamState().getSubjects().addAll(si.getStreamState().getSubjects());
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     boolean hasMore() {
-        return engine.hasMore();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     byte @NonNull [] nextJson(@Nullable StreamInfoOptions options) {
-        StringBuilder sb = beginJson();
-        addField(sb, "offset", engine.nextOffset());
-        if (options != null) {
-            addField(sb, SUBJECTS_FILTER, options.getSubjectsFilter());
-            addFldWhenTrue(sb, DELETED_DETAILS, options.isDeletedDetails());
-        }
-        return endJson(sb).toString().getBytes();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     StreamInfo getStreamInfo() {
-        return streamInfo;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -17,10 +17,8 @@ import io.nats.client.support.JsonValueUtils;
 import io.nats.client.support.NatsKeyValueUtil;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import java.time.Duration;
 import java.util.*;
-
 import static io.nats.client.support.NatsJetStreamConstants.SERVER_DEFAULT_DUPLICATE_WINDOW_MS;
 import static io.nats.client.support.NatsKeyValueUtil.*;
 import static io.nats.client.support.Validator.*;
@@ -29,6 +27,7 @@ import static io.nats.client.support.Validator.*;
  * The KeyValueConfiguration class contains the configuration for a Key Value bucket.
  */
 public class KeyValueConfiguration extends FeatureConfiguration {
+
     KeyValueConfiguration(StreamConfiguration sc) {
         super(sc, extractBucketName(sc.getName()));
     }
@@ -38,7 +37,7 @@ public class KeyValueConfiguration extends FeatureConfiguration {
      * @return the maximum number of values for any one key.
      */
     public long getMaxHistoryPerKey() {
-        return sc.getMaxMsgsPerSubject();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -56,7 +55,7 @@ public class KeyValueConfiguration extends FeatureConfiguration {
      * @return the maximum size for a value.
      */
     public int getMaximumValueSize() {
-        return sc.getMaximumMessageSize();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -65,7 +64,7 @@ public class KeyValueConfiguration extends FeatureConfiguration {
      */
     @Nullable
     public Republish getRepublish() {
-        return sc.getRepublish();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -74,7 +73,7 @@ public class KeyValueConfiguration extends FeatureConfiguration {
      */
     @Nullable
     public Mirror getMirror() {
-        return sc.getMirror();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -83,7 +82,7 @@ public class KeyValueConfiguration extends FeatureConfiguration {
      */
     @Nullable
     public List<Source> getSources() {
-        return sc.getSources();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -92,27 +91,18 @@ public class KeyValueConfiguration extends FeatureConfiguration {
      */
     @Nullable
     public Duration getLimitMarkerTtl() {
-        return sc.getSubjectDeleteMarkerTtl();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return "KeyValueConfiguration" + toJson();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     @NonNull
     public JsonValue toJsonValue() {
-        JsonValueUtils.MapBuilder mb = new JsonValueUtils.MapBuilder(super.toJsonValue());
-        mb.jv.mapOrder.remove("metaData");
-        mb.put("maxHistoryPerKey", getMaxHistoryPerKey());
-        mb.put("maxValueSize", getMaxValueSize());
-        mb.put("republish", getRepublish());
-        mb.put("mirror", getMirror());
-        mb.put("sources", getSources());
-        mb.put("limitMarkerTtl", getLimitMarkerTtl());
-        mb.jv.mapOrder.add("metaData");
-        return mb.toJsonValue();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -120,7 +110,7 @@ public class KeyValueConfiguration extends FeatureConfiguration {
      * @return a KeyValueConfiguration Builder
      */
     public static Builder builder() {
-        return new Builder((KeyValueConfiguration)null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -129,7 +119,7 @@ public class KeyValueConfiguration extends FeatureConfiguration {
      * @return a KeyValueConfiguration Builder
      */
     public static Builder builder(String name) {
-        return new Builder(name);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -138,7 +128,7 @@ public class KeyValueConfiguration extends FeatureConfiguration {
      * @return a KeyValueConfiguration Builder
      */
     public static Builder builder(KeyValueConfiguration kvc) {
-        return new Builder(kvc);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -146,25 +136,25 @@ public class KeyValueConfiguration extends FeatureConfiguration {
      * create a default set of options if no methods are calls.
      *
      * <p>{@code new Builder().build()} will create a new KeyValueConfiguration.
-     *
      */
-    public static class Builder
-        extends FeatureConfiguration.Builder<Builder, KeyValueConfiguration>
-    {
+    public static class Builder extends FeatureConfiguration.Builder<Builder, KeyValueConfiguration> {
+
         Mirror mirror;
+
         Duration limitMarkerTtl;
+
         final List<Source> sources = new ArrayList<>();
 
         @Override
         protected Builder getThis() {
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
          * Default Builder
          */
         public Builder() {
-            this((KeyValueConfiguration)null);
+            this((KeyValueConfiguration) null);
         }
 
         /**
@@ -172,7 +162,7 @@ public class KeyValueConfiguration extends FeatureConfiguration {
          * @param name name of the key value bucket.
          */
         public Builder(String name) {
-            this((KeyValueConfiguration)null);
+            this((KeyValueConfiguration) null);
             name(name);
         }
 
@@ -185,8 +175,7 @@ public class KeyValueConfiguration extends FeatureConfiguration {
                 scBuilder = new StreamConfiguration.Builder();
                 maxHistoryPerKey(1);
                 replicas(1);
-            }
-            else {
+            } else {
                 scBuilder = new StreamConfiguration.Builder(kvc.sc);
                 name = NatsKeyValueUtil.extractBucketName(kvc.sc.getName());
             }
@@ -199,7 +188,7 @@ public class KeyValueConfiguration extends FeatureConfiguration {
          */
         @Override
         public Builder name(String name) {
-            return super.name(name);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -209,7 +198,7 @@ public class KeyValueConfiguration extends FeatureConfiguration {
          */
         @Override
         public Builder description(String description) {
-            return super.description(description);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -218,8 +207,7 @@ public class KeyValueConfiguration extends FeatureConfiguration {
          * @return Builder
          */
         public Builder maxHistoryPerKey(int maxHistoryPerKey) {
-            scBuilder.maxMessagesPerSubject(validateMaxHistory(maxHistoryPerKey));
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -229,7 +217,7 @@ public class KeyValueConfiguration extends FeatureConfiguration {
          */
         @Override
         public Builder maxBucketSize(long maxBucketSize) {
-            return super.maxBucketSize(maxBucketSize);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -240,7 +228,7 @@ public class KeyValueConfiguration extends FeatureConfiguration {
          */
         @Deprecated
         public Builder maxValueSize(long maxValueSize) {
-            scBuilder.maximumMessageSize((int)validateMaxValueSize(maxValueSize));
+            scBuilder.maximumMessageSize((int) validateMaxValueSize(maxValueSize));
             return this;
         }
 
@@ -250,8 +238,7 @@ public class KeyValueConfiguration extends FeatureConfiguration {
          * @return Builder
          */
         public Builder maximumValueSize(int maxValueSize) {
-            scBuilder.maximumMessageSize((int)validateMaxValueSize(maxValueSize));
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -261,7 +248,7 @@ public class KeyValueConfiguration extends FeatureConfiguration {
          */
         @Override
         public Builder ttl(Duration ttl) {
-            return super.ttl(ttl);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -271,7 +258,7 @@ public class KeyValueConfiguration extends FeatureConfiguration {
          */
         @Override
         public Builder storageType(StorageType storageType) {
-            return super.storageType(storageType);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -281,7 +268,7 @@ public class KeyValueConfiguration extends FeatureConfiguration {
          */
         @Override
         public Builder replicas(int replicas) {
-            return super.replicas(replicas);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -291,7 +278,7 @@ public class KeyValueConfiguration extends FeatureConfiguration {
          */
         @Override
         public Builder placement(Placement placement) {
-            return super.placement(placement);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -302,7 +289,7 @@ public class KeyValueConfiguration extends FeatureConfiguration {
          */
         @Override
         public Builder compression(boolean compression) {
-            return super.compression(compression);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -312,7 +299,7 @@ public class KeyValueConfiguration extends FeatureConfiguration {
          */
         @Override
         public Builder metadata(Map<String, String> metadata) {
-            return super.metadata(metadata);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -321,8 +308,7 @@ public class KeyValueConfiguration extends FeatureConfiguration {
          * @return Builder
          */
         public Builder republish(Republish republish) {
-            scBuilder.republish(republish);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -331,8 +317,7 @@ public class KeyValueConfiguration extends FeatureConfiguration {
          * @return Builder
          */
         public Builder mirror(Mirror mirror) {
-            this.mirror = mirror;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -341,8 +326,7 @@ public class KeyValueConfiguration extends FeatureConfiguration {
          * @return Builder
          */
         public Builder sources(Source... sources) {
-            this.sources.clear();
-            return addSources(sources);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -351,8 +335,7 @@ public class KeyValueConfiguration extends FeatureConfiguration {
          * @return Builder
          */
         public Builder sources(Collection<Source> sources) {
-            this.sources.clear();
-            return addSources(sources);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -361,10 +344,7 @@ public class KeyValueConfiguration extends FeatureConfiguration {
          * @return Builder
          */
         public Builder addSource(Source source) {
-            if (source != null && !this.sources.contains(source)) {
-                this.sources.add(source);
-            }
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -373,10 +353,7 @@ public class KeyValueConfiguration extends FeatureConfiguration {
          * @return Builder
          */
         public Builder addSources(Source... sources) {
-            if (sources != null) {
-                return addSources(Arrays.asList(sources));
-            }
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -385,14 +362,7 @@ public class KeyValueConfiguration extends FeatureConfiguration {
          * @return Builder
          */
         public Builder addSources(Collection<Source> sources) {
-            if (sources != null) {
-                for (Source source : sources) {
-                    if (source != null && !this.sources.contains(source)) {
-                        this.sources.add(source);
-                    }
-                }
-            }
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -402,8 +372,7 @@ public class KeyValueConfiguration extends FeatureConfiguration {
          * @return The Builder
          */
         public Builder limitMarker(Duration limitMarkerTtl) {
-            this.limitMarkerTtl = validateDurationNotRequiredGtOrEqSeconds(1, limitMarkerTtl, null, "Limit Marker Ttl");
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -413,13 +382,7 @@ public class KeyValueConfiguration extends FeatureConfiguration {
          * @return The Builder
          */
         public Builder limitMarker(long limitMarkerTtlMillis) {
-            if (limitMarkerTtlMillis <= 0) {
-                this.limitMarkerTtl = null;
-            }
-            else {
-                this.limitMarkerTtl = validateDurationGtOrEqSeconds(1, limitMarkerTtlMillis, "Limit Marker Ttl");
-            }
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -427,61 +390,7 @@ public class KeyValueConfiguration extends FeatureConfiguration {
          * @return the KeyValueConfiguration.
          */
         public KeyValueConfiguration build() {
-            name = required(name, "name");
-            scBuilder.name(toStreamName(name))
-                .allowRollup(true)
-                .allowDirect(true) // by design
-                .discardPolicy(DiscardPolicy.New)
-                .denyDelete(true);
-
-            if (mirror != null) {
-                scBuilder.mirrorDirect(true);
-                String name = mirror.getName();
-                if (hasPrefix(name)) {
-                    scBuilder.mirror(mirror);
-                }
-                else {
-                    scBuilder.mirror(
-                        Mirror.builder(mirror)
-                            .name(toStreamName(name))
-                            .build());
-                }
-            }
-            else if (!sources.isEmpty()) {
-                for (Source source : sources) {
-                    String name = source.getName();
-                    if (hasPrefix(name)) {
-                        scBuilder.addSource(source);
-                    }
-                    else {
-                        scBuilder.addSource(
-                            Source.builder(source)
-                                .name(toStreamName(name))
-                                .build());
-                    }
-                }
-            }
-            else {
-                scBuilder.subjects(toStreamSubject(name));
-            }
-
-            if (limitMarkerTtl != null) {
-                scBuilder.subjectDeleteMarkerTtl(limitMarkerTtl).allowMessageTtl();
-            }
-
-            // When stream's MaxAge is not set, server uses 2 minutes as the default
-            // for the duplicate window. If MaxAge is set, and lower than 2 minutes,
-            // then the duplicate window will be set to that. If MaxAge is greater,
-            // we will cap the duplicate window to 2 minutes (to be consistent with
-            // previous behavior).
-            long ttlMs = ttl.toMillis();
-            long dupeMs = SERVER_DEFAULT_DUPLICATE_WINDOW_MS;
-            if (ttlMs > 0 && ttlMs < SERVER_DEFAULT_DUPLICATE_WINDOW_MS) {
-                dupeMs = ttlMs;
-            }
-            scBuilder.duplicateWindow(dupeMs);
-
-            return new KeyValueConfiguration(scBuilder.build());
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

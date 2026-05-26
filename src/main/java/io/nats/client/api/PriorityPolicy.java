@@ -10,11 +10,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import org.jspecify.annotations.Nullable;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,27 +22,28 @@ import java.util.Map;
  * Setting a priority policy will also require setting a Priority group. <BR>
  * When a priority policy and priority group are set, client instances making pull request need to specify the priority group
  * and optionally other ConsumerOptions See {@link io.nats.client.BaseConsumeOptions}
- *
  */
 public enum PriorityPolicy {
-    /** Standard consumer. All client instances are load balance fairly. */
+
+    /**
+     * Standard consumer. All client instances are load balance fairly.
+     */
     None("none"),
     /**
-	 * Each client pull request specifies overflow limits in the  {@link io.nats.client.BaseConsumeOptions} <BR>
-	 * Currently minPending and minAckPending are respected. <BR>
-	 * When either the minimum number of pending messages (not yet delivered to any client) OR the number pending acks is exceeded the pull request will return messages.
-     * */
+     * Each client pull request specifies overflow limits in the  {@link io.nats.client.BaseConsumeOptions} <BR>
+     * Currently minPending and minAckPending are respected. <BR>
+     * When either the minimum number of pending messages (not yet delivered to any client) OR the number pending acks is exceeded the pull request will return messages.
+     */
     Overflow("overflow"),
-
-    /** The client pull request will specify a priortity from 1 to 10 in the {@link io.nats.client.BaseConsumeOptions} <BR>
-     * Request with lower priority will be served first. That is, higher priority request will only be served when no pull request from lower priorities are pending.
-     * */
-    Prioritized("prioritized"),
-
     /**
-		If multiple clients make requests only ONE will be served messages. The API will identify clients through a UUID. <BR>.
-		If a client fails to make requests for more than the timeout specified in {@link io.nats.client.BaseConsumeOptions} another client will be served.
-    */
+     * The client pull request will specify a priortity from 1 to 10 in the {@link io.nats.client.BaseConsumeOptions} <BR>
+     * Request with lower priority will be served first. That is, higher priority request will only be served when no pull request from lower priorities are pending.
+     */
+    Prioritized("prioritized"),
+    /**
+     * 		If multiple clients make requests only ONE will be served messages. The API will identify clients through a UUID. <BR>.
+     * 		If a client fails to make requests for more than the timeout specified in {@link io.nats.client.BaseConsumeOptions} another client will be served.
+     */
     PinnedClient("pinned_client");
 
     private final String policy;
@@ -55,7 +54,7 @@ public enum PriorityPolicy {
 
     @Override
     public String toString() {
-        return policy;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private static final Map<String, PriorityPolicy> strEnumHash = new HashMap<>();
@@ -73,6 +72,6 @@ public enum PriorityPolicy {
      */
     @Nullable
     public static PriorityPolicy get(String value) {
-        return strEnumHash.get(value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

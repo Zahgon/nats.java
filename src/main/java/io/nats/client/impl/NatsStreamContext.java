@@ -10,14 +10,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import io.nats.client.*;
 import io.nats.client.api.*;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -25,8 +23,11 @@ import java.util.List;
  * Implementation of Stream Context
  */
 class NatsStreamContext implements StreamContext {
+
     final String streamName;
+
     final NatsJetStream js;
+
     final NatsJetStreamManagement jsm;
 
     // for when this is constructed from the NatsJetStream itself
@@ -34,7 +35,8 @@ class NatsStreamContext implements StreamContext {
         this.streamName = streamName;
         this.js = js == null ? new NatsJetStream(connection, jsOptions) : js;
         jsm = new NatsJetStreamManagement(connection, jsOptions);
-        jsm.getStreamInfo(streamName); // this is just verifying that the stream exists
+        // this is just verifying that the stream exists
+        jsm.getStreamInfo(streamName);
     }
 
     /**
@@ -43,7 +45,7 @@ class NatsStreamContext implements StreamContext {
     @Override
     @NonNull
     public String getStreamName() {
-        return streamName;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -52,7 +54,7 @@ class NatsStreamContext implements StreamContext {
     @Override
     @NonNull
     public StreamInfo getStreamInfo() throws IOException, JetStreamApiException {
-        return jsm.getStreamInfo(streamName, null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -61,7 +63,7 @@ class NatsStreamContext implements StreamContext {
     @Override
     @NonNull
     public StreamInfo getStreamInfo(@Nullable StreamInfoOptions options) throws IOException, JetStreamApiException {
-        return jsm.getStreamInfo(streamName, options);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -70,7 +72,7 @@ class NatsStreamContext implements StreamContext {
     @Override
     @NonNull
     public PurgeResponse purge() throws IOException, JetStreamApiException {
-        return jsm.purgeStream(streamName);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -79,7 +81,7 @@ class NatsStreamContext implements StreamContext {
     @Override
     @NonNull
     public PurgeResponse purge(@NonNull PurgeOptions options) throws IOException, JetStreamApiException {
-        return jsm.purgeStream(streamName, options);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -88,7 +90,7 @@ class NatsStreamContext implements StreamContext {
     @Override
     @NonNull
     public ConsumerContext getConsumerContext(@NonNull String consumerName) throws IOException, JetStreamApiException {
-        return new NatsConsumerContext(this, jsm.getConsumerInfo(streamName, consumerName), null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -97,7 +99,7 @@ class NatsStreamContext implements StreamContext {
     @Override
     @NonNull
     public ConsumerContext createOrUpdateConsumer(@NonNull ConsumerConfiguration config) throws IOException, JetStreamApiException {
-        return new NatsConsumerContext(this, jsm.addOrUpdateConsumer(streamName, config), null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -106,7 +108,7 @@ class NatsStreamContext implements StreamContext {
     @Override
     @NonNull
     public OrderedConsumerContext createOrderedConsumer(@NonNull OrderedConsumerConfiguration config) throws IOException, JetStreamApiException {
-        return new NatsOrderedConsumerContext(this, config);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -114,7 +116,7 @@ class NatsStreamContext implements StreamContext {
      */
     @Override
     public boolean deleteConsumer(@NonNull String consumerName) throws IOException, JetStreamApiException {
-        return jsm.deleteConsumer(streamName, consumerName);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -123,7 +125,7 @@ class NatsStreamContext implements StreamContext {
     @Override
     @NonNull
     public ConsumerInfo getConsumerInfo(@NonNull String consumerName) throws IOException, JetStreamApiException {
-        return jsm.getConsumerInfo(streamName, consumerName);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -132,7 +134,7 @@ class NatsStreamContext implements StreamContext {
     @Override
     @NonNull
     public List<String> getConsumerNames() throws IOException, JetStreamApiException {
-        return jsm.getConsumerNames(streamName);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -141,7 +143,7 @@ class NatsStreamContext implements StreamContext {
     @Override
     @NonNull
     public List<ConsumerInfo> getConsumers() throws IOException, JetStreamApiException {
-        return jsm.getConsumers(streamName);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -150,7 +152,7 @@ class NatsStreamContext implements StreamContext {
     @Override
     @NonNull
     public MessageInfo getMessage(long seq) throws IOException, JetStreamApiException {
-        return jsm.getMessage(streamName, seq);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -159,7 +161,7 @@ class NatsStreamContext implements StreamContext {
     @Override
     @NonNull
     public MessageInfo getLastMessage(@NonNull String subject) throws IOException, JetStreamApiException {
-        return jsm.getLastMessage(streamName, subject);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -168,7 +170,7 @@ class NatsStreamContext implements StreamContext {
     @Override
     @NonNull
     public MessageInfo getFirstMessage(@NonNull String subject) throws IOException, JetStreamApiException {
-        return jsm.getFirstMessage(streamName, subject);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -177,7 +179,7 @@ class NatsStreamContext implements StreamContext {
     @Override
     @NonNull
     public MessageInfo getNextMessage(long seq, @NonNull String subject) throws IOException, JetStreamApiException {
-        return jsm.getNextMessage(streamName, seq, subject);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -185,7 +187,7 @@ class NatsStreamContext implements StreamContext {
      */
     @Override
     public boolean deleteMessage(long seq) throws IOException, JetStreamApiException {
-        return jsm.deleteMessage(streamName, seq);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -193,6 +195,6 @@ class NatsStreamContext implements StreamContext {
      */
     @Override
     public boolean deleteMessage(long seq, boolean erase) throws IOException, JetStreamApiException {
-        return jsm.deleteMessage(streamName, seq, erase);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

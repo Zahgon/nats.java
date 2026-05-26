@@ -10,20 +10,17 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.support;
 
 import io.nats.client.NKey;
 import io.nats.client.NatsSystemClock;
 import org.jspecify.annotations.NonNull;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.time.Duration;
 import java.util.List;
-
 import static io.nats.client.support.Encoding.*;
 import static io.nats.client.support.JsonUtils.beginJson;
 import static io.nats.client.support.JsonUtils.endJson;
@@ -33,17 +30,18 @@ import static io.nats.client.support.JsonUtils.endJson;
  */
 public abstract class JwtUtils {
 
-    private JwtUtils() {} /* ensures cannot be constructed */
+    private JwtUtils() {
+    }
 
-    private static final String ENCODED_CLAIM_HEADER =
-        base64UrlEncodeToString("{\"typ\":\"JWT\", \"alg\":\"ed25519-nkey\"}");
+    /* ensures cannot be constructed */
+    private static final String ENCODED_CLAIM_HEADER = base64UrlEncodeToString("{\"typ\":\"JWT\", \"alg\":\"ed25519-nkey\"}");
 
     private static final long NO_LIMIT = -1;
 
     /**
      * Format string with `%s` placeholder for the JWT token followed
      * by the user NKey seed. This can be directly used as such:
-     * 
+     *
      * <pre>
      * NKey userKey = NKey.createUser(new SecureRandom());
      * NKey signingKey = loadFromSecretStore();
@@ -51,26 +49,14 @@ public abstract class JwtUtils {
      * String.format(JwtUtils.NATS_USER_JWT_FORMAT, jwt, new String(userKey.getSeed()));
      * </pre>
      */
-    public static final String NATS_USER_JWT_FORMAT = "-----BEGIN NATS USER JWT-----\n" +
-            "%s\n" +
-            "------END NATS USER JWT------\n" +
-            "\n" +
-            "************************* IMPORTANT *************************\n" +
-            "NKEY Seed printed below can be used to sign and prove identity.\n" +
-            "NKEYs are sensitive and should be treated as secrets.\n" +
-            "\n" +
-            "-----BEGIN USER NKEY SEED-----\n" +
-            "%s\n" +
-            "------END USER NKEY SEED------\n" +
-            "\n" +
-            "*************************************************************\n";
+    public static final String NATS_USER_JWT_FORMAT = "-----BEGIN NATS USER JWT-----\n" + "%s\n" + "------END NATS USER JWT------\n" + "\n" + "************************* IMPORTANT *************************\n" + "NKEY Seed printed below can be used to sign and prove identity.\n" + "NKEYs are sensitive and should be treated as secrets.\n" + "\n" + "-----BEGIN USER NKEY SEED-----\n" + "%s\n" + "------END USER NKEY SEED------\n" + "\n" + "*************************************************************\n";
 
     /**
      * Get the current time in seconds since epoch. Used for issue time.
      * @return the time
      */
     public static long currentTimeSeconds() {
-        return NatsSystemClock.currentTimeMillis() / 1000;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -85,7 +71,7 @@ public abstract class JwtUtils {
      * @return a JWT
      */
     public static String issueUserJWT(NKey signingKey, String accountId, String publicUserKey) throws GeneralSecurityException, IOException {
-        return issueUserJWT(signingKey, publicUserKey, null, null, currentTimeSeconds(), null, new UserClaim(accountId));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -101,7 +87,7 @@ public abstract class JwtUtils {
      * @return a JWT
      */
     public static String issueUserJWT(NKey signingKey, String accountId, String publicUserKey, String name) throws GeneralSecurityException, IOException {
-        return issueUserJWT(signingKey, publicUserKey, name, null, currentTimeSeconds(), null, new UserClaim(accountId));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -119,7 +105,7 @@ public abstract class JwtUtils {
      * @return a JWT
      */
     public static String issueUserJWT(NKey signingKey, String accountId, String publicUserKey, String name, Duration expiration, String... tags) throws GeneralSecurityException, IOException {
-        return issueUserJWT(signingKey, publicUserKey, name, expiration, currentTimeSeconds(), null, new UserClaim(accountId).tags(tags));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -138,7 +124,7 @@ public abstract class JwtUtils {
      * @return a JWT
      */
     public static String issueUserJWT(NKey signingKey, String accountId, String publicUserKey, String name, Duration expiration, String[] tags, long issuedAt) throws GeneralSecurityException, IOException {
-        return issueUserJWT(signingKey, publicUserKey, name, expiration, issuedAt, null, new UserClaim(accountId).tags(tags));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -156,7 +142,7 @@ public abstract class JwtUtils {
      * @throws IOException if signingKey sign method throws this exception.
      */
     public static String issueUserJWT(NKey signingKey, String accountId, String publicUserKey, String name, Duration expiration, String[] tags, long issuedAt, String audience) throws GeneralSecurityException, IOException {
-        return issueUserJWT(signingKey, publicUserKey, name, expiration, issuedAt, audience, new UserClaim(accountId).tags(tags));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -174,7 +160,7 @@ public abstract class JwtUtils {
      * @return a JWT
      */
     public static String issueUserJWT(NKey signingKey, String publicUserKey, String name, Duration expiration, long issuedAt, UserClaim nats) throws GeneralSecurityException, IOException {
-        return issueUserJWT(signingKey, publicUserKey, name, expiration, issuedAt, null, nats);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -193,25 +179,7 @@ public abstract class JwtUtils {
      * @return a JWT
      */
     public static String issueUserJWT(NKey signingKey, String publicUserKey, String name, Duration expiration, long issuedAt, String audience, UserClaim nats) throws GeneralSecurityException, IOException {
-        // Validate the signingKey:
-        if (signingKey.getType() != NKey.Type.ACCOUNT) {
-            throw new IllegalArgumentException("issueUserJWT requires an account key for the signingKey parameter, but got " + signingKey.getType());
-        }
-        // Validate the accountId:
-        NKey accountKey = NKey.fromPublicKey(nats.issuerAccount.toCharArray());
-        if (accountKey.getType() != NKey.Type.ACCOUNT) {
-            throw new IllegalArgumentException("issueUserJWT requires an account key for the accountId parameter, but got " + accountKey.getType());
-        }
-        // Validate the publicUserKey:
-        NKey userKey = NKey.fromPublicKey(publicUserKey.toCharArray());
-        if (userKey.getType() != NKey.Type.USER) {
-            throw new IllegalArgumentException("issueUserJWT requires a user key for the publicUserKey parameter, but got " + userKey.getType());
-        }
-        String accSigningKeyPub = new String(signingKey.getPublicKey());
-
-        String claimName = Validator.nullOrEmpty(name) ? publicUserKey : name;
-
-        return issueJWT(signingKey, publicUserKey, claimName, expiration, issuedAt, accSigningKeyPub, audience, nats);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -228,7 +196,7 @@ public abstract class JwtUtils {
      * @return a JWT
      */
     public static String issueJWT(NKey signingKey, String publicUserKey, String name, Duration expiration, long issuedAt, String accSigningKeyPub, JsonSerializable nats) throws GeneralSecurityException, IOException {
-        return issueJWT(signingKey, publicUserKey, name, expiration, issuedAt, accSigningKeyPub, null, nats);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -247,34 +215,7 @@ public abstract class JwtUtils {
      * @throws IOException              if signingKey sign method throws this exception.
      */
     public static String issueJWT(NKey signingKey, String publicUserKey, String name, Duration expiration, long issuedAt, String accSigningKeyPub, String audience, JsonSerializable nats) throws GeneralSecurityException, IOException {
-        Claim claim = new Claim();
-        claim.aud = audience;
-        claim.iat = issuedAt;
-        claim.iss = accSigningKeyPub;
-        claim.name = name;
-        claim.sub = publicUserKey;
-        claim.exp = expiration;
-        claim.nats = nats;
-
-        // Issue At time is stored in unix seconds
-        String claimJson = claim.toJson();
-
-        // Compute jti, a base32 encoded sha256 hash
-        MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
-        byte[] encoded = sha256.digest(claimJson.getBytes(StandardCharsets.ISO_8859_1));
-
-        claim.jti = new String(base32Encode(encoded));
-        claimJson = claim.toJson();
-
-        // all three components (header/body/signature) are base64url encoded
-        String encBody = base64UrlEncodeToString(claimJson);
-
-        // compute the signature off of header + body (. included on purpose)
-        byte[] sig = (ENCODED_CLAIM_HEADER + "." + encBody).getBytes(StandardCharsets.UTF_8);
-        String encSig = base64UrlEncodeToString(signingKey.sign(sig));
-
-        // append signature to header and body and return it
-        return ENCODED_CLAIM_HEADER + "." + encBody + "." + encSig;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -283,25 +224,55 @@ public abstract class JwtUtils {
      * @return the claim body json
      */
     public static String getClaimBody(String jwt) {
-        return base64UrlDecodeToString(jwt.split("\\.")[1]);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static class UserClaim implements JsonSerializable {
-        public String issuerAccount;            // User
-        public String[] tags;                   // User/GenericFields
-        public String type = "user";            // User/GenericFields
-        public int version = 2;                 // User/GenericFields
-        public Permission pub;                  // User/UserPermissionLimits/Permissions
-        public Permission sub;                  // User/UserPermissionLimits/Permissions
-        public ResponsePermission resp;         // User/UserPermissionLimits/Permissions
-        public String[] src;                    // User/UserPermissionLimits/Limits/UserLimits
-        public List<TimeRange> times;           // User/UserPermissionLimits/Limits/UserLimits
-        public String locale;                   // User/UserPermissionLimits/Limits/UserLimits
-        public long subs = NO_LIMIT;            // User/UserPermissionLimits/Limits/NatsLimits
-        public long data = NO_LIMIT;            // User/UserPermissionLimits/Limits/NatsLimits
-        public long payload = NO_LIMIT;         // User/UserPermissionLimits/Limits/NatsLimits
-        public boolean bearerToken;             // User/UserPermissionLimits
-        public String[] allowedConnectionTypes; // User/UserPermissionLimits
+
+        // User
+        public String issuerAccount;
+
+        // User/GenericFields
+        public String[] tags;
+
+        // User/GenericFields
+        public String type = "user";
+
+        // User/GenericFields
+        public int version = 2;
+
+        // User/UserPermissionLimits/Permissions
+        public Permission pub;
+
+        // User/UserPermissionLimits/Permissions
+        public Permission sub;
+
+        // User/UserPermissionLimits/Permissions
+        public ResponsePermission resp;
+
+        // User/UserPermissionLimits/Limits/UserLimits
+        public String[] src;
+
+        // User/UserPermissionLimits/Limits/UserLimits
+        public List<TimeRange> times;
+
+        // User/UserPermissionLimits/Limits/UserLimits
+        public String locale;
+
+        // User/UserPermissionLimits/Limits/NatsLimits
+        public long subs = NO_LIMIT;
+
+        // User/UserPermissionLimits/Limits/NatsLimits
+        public long data = NO_LIMIT;
+
+        // User/UserPermissionLimits/Limits/NatsLimits
+        public long payload = NO_LIMIT;
+
+        // User/UserPermissionLimits
+        public boolean bearerToken;
+
+        // User/UserPermissionLimits
+        public String[] allowedConnectionTypes;
 
         public UserClaim(String issuerAccount) {
             this.issuerAccount = issuerAccount;
@@ -310,88 +281,62 @@ public abstract class JwtUtils {
         @Override
         @NonNull
         public String toJson() {
-            StringBuilder sb = beginJson();
-            JsonUtils.addField(sb, "issuer_account", issuerAccount);
-            JsonUtils.addStrings(sb, "tags", tags);
-            JsonUtils.addField(sb, "type", type);
-            JsonUtils.addField(sb, "version", version);
-            JsonUtils.addField(sb, "pub", pub);
-            JsonUtils.addField(sb, "sub", sub);
-            JsonUtils.addField(sb, "resp", resp);
-            JsonUtils.addStrings(sb, "src", src);
-            JsonUtils.addJsons(sb, "times", times);
-            JsonUtils.addField(sb, "times_location", locale);
-            JsonUtils.addFieldWhenGteMinusOne(sb, "subs", subs);
-            JsonUtils.addFieldWhenGteMinusOne(sb, "data", data);
-            JsonUtils.addFieldWhenGteMinusOne(sb, "payload", payload);
-            JsonUtils.addFldWhenTrue(sb, "bearer_token", bearerToken);
-            JsonUtils.addStrings(sb, "allowed_connection_types", allowedConnectionTypes);
-            return endJson(sb).toString();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         public UserClaim tags(String... tags) {
-            this.tags = tags;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         public UserClaim pub(Permission pub) {
-            this.pub = pub;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         public UserClaim sub(Permission sub) {
-            this.sub = sub;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         public UserClaim resp(ResponsePermission resp) {
-            this.resp = resp;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         public UserClaim src(String... src) {
-            this.src = src;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         public UserClaim times(List<TimeRange> times) {
-            this.times = times;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         public UserClaim locale(String locale) {
-            this.locale = locale;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         public UserClaim subs(long subs) {
-            this.subs = subs;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         public UserClaim data(long data) {
-            this.data = data;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         public UserClaim payload(long payload) {
-            this.payload = payload;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         public UserClaim bearerToken(boolean bearerToken) {
-            this.bearerToken = bearerToken;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         public UserClaim allowedConnectionTypes(String... allowedConnectionTypes) {
-            this.allowedConnectionTypes = allowedConnectionTypes;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     public static class TimeRange implements JsonSerializable {
+
         public String start;
+
         public String end;
 
         public TimeRange(String start, String end) {
@@ -402,94 +347,78 @@ public abstract class JwtUtils {
         @Override
         @NonNull
         public String toJson() {
-            StringBuilder sb = beginJson();
-            JsonUtils.addField(sb, "start", start);
-            JsonUtils.addField(sb, "end", end);
-            return endJson(sb).toString();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     public static class ResponsePermission implements JsonSerializable {
+
         public int maxMsgs;
+
         public Duration expires;
 
         public ResponsePermission maxMsgs(int maxMsgs) {
-            this.maxMsgs = maxMsgs;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         public ResponsePermission expires(Duration expires) {
-            this.expires = expires;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         public ResponsePermission expires(long expiresMillis) {
-            this.expires = Duration.ofMillis(expiresMillis);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         @NonNull
         public String toJson() {
-            StringBuilder sb = beginJson();
-            JsonUtils.addField(sb, "max", maxMsgs);
-            JsonUtils.addFieldAsNanos(sb, "ttl", expires);
-            return endJson(sb).toString();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     public static class Permission implements JsonSerializable {
+
         public String[] allow;
+
         public String[] deny;
 
         public Permission allow(String... allow) {
-            this.allow = allow;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         public Permission deny(String... deny) {
-            this.deny = deny;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         @NonNull
         public String toJson() {
-            StringBuilder sb = beginJson();
-            JsonUtils.addStrings(sb, "allow", allow);
-            JsonUtils.addStrings(sb, "deny", deny);
-            return endJson(sb).toString();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     static class Claim implements JsonSerializable {
+
         String aud;
+
         String jti;
+
         long iat;
+
         String iss;
+
         String name;
+
         String sub;
+
         Duration exp;
+
         JsonSerializable nats;
 
         @Override
         @NonNull
         public String toJson() {
-            StringBuilder sb = beginJson();
-            JsonUtils.addField(sb, "aud", aud);
-            JsonUtils.addFieldEvenEmpty(sb, "jti", jti);
-            JsonUtils.addField(sb, "iat", iat);
-            JsonUtils.addField(sb, "iss", iss);
-            JsonUtils.addField(sb, "name", name);
-            JsonUtils.addField(sb, "sub", sub);
-
-            if (exp != null && !exp.isZero() && !exp.isNegative()) {
-                long seconds = exp.toMillis() / 1000;
-                JsonUtils.addField(sb, "exp", iat + seconds); // relative to the iat
-            }
-
-            JsonUtils.addField(sb, "nats", nats);
-            return endJson(sb).toString();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

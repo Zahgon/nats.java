@@ -10,17 +10,16 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.support;
 
 import org.jspecify.annotations.NonNull;
-
 import java.nio.charset.StandardCharsets;
 
 /**
  * A general interface for an object to be able to converted to JSON
  */
 public interface JsonSerializable {
+
     /**
      * Get the JSON string
      * @return the string
@@ -33,7 +32,7 @@ public interface JsonSerializable {
      * @return the byte array
      */
     default byte @NonNull [] serialize() {
-        return toJson().getBytes(StandardCharsets.UTF_8);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -42,6 +41,6 @@ public interface JsonSerializable {
      */
     @NonNull
     default JsonValue toJsonValue() {
-        return JsonParser.parseUnchecked(toJson());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

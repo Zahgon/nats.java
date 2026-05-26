@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client;
 
 /**
@@ -19,17 +18,22 @@ package io.nats.client;
  * if they take a significant time to process them. This class is really intended for debugging purposes.
  */
 public interface ReadListener {
+
     /**
      * Called when the message is specifically a protocol message
      * @param op the protocol operation
      * @param text the text associated with the protocol if there is any. May be null
      */
-    default void protocol(String op, String text) {};
+    default void protocol(String op, String text) {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
     /**
      * Called when the message is any non-protocol message
      * @param op the message operation
      * @param message the actual message
      */
-    default void message(String op, Message message) {};
+    default void message(String op, Message message) {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 }

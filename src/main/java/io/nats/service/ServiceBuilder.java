@@ -2,11 +2,9 @@ package io.nats.service;
 
 import io.nats.client.Connection;
 import io.nats.client.Dispatcher;
-
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
-
 import static io.nats.client.support.Validator.*;
 
 /**
@@ -14,6 +12,7 @@ import static io.nats.client.support.Validator.*;
  * Use the Service static method <code>builder()</code> or <code>new ServiceBuilder()</code> to get an instance.
  */
 public class ServiceBuilder {
+
     /**
      * Constant for the default drain timeout in millis
      */
@@ -25,20 +24,30 @@ public class ServiceBuilder {
     public static final Duration DEFAULT_DRAIN_TIMEOUT = Duration.ofMillis(DEFAULT_DRAIN_TIMEOUT_MILLIS);
 
     Connection conn;
+
     String name;
+
     String description;
+
     String version;
+
     Map<String, String> metadata;
+
     final Map<String, ServiceEndpoint> serviceEndpoints = new HashMap<>();
+
     Duration drainTimeout = DEFAULT_DRAIN_TIMEOUT;
+
     Dispatcher pingDispatcher;
+
     Dispatcher infoDispatcher;
+
     Dispatcher statsDispatcher;
 
     /**
      * Construct an instance of the builder
      */
-    public ServiceBuilder() {}
+    public ServiceBuilder() {
+    }
 
     /**
      * The connection the service runs on
@@ -46,8 +55,7 @@ public class ServiceBuilder {
      * @return the ServiceBuilder
      */
     public ServiceBuilder connection(Connection conn) {
-        this.conn = conn;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -56,8 +64,7 @@ public class ServiceBuilder {
      * @return the ServiceBuilder
      */
     public ServiceBuilder name(String name) {
-        this.name = validateIsRestrictedTerm(name, "Service Name", true);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -66,8 +73,7 @@ public class ServiceBuilder {
      * @return the ServiceBuilder
      */
     public ServiceBuilder description(String description) {
-        this.description = description;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -76,8 +82,7 @@ public class ServiceBuilder {
      * @return the ServiceBuilder
      */
     public ServiceBuilder version(String version) {
-        this.version = validateSemVer(version, "Service Version", true);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -86,8 +91,7 @@ public class ServiceBuilder {
      * @return the ServiceBuilder
      */
     public ServiceBuilder metadata(Map<String, String> metadata) {
-        this.metadata = metadata;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -96,8 +100,7 @@ public class ServiceBuilder {
      * @return the ServiceBuilder
      */
     public ServiceBuilder addServiceEndpoint(ServiceEndpoint serviceEndpoint) {
-        serviceEndpoints.put(serviceEndpoint.getName(), serviceEndpoint);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -106,8 +109,7 @@ public class ServiceBuilder {
      * @return the ServiceBuilder
      */
     public ServiceBuilder drainTimeout(Duration drainTimeout) {
-        this.drainTimeout = drainTimeout == null ? DEFAULT_DRAIN_TIMEOUT : drainTimeout;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -116,8 +118,7 @@ public class ServiceBuilder {
      * @return the ServiceBuilder
      */
     public ServiceBuilder drainTimeout(long drainTimeoutMillis) {
-        this.drainTimeout = Duration.ofMillis(drainTimeoutMillis);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -126,8 +127,7 @@ public class ServiceBuilder {
      * @return the ServiceBuilder
      */
     public ServiceBuilder pingDispatcher(Dispatcher pingDispatcher) {
-        this.pingDispatcher = pingDispatcher;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -136,8 +136,7 @@ public class ServiceBuilder {
      * @return the ServiceBuilder
      */
     public ServiceBuilder infoDispatcher(Dispatcher infoDispatcher) {
-        this.infoDispatcher = infoDispatcher;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -157,8 +156,7 @@ public class ServiceBuilder {
      * @return the ServiceBuilder
      */
     public ServiceBuilder statsDispatcher(Dispatcher statsDispatcher) {
-        this.statsDispatcher = statsDispatcher;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -166,9 +164,6 @@ public class ServiceBuilder {
      * @return the Service instance
      */
     public Service build() {
-        required(conn, "Connection");
-        required(name, "Name");
-        required(version, "Version");
-        return new Service(this);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

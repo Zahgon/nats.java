@@ -10,14 +10,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import io.nats.client.support.ByteArrayBuilder;
 
 public class IncomingMessage extends NatsMessage {
+
     IncomingMessage() {
-        super((byte[])null);
+        super((byte[]) null);
     }
 
     IncomingMessage(byte[] data) {
@@ -26,21 +26,21 @@ public class IncomingMessage extends NatsMessage {
 
     @Override
     protected void calculate() {
-        // intentionally does nothing
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     ByteArrayBuilder getProtocolBab() {
-        throw new IllegalStateException("getProtocolBab not supported for this type of message.");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     byte[] getProtocolBytes() {
-        throw new IllegalStateException("getProtocolBytes not supported for this type of message.");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     int getControlLineLength() {
-        throw new IllegalStateException("getControlLineLength not supported for this type of message.");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

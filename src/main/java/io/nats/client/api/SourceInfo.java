@@ -10,12 +10,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.support.JsonValue;
 import io.nats.client.support.JsonValueUtils;
-
 import java.util.List;
 
 /**
@@ -24,7 +22,7 @@ import java.util.List;
 public class SourceInfo extends SourceInfoBase {
 
     static List<SourceInfo> optionalListOf(JsonValue vSourceInfos) {
-        return JsonValueUtils.optionalListOf(vSourceInfos, SourceInfo::new);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     SourceInfo(JsonValue vSourceInfo) {
@@ -33,6 +31,6 @@ public class SourceInfo extends SourceInfoBase {
 
     @Override
     public String toString() {
-        return "SourceInfo " + jv;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -18,7 +18,6 @@ import io.nats.client.support.JsonValue;
 import io.nats.client.support.Validator;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import static io.nats.client.support.ApiConstants.BUCKET;
 import static io.nats.client.support.ApiConstants.NAME;
 import static io.nats.client.support.JsonUtils.beginJson;
@@ -31,10 +30,11 @@ import static io.nats.client.support.JsonValueUtils.readString;
 public class ObjectLink implements JsonSerializable {
 
     private final String bucket;
+
     private final String objectName;
 
     static ObjectLink optionalInstance(JsonValue vLink) {
-        return vLink == null ? null : new ObjectLink(vLink);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     ObjectLink(JsonValue vLink) {
@@ -50,10 +50,7 @@ public class ObjectLink implements JsonSerializable {
     @Override
     @NonNull
     public String toJson() {
-        StringBuilder sb = beginJson();
-        JsonUtils.addField(sb, BUCKET, bucket);
-        JsonUtils.addField(sb, NAME, objectName);
-        return endJson(sb).toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -62,7 +59,7 @@ public class ObjectLink implements JsonSerializable {
      */
     @NonNull
     public String getBucket() {
-        return bucket;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -71,7 +68,7 @@ public class ObjectLink implements JsonSerializable {
      */
     @Nullable
     public String getObjectName() {
-        return objectName;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -79,7 +76,7 @@ public class ObjectLink implements JsonSerializable {
      * @return true if the object is a link
      */
     public boolean isObjectLink() {
-        return objectName != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -87,7 +84,7 @@ public class ObjectLink implements JsonSerializable {
      * @return true if the object is a bucket
      */
     public boolean isBucketLink() {
-        return objectName == null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -96,7 +93,7 @@ public class ObjectLink implements JsonSerializable {
      * @return the ObjectLink
      */
     public static ObjectLink bucket(@NonNull String bucket) {
-        return new ObjectLink(bucket, null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -106,31 +103,21 @@ public class ObjectLink implements JsonSerializable {
      * @return the ObjectLink
      */
     public static ObjectLink object(String bucket, String objectName) {
-        return new ObjectLink(bucket, objectName);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ObjectLink that = (ObjectLink) o;
-
-        if (!bucket.equals(that.bucket)) return false; // bucket never null
-        return objectName != null ? objectName.equals(that.objectName) : that.objectName == null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int hashCode() {
-        return bucket.hashCode() * 31
-            + (objectName == null ? 0 : objectName.hashCode());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return "ObjectLink{" +
-            "bucket='" + bucket + '\'' +
-            ", objectName='" + objectName + '\'' +
-            '}';
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

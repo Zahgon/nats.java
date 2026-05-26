@@ -10,18 +10,15 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.service;
 
 import io.nats.client.support.*;
 import org.jspecify.annotations.NonNull;
-
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
-
 import static io.nats.client.support.ApiConstants.*;
 import static io.nats.client.support.JsonUtils.endJson;
 import static io.nats.client.support.JsonValueUtils.readString;
@@ -31,11 +28,17 @@ import static io.nats.client.support.JsonValueUtils.readStringStringMap;
  * Base class for service responses Info, Ping and Stats
  */
 public abstract class ServiceResponse implements JsonSerializable {
+
     protected final String type;
+
     protected final String name;
+
     protected final String id;
+
     protected final String version;
+
     protected final Map<String, String> metadata;
+
     protected final AtomicReference<byte[]> serialized;
 
     protected ServiceResponse(String type, String id, String name, String version, Map<String, String> metadata) {
@@ -69,20 +72,11 @@ public abstract class ServiceResponse implements JsonSerializable {
 
     @Override
     public byte @NonNull [] serialize() {
-        // lazy since endpoints can be added after creation
-        if (serialized.get() == null) {
-            serialized.set(toJson().getBytes(StandardCharsets.UTF_8));
-        }
-        return serialized.get();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected static JsonValue parseMessage(byte[] bytes) {
-        try {
-            return JsonParser.parse(bytes);
-        }
-        catch (JsonParseException e) {
-            return JsonValue.EMPTY_MAP;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -90,7 +84,7 @@ public abstract class ServiceResponse implements JsonSerializable {
      * @return the type string
      */
     public String getType() {
-        return type;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -98,7 +92,7 @@ public abstract class ServiceResponse implements JsonSerializable {
      * @return the service id
      */
     public String getId() {
-        return id;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -106,7 +100,7 @@ public abstract class ServiceResponse implements JsonSerializable {
      * @return the service name
      */
     public String getName() {
-        return name;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -114,7 +108,7 @@ public abstract class ServiceResponse implements JsonSerializable {
      * @return the version
      */
     public String getVersion() {
-        return version;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -122,50 +116,31 @@ public abstract class ServiceResponse implements JsonSerializable {
      * @return the metadata
      */
     public Map<String, String> getMetadata() {
-        return metadata == null ? null : new HashMap<>(metadata);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    protected void subToJson(StringBuilder sb) {}
+    protected void subToJson(StringBuilder sb) {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
     @Override
     @NonNull
     public String toJson() {
-        StringBuilder sb = JsonUtils.beginJson();
-        JsonUtils.addField(sb, ID, id);
-        JsonUtils.addField(sb, NAME, name);
-        JsonUtils.addField(sb, VERSION, version);
-        subToJson(sb);
-        JsonUtils.addField(sb, TYPE, type);
-        JsonUtils.addField(sb, METADATA, metadata);
-        return endJson(sb).toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return JsonUtils.toKey(getClass()) + toJson();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ServiceResponse that = (ServiceResponse) o;
-
-        if (!Objects.equals(type, that.type)) return false;
-        if (!Objects.equals(name, that.name)) return false;
-        if (!Objects.equals(id, that.id)) return false;
-        if (!Objects.equals(version, that.version)) return false;
-        return JsonUtils.mapEquals(metadata, that.metadata);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int hashCode() {
-        int result = type != null ? type.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (id != null ? id.hashCode() : 0);
-        result = 31 * result + (version != null ? version.hashCode() : 0);
-        result = 31 * result + (metadata != null ? metadata.hashCode() : 0);
-        return result;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

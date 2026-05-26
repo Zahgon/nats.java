@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import io.nats.client.*;
@@ -20,7 +19,6 @@ import io.nats.client.api.ServerInfo;
 import io.nats.client.support.*;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URISyntaxException;
@@ -36,7 +34,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
-
 import static io.nats.client.support.NatsConstants.*;
 import static io.nats.client.support.NatsRequestCompletableFuture.CancelAction;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -46,170 +43,192 @@ class NatsConnection implements Connection {
     public static final double NANOS_PER_SECOND = 1_000_000_000.0;
 
     protected final Options options;
+
     protected final boolean forceFlushOnRequest;
 
     protected final StatisticsCollector statistics;
 
-    protected volatile boolean connecting; // you can only connect in one thread
-    protected volatile boolean disconnecting; // you can only disconnect in one thread
-    protected volatile boolean closing; // respect a close call regardless
-    protected Exception exceptionDuringConnectChange; // exception occurred in another thread while dis/connecting
+    // you can only connect in one thread
+    protected volatile boolean connecting;
+
+    // you can only disconnect in one thread
+    protected volatile boolean disconnecting;
+
+    // respect a close call regardless
+    protected volatile boolean closing;
+
+    // exception occurred in another thread while dis/connecting
+    protected Exception exceptionDuringConnectChange;
+
     protected final ReentrantLock closeSocketLock;
 
     private volatile Status status;
+
     protected final ReentrantLock statusLock;
+
     protected final Condition statusChanged;
 
     protected CompletableFuture<DataPort> dataPortFuture;
+
     protected DataPort dataPort;
+
     protected NatsUri currentServer;
+
     protected NatsUri lastServer;
+
     protected CompletableFuture<Boolean> reconnectWaiter;
+
     protected final ConcurrentHashMap<NatsUri, String> serverAuthErrors;
 
     protected NatsConnectionReader reader;
+
     protected NatsConnectionWriter writer;
 
     protected final AtomicReference<ServerInfo> serverInfo;
 
     protected final Map<String, NatsSubscription> subscribers;
-    protected final Map<String, NatsDispatcher> dispatchers; // use a concurrent map so we get more consistent iteration behavior
+
+    // use a concurrent map so we get more consistent iteration behavior
+    protected final Map<String, NatsDispatcher> dispatchers;
+
     protected final Collection<ConnectionListener> connectionListeners;
+
     protected final Map<String, NatsRequestCompletableFuture> responsesAwaiting;
+
     protected final Map<String, NatsRequestCompletableFuture> responsesRespondedTo;
+
     protected final ConcurrentLinkedDeque<CompletableFuture<Boolean>> pongQueue;
 
     protected final String mainInbox;
+
     protected final AtomicReference<NatsDispatcher> inboxDispatcher;
+
     protected final ReentrantLock inboxDispatcherLock;
+
     protected ScheduledTask pingTask;
+
     protected ScheduledTask cleanupTask;
 
     protected final AtomicBoolean needPing;
 
     protected final AtomicLong nextSid;
+
     protected final NUID nuid;
 
     protected final AtomicReference<String> connectError;
+
     protected final AtomicReference<String> lastError;
+
     protected final AtomicReference<CompletableFuture<Boolean>> draining;
+
     protected final AtomicBoolean blockPublishForDrain;
+
     protected final AtomicBoolean tryingToConnect;
 
     // these are not final so they can be nullified on close
     protected ExecutorService callbackExecutor;
+
     protected ExecutorService executor;
+
     protected ExecutorService connectExecutor;
+
     protected ScheduledExecutorService scheduledExecutor;
 
     protected final boolean advancedTracking;
 
     protected final ServerPool serverPool;
+
     protected final DispatcherFactory dispatcherFactory;
-    protected final @NonNull CancelAction cancelAction;
+
+    @NonNull
+    protected final CancelAction cancelAction;
 
     protected final boolean trace;
+
     protected final TimeTraceLogger timeTraceLogger;
 
     // allows user to opt into the level of subject validation they want
     protected interface SubjectReplyValidator {
+
         String validate(String subject, boolean required);
     }
 
     protected final SubjectReplyValidator subjectValidator;
+
     protected final SubjectReplyValidator replyValidator;
 
     protected String subjectValidate(String subject, boolean required) {
-        return subjectValidator.validate(subject, required);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected String replyValidate(String replyTo, boolean required) {
-        return replyValidator.validate(replyTo, required);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected NatsConnection(@NonNull Options options) {
         trace = options.isTraceConnection();
         timeTraceLogger = options.getTimeTraceLogger();
         timeTraceLogger.trace("creating connection object");
-
         this.options = options;
         forceFlushOnRequest = options.forceFlushOnRequest();
-
         advancedTracking = options.isTrackAdvancedStats();
         this.statistics = options.getStatisticsCollector() == null ? new NatsStatistics() : options.getStatisticsCollector();
         this.statistics.setAdvancedTracking(advancedTracking);
-
         this.closeSocketLock = new ReentrantLock();
-
         this.statusLock = new ReentrantLock();
         this.statusChanged = this.statusLock.newCondition();
         this.status = Status.DISCONNECTED;
         this.reconnectWaiter = new CompletableFuture<>();
         this.reconnectWaiter.complete(Boolean.TRUE);
-
         this.connectionListeners = ConcurrentHashMap.newKeySet();
         if (options.getConnectionListener() != null) {
             addConnectionListener(options.getConnectionListener());
         }
-
         this.dispatchers = new ConcurrentHashMap<>();
         this.subscribers = new ConcurrentHashMap<>();
         this.responsesAwaiting = new ConcurrentHashMap<>();
         this.responsesRespondedTo = new ConcurrentHashMap<>();
         this.serverAuthErrors = new ConcurrentHashMap<>();
-
         this.nextSid = new AtomicLong(1);
         timeTraceLogger.trace("creating NUID");
         this.nuid = new NUID();
         this.mainInbox = createInbox() + ".*";
-
         this.lastError = new AtomicReference<>();
         this.connectError = new AtomicReference<>();
-
-        this.serverInfo = new AtomicReference<>(ServerInfo.EMPTY_INFO); // we want serverInfo.get to never return a null
+        // we want serverInfo.get to never return a null
+        this.serverInfo = new AtomicReference<>(ServerInfo.EMPTY_INFO);
         this.inboxDispatcher = new AtomicReference<>();
         this.inboxDispatcherLock = new ReentrantLock();
         this.pongQueue = new ConcurrentLinkedDeque<>();
         this.draining = new AtomicReference<>();
         this.blockPublishForDrain = new AtomicBoolean();
         this.tryingToConnect = new AtomicBoolean();
-
         timeTraceLogger.trace("creating executors");
         options.incrementExecutorUse();
         this.executor = options.getExecutor();
         this.callbackExecutor = options.getCallbackExecutor();
         this.connectExecutor = options.getConnectExecutor();
         this.scheduledExecutor = options.getScheduledExecutor();
-
         timeTraceLogger.trace("creating reader and writer");
         this.reader = new NatsConnectionReader(this);
         this.writer = new NatsConnectionWriter(this);
-
         this.needPing = new AtomicBoolean(true);
-
         serverPool = options.getServerPool() == null ? new NatsServerPool() : options.getServerPool();
         serverPool.initialize(options);
         dispatcherFactory = options.getDispatcherFactory() == null ? new DispatcherFactory() : options.getDispatcherFactory();
-
         cancelAction = options.isReportNoResponders() ? CancelAction.REPORT : CancelAction.CANCEL;
-
         timeTraceLogger.trace("connection object created");
-
-        switch (options.subjectValidationType()) {
+        switch(options.subjectValidationType()) {
             case None:
-                subjectValidator = (subject, required) -> required
-                    ? Validator.required(subject, "Subject")
-                    : Validator.emptyAsNull(subject);
+                subjectValidator = (subject, required) -> required ? Validator.required(subject, "Subject") : Validator.emptyAsNull(subject);
                 replyValidator = (replyTo, required) -> Validator.emptyAsNull(replyTo);
                 break;
             case Strict:
-                subjectValidator = (subject, required) ->
-                    Validator.validateSubjectTermStrict(subject, "Subject", required);
+                subjectValidator = (subject, required) -> Validator.validateSubjectTermStrict(subject, "Subject", required);
                 replyValidator = Validator::validateReplyTo;
                 break;
             default:
-                subjectValidator = (subject, required) ->
-                    Validator.validateSubjectTerm(subject, "Subject", required);
+                subjectValidator = (subject, required) -> Validator.validateSubjectTerm(subject, "Subject", required);
                 replyValidator = Validator::validateReplyTo;
                 break;
         }
@@ -217,778 +236,119 @@ class NatsConnection implements Connection {
 
     // Connect is only called after creation
     protected void connect(boolean reconnectOnConnect) throws InterruptedException, IOException {
-        if (tryingToConnect.compareAndSet(false, true)) {
-            try {
-                connectImpl(reconnectOnConnect);
-            }
-            finally {
-                tryingToConnect.set(false);
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void connectImpl(boolean reconnectOnConnect) throws InterruptedException, IOException {
-        if (options.getServers().isEmpty()) {
-            throw new IllegalArgumentException("No servers provided in options");
-        }
-
-        boolean trace = options.isTraceConnection();
-        long start = NatsSystemClock.nanoTime();
-
-        this.lastError.set("");
-
-        timeTraceLogger.trace("starting connect loop");
-
-        Set<NatsUri> failList = new HashSet<>();
-        boolean keepGoing = true;
-        NatsUri first = null;
-        NatsUri cur;
-        while (keepGoing && (cur = serverPool.peekNextServer()) != null) {
-            if (first == null) {
-                first = cur;
-            }
-            else if (cur.equals(first)) {
-                break;  // connect only goes through loop once
-            }
-            serverPool.nextServer(); // b/c we only peeked.
-
-            // let server pool resolve hostnames, then loop through resolved
-            List<NatsUri> resolvedList = resolveHost(cur);
-            for (NatsUri resolved : resolvedList) {
-                if (isClosed()) {
-                    keepGoing = false;
-                    break;
-                }
-                connectError.set(""); // new on each attempt
-
-                timeTraceLogger.trace("setting status to connecting");
-                updateStatus(Status.CONNECTING, resolved, cur);
-
-                timeTraceLogger.trace("trying to connect to %s", cur);
-                tryToConnect(cur, resolved, NatsSystemClock.nanoTime());
-
-                if (isConnected()) {
-                    serverPool.connectSucceeded(cur);
-                    keepGoing = false;
-                    break;
-                }
-
-                timeTraceLogger.trace("setting status to disconnected");
-                updateStatus(Status.DISCONNECTED, resolved, cur);
-
-                failList.add(cur);
-                serverPool.connectFailed(cur);
-
-                String err = connectError.get();
-
-                if (this.isAuthenticationError(err)) {
-                    this.serverAuthErrors.put(resolved, err);
-                }
-            }
-        }
-
-        if (!isConnected() && !isClosed()) {
-            if (reconnectOnConnect) {
-                timeTraceLogger.trace("trying to reconnect on connect");
-                reconnectImpl(); // call the impl here otherwise the tryingToConnect guard will block the behavior
-            }
-            else {
-                timeTraceLogger.trace("connection failed, closing to cleanup");
-                close();
-
-                String err = connectError.get();
-                if (this.isAuthenticationError(err)) {
-                    throw new AuthenticationException("Authentication error connecting to NATS server: " + err);
-                }
-                throw new IOException("Unable to connect to NATS servers: " + failList);
-            }
-        }
-        else if (trace) {
-            long end = NatsSystemClock.nanoTime();
-            double seconds = ((double) (end - start)) / NANOS_PER_SECOND;
-            timeTraceLogger.trace("connect complete in %.3f seconds", seconds);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void forceReconnect() throws IOException, InterruptedException {
-        forceReconnect(ForceReconnectOptions.DEFAULT_INSTANCE);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void forceReconnect(ForceReconnectOptions options) throws IOException, InterruptedException {
-        if (tryingToConnect.compareAndSet(false, true)) {
-            try {
-                forceReconnectImpl(options == null ? ForceReconnectOptions.DEFAULT_INSTANCE : options);
-            }
-            finally {
-                tryingToConnect.set(false);
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void forceReconnectImpl(@NonNull ForceReconnectOptions frOpts) throws InterruptedException {
-        if (frOpts.getFlushWait() != null) {
-            try {
-                flush(frOpts.getFlushWait());
-            }
-            catch (TimeoutException e) {
-                // Ignored. Manual test demonstrates that if the connection is dropped
-                // in the middle of the flush, the most likely reason for a TimeoutException,
-                // the socket is closed.
-            }
-        }
-
-        closeSocketLock.lock();
-        try {
-            updateStatus(Status.DISCONNECTED);
-
-            // Close and reset the current data port and future
-            if (dataPortFuture != null) {
-                dataPortFuture.cancel(true);
-                dataPortFuture = null;
-            }
-
-            // close the data port as a task so as not to block reconnecting
-            if (dataPort != null) {
-                final DataPort dataPortToClose = dataPort;
-                dataPort = null;
-                executor.submit(() -> {
-                    try {
-                        if (frOpts.isForceClose()) {
-                            dataPortToClose.forceClose();
-                        }
-                        else {
-                            dataPortToClose.close();
-                        }
-                    }
-                    catch (IOException ignore) {
-                        // ignored since running as a task and nothing we can do.
-                    }
-                });
-            }
-
-            // stop i/o
-            try {
-                this.reader.stop(false).get(100, TimeUnit.MILLISECONDS);
-            }
-            catch (Exception ex) {
-                processException(ex);
-            }
-            try {
-                this.writer.stop().get(100, TimeUnit.MILLISECONDS);
-            }
-            catch (Exception ex) {
-                processException(ex);
-            }
-        }
-        finally {
-            closeSocketLock.unlock();
-        }
-
-        reconnectImpl();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void reconnect() throws InterruptedException {
-        if (tryingToConnect.compareAndSet(false, true)) {
-            try {
-                reconnectImpl();
-            }
-            finally {
-                tryingToConnect.set(false);
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     // Reconnect can only be called when the connection is disconnected
     protected void reconnectImpl() throws InterruptedException {
-        if (isClosed()) {
-            return;
-        }
-
-        if (options.getMaxReconnect() == 0) {
-            this.close();
-            return;
-        }
-
-        writer.enterReconnectMode();
-
-        if (!isConnected() && !isClosed() && !this.isClosing()) {
-            reconnectImplConnect();
-        }
-
-        if (!isConnected()) {
-            this.close();
-            return;
-        }
-
-        this.subscribers.forEach((sid, sub) -> {
-            if (sub.getDispatcher() == null && !sub.isDraining()) {
-                sendSubscriptionMessage(sub.getSID(), sub.getSubject(), sub.getQueueName(), true);
-            }
-        });
-
-        this.dispatchers.forEach((nuid, d) -> {
-            if (!d.isDraining()) {
-                d.resendSubscriptions();
-            }
-        });
-
-        writer.enterWaitingForEndReconnectMode();
-
-        processConnectionEvent(Events.RESUBSCRIBED, uriDetail(currentServer));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void reconnectImplConnect() throws InterruptedException {
-        int totalRounds = 0;
-        NatsUri first = null;
-        NatsUri cur;
-        while ((cur = serverPool.nextServer()) != null) {
-            if (first == null) {
-                first = cur;
-            }
-            else if (first.equals(cur)) {
-                // went around the pool an entire time
-                invokeReconnectDelayHandler(++totalRounds);
-            }
-
-            // let server list provider resolve hostnames
-            // then loop through resolved
-            List<NatsUri> resolvedList = resolveHost(cur);
-            for (NatsUri resolved : resolvedList) {
-                if (isClosed()) {
-                    return;
-                }
-                connectError.set(""); // reset on each loop
-                if (isDisconnectingOrClosed() || this.isClosing()) {
-                    return;
-                }
-                updateStatus(Status.RECONNECTING, resolved, cur);
-
-                timeTraceLogger.trace("reconnecting to server %s", cur);
-                tryToConnect(cur, resolved, NatsSystemClock.nanoTime());
-
-                if (isConnected()) {
-                    serverPool.connectSucceeded(cur);
-                    statistics.incrementReconnects();
-                    return;
-                }
-
-                serverPool.connectFailed(cur);
-                String err = connectError.get();
-                if (this.isAuthenticationError(err)) {
-                    if (err.equals(this.serverAuthErrors.get(resolved))) {
-                        return; // double auth error
-                    }
-                    serverAuthErrors.put(resolved, err);
-                }
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected long timeCheck(long endNanos, String message) throws TimeoutException {
-        long remainingNanos = endNanos - NatsSystemClock.nanoTime();
-        if (trace) {
-            traceTimeCheck(message, remainingNanos);
-        }
-        if (remainingNanos < 0) {
-            throw new TimeoutException("connection timed out");
-        }
-        return remainingNanos;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void traceTimeCheck(String message, long remainingNanos) {
-        if (remainingNanos < 0) {
-            if (remainingNanos > -1_000_000) { // less than -1 ms
-                timeTraceLogger.trace(message + String.format(", %d (ns) beyond timeout", -remainingNanos));
-            }
-            else if (remainingNanos > -1_000_000_000) { // less than -1 second
-                long ms = -remainingNanos / 1_000_000;
-                timeTraceLogger.trace(message + String.format(", %d (ms) beyond timeout", ms));
-            }
-            else {
-                double seconds = ((double) -remainingNanos) / 1_000_000_000.0;
-                timeTraceLogger.trace(message + String.format(", %.3f (s) beyond timeout", seconds));
-            }
-        }
-        else if (remainingNanos < 1_000_000) {
-            timeTraceLogger.trace(message + String.format(", %d (ns) remaining", remainingNanos));
-        }
-        else if (remainingNanos < 1_000_000_000) {
-            long ms = remainingNanos / 1_000_000;
-            timeTraceLogger.trace(message + String.format(", %d (ms) remaining", ms));
-        }
-        else {
-            double seconds = ((double) remainingNanos) / 1_000_000_000.0;
-            timeTraceLogger.trace(message + String.format(", %.3f (s) remaining", seconds));
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     // is called from reconnect and connect
     // will wait for any previous attempt to complete, using the reader.stop and
     // writer.stop
     protected void tryToConnect(NatsUri cur, NatsUri resolved, long now) {
-        clearCurrentServer();
-
-        try {
-            Duration connectTimeout = options.getConnectionTimeout();
-            boolean trace = options.isTraceConnection();
-            long end = now + connectTimeout.toNanos();
-            timeCheck(end, "starting connection attempt");
-
-            statusLock.lock();
-            try {
-                if (this.connecting) {
-                    return;
-                }
-                this.connecting = true;
-                statusChanged.signalAll();
-            }
-            finally {
-                statusLock.unlock();
-            }
-
-            // Create a new future for the DataPort, the reader/writer will use this
-            // to wait for the connect/failure.
-            this.dataPortFuture = new CompletableFuture<>();
-
-            // Make sure the reader and writer are stopped
-            long timeoutNanos = timeCheck(end, "waiting for reader");
-            if (reader.isRunning()) {
-                this.reader.stop().get(timeoutNanos, TimeUnit.NANOSECONDS);
-            }
-            timeoutNanos = timeCheck(end, "waiting for writer");
-            if (writer.isRunning()) {
-                this.writer.stop().get(timeoutNanos, TimeUnit.NANOSECONDS);
-            }
-
-            timeCheck(end, "cleaning pong queue");
-            cleanUpPongQueue();
-
-            timeoutNanos = timeCheck(end, "connecting data port");
-            DataPort newDataPort = this.options.buildDataPort();
-            newDataPort.connect(this, resolved, timeoutNanos);
-
-            // Notify any threads waiting on the sockets
-            this.dataPort = newDataPort;
-            this.dataPortFuture.complete(this.dataPort);
-
-            // Wait for the INFO message manually.
-            // All other traffic will use the reader and writer
-            // TLS First, don't read info until after upgrade
-            // ---
-            // Also this task does not have any exception catching
-            // Since it is submitted as an async task, the future
-            // will be aware of any exception thrown, and the future.get()
-            // will throw an ExecutionException which is handled futher down
-            Callable<Object> connectTask = () -> {
-                if (!options.isTlsFirst()) {
-                    readInitialInfo();
-                    checkVersionRequirements();
-                }
-                long start = NatsSystemClock.nanoTime();
-                upgradeToSecureIfNeeded(resolved);
-                if (trace && options.isTLSRequired()) {
-                    // If the time appears too long, it might be related to
-                    // https://github.com/nats-io/nats.java#linux-platform-note
-                    timeTraceLogger.trace("TLS upgrade took: %.3f (s)",
-                        ((double) (NatsSystemClock.nanoTime() - start)) / NANOS_PER_SECOND);
-                }
-                if (options.isTlsFirst()) {
-                    readInitialInfo();
-                    checkVersionRequirements();
-                }
-                return null;
-            };
-
-            timeoutNanos = timeCheck(end, "reading info, version and upgrading to secure if necessary");
-            Future<Object> future = connectExecutor.submit(connectTask);
-            try {
-                future.get(timeoutNanos, TimeUnit.NANOSECONDS);
-            }
-            finally {
-                future.cancel(true);
-            }
-
-            // start the reader and writer after we secured the connection, if necessary
-            timeCheck(end, "starting reader");
-            this.reader.start(this.dataPortFuture);
-            timeCheck(end, "starting writer");
-            this.writer.start(this.dataPortFuture);
-
-            timeCheck(end, "sending connect message");
-            this.sendConnect(resolved);
-
-            timeoutNanos = timeCheck(end, "sending initial ping");
-            Future<Boolean> pongFuture = sendPing();
-
-            if (pongFuture != null) {
-                pongFuture.get(timeoutNanos, TimeUnit.NANOSECONDS);
-            }
-
-            if (pingTask == null) {
-                timeCheck(end, "starting ping and cleanup timers");
-                long pingMillis = this.options.getPingInterval().toMillis();
-
-                if (pingMillis > 0) {
-                    pingTask = new ScheduledTask(scheduledExecutor, pingMillis, () -> {
-                        if (isConnected() && !isClosing()) {
-                            try {
-                                softPing(); // The timer always uses the standard queue
-                            }
-                            catch (Exception e) {
-                                // it's running in a thread, there is no point throwing here
-                            }
-                        }
-                    });
-                }
-
-                long cleanMillis = this.options.getRequestCleanupInterval().toMillis();
-
-                if (cleanMillis > 0) {
-                    cleanupTask = new ScheduledTask(scheduledExecutor, cleanMillis, () -> cleanResponses(false));
-                }
-            }
-
-            // Set connected status
-            timeCheck(end, "updating status to connected");
-            statusLock.lock();
-            try {
-                this.connecting = false;
-
-                if (this.exceptionDuringConnectChange != null) {
-                    throw this.exceptionDuringConnectChange;
-                }
-
-                this.currentServer = cur;
-                this.serverAuthErrors.clear(); // reset on successful connection
-                updateStatus(Status.CONNECTED); // will signal status change, we also signal in finally
-            }
-            finally {
-                statusLock.unlock();
-            }
-            timeTraceLogger.trace("status updated");
-        }
-        catch (Exception exp) {
-            processException(exp);
-            try {
-                // allow force reconnect since this is pretty exceptional,
-                // a connection failure while trying to connect
-                this.closeSocket(false, true);
-            }
-            catch (InterruptedException e) {
-                processException(e);
-                Thread.currentThread().interrupt();
-            }
-        }
-        finally {
-            statusLock.lock();
-            try {
-                this.connecting = false;
-                statusChanged.signalAll();
-            }
-            finally {
-                statusLock.unlock();
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void clearCurrentServer() {
-        if (currentServer != null) {
-            lastServer = currentServer;
-        }
-        currentServer = null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void checkVersionRequirements() throws IOException {
-        Options opts = getOptions();
-        ServerInfo info = getServerInfo();
-
-        if (opts.isNoEcho() && info.getProtocolVersion() < 1) {
-            throw new IOException("Server does not support no echo.");
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void upgradeToSecureIfNeeded(NatsUri nuri) throws IOException {
-        // When already communicating over "https" websocket, do NOT try to upgrade to secure.
-        if (!nuri.isWebsocket()) {
-            if (options.isTlsFirst()) {
-                dataPort.upgradeToSecure();
-            }
-            else {
-                // server    | client options      | result
-                // --------- | ------------------- | --------
-                // required  | not isTLSRequired() | mismatch
-                // available | not isTLSRequired() | ok
-                // neither   | not isTLSRequired() | ok
-                // required  | isTLSRequired()     | ok
-                // available | isTLSRequired()     | ok
-                // neither   | isTLSRequired()     | mismatch
-                ServerInfo serverInfo = getServerInfo();
-                if (options.isTLSRequired()) {
-                    if (!serverInfo.isTLSRequired() && !serverInfo.isTLSAvailable()) {
-                        throw new IOException("SSL connection wanted by client.");
-                    }
-                    dataPort.upgradeToSecure();
-                }
-                else if (serverInfo.isTLSRequired()) {
-                    throw new IOException("SSL required by server.");
-                }
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     // Called from reader/writer thread
     protected void handleCommunicationIssue(Exception io) {
-        // If we are connecting or disconnecting, note exception and leave
-        statusLock.lock();
-        try {
-            if (this.connecting || this.disconnecting || this.status == Status.CLOSED || this.isDraining()) {
-                this.exceptionDuringConnectChange = io;
-                return;
-            }
-        }
-        finally {
-            statusLock.unlock();
-        }
-
-        processException(io);
-        if (currentServer != null) {
-            serverPool.connectFailed(currentServer);
-        }
-
-        // Spawn a thread so we don't have timing issues with
-        // waiting on read/write threads
-        executor.submit(() -> {
-            if (tryingToConnect.compareAndSet(false, true)) {
-                try {
-                    // any issue that brings us here is pretty serious
-                    // so we are comfortable forcing the close
-                    this.closeSocket(true, true);
-                }
-                catch (InterruptedException e) {
-                    processException(e);
-                    Thread.currentThread().interrupt();
-                }
-                finally {
-                    tryingToConnect.set(false);
-                }
-            }
-        });
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     // Close socket is called when another connect attempt is possible
     // Close is called when the connection should shut down, period
     protected void closeSocket(boolean tryReconnectIfConnected, boolean forceClose) throws InterruptedException {
-        // Ensure we close the socket exclusively within one thread.
-        closeSocketLock.lock();
-        try {
-            boolean wasConnected;
-            statusLock.lock();
-            try {
-                if (isDisconnectingOrClosed()) {
-                    waitForDisconnectOrClose(this.options.getConnectionTimeout());
-                    return;
-                }
-                this.disconnecting = true;
-                this.exceptionDuringConnectChange = null;
-                wasConnected = (this.status == Status.CONNECTED);
-                statusChanged.signalAll();
-            }
-            finally {
-                statusLock.unlock();
-            }
-
-            closeSocketImpl(forceClose);
-
-            statusLock.lock();
-            try {
-                updateStatus(Status.DISCONNECTED);
-                this.exceptionDuringConnectChange = null; // Ignore IOExceptions during closeSocketImpl()
-                this.disconnecting = false;
-                statusChanged.signalAll();
-            }
-            finally {
-                statusLock.unlock();
-            }
-
-            if (isClosing()) { // isClosing() means we are in the close method or were asked to be
-                close();
-            }
-            else if (wasConnected && tryReconnectIfConnected) {
-                reconnectImpl(); // call the impl here otherwise the tryingToConnect guard will block the behavior
-            }
-        }
-        finally {
-            closeSocketLock.unlock();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     // Close socket is called when another connect attempt is possible
     // Close is called when the connection should shut down, period
-
     /**
      * {@inheritDoc}
      */
     @Override
     public void close() throws InterruptedException {
-        this.close(true, false);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     // This method was originally built assuming there might be multiple paths to this method,
     // but it turns out there isn't. Not refactoring the code though, hence the warning suppression
     @SuppressWarnings("SameParameterValue")
     protected void close(boolean checkDrainStatus, boolean forceClose) throws InterruptedException {
-        statusLock.lock();
-        try {
-            if (checkDrainStatus && this.isDraining()) {
-                waitForDisconnectOrClose(this.options.getConnectionTimeout());
-                return;
-            }
-
-            this.closing = true;// We were asked to close, so do it
-            if (isDisconnectingOrClosed()) {
-                waitForDisconnectOrClose(this.options.getConnectionTimeout());
-                return;
-            }
-            else {
-                this.disconnecting = true;
-                this.exceptionDuringConnectChange = null;
-                statusChanged.signalAll();
-            }
-        }
-        finally {
-            statusLock.unlock();
-        }
-
-        // Stop the reconnect wait timer after we stop the writer/reader (only if we are
-        // really closing, not on errors)
-        if (this.reconnectWaiter != null) {
-            this.reconnectWaiter.cancel(true);
-        }
-
-        closeSocketImpl(forceClose);
-
-        this.dispatchers.forEach((nuid, d) -> d.stop(false));
-
-        this.subscribers.forEach((sid, sub) -> sub.invalidate());
-
-        this.dispatchers.clear();
-        this.subscribers.clear();
-
-        if (pingTask != null) {
-            pingTask.shutdown();
-            pingTask = null;
-        }
-        if (cleanupTask != null) {
-            cleanupTask.shutdown();
-            cleanupTask = null;
-        }
-
-        cleanResponses(true);
-
-        cleanUpPongQueue();
-
-        statusLock.lock();
-        try {
-            updateStatus(Status.CLOSED); // will signal, we also signal when we stop disconnecting
-
-            /*
-             * if (exceptionDuringConnectChange != null) {
-             * processException(exceptionDuringConnectChange); exceptionDuringConnectChange
-             * = null; }
-             */
-        }
-        finally {
-            statusLock.unlock();
-        }
-
-        callbackExecutor = null;
-        executor = null;
-        connectExecutor = null;
-        scheduledExecutor = null;
-        options.shutdownExecutors();
-
-        statusLock.lock();
-        try {
-            this.disconnecting = false;
-            statusChanged.signalAll();
-        }
-        finally {
-            statusLock.unlock();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     // these four *ExecutorIsClosed() are only used for tests
-    protected boolean callbackExecutorIsClosed() { return callbackExecutor == null; }
-    protected boolean executorIsClosed() { return executor == null; }
-    protected boolean connectExecutorIsClosed() { return connectExecutor == null; }
-    protected boolean scheduledExecutorIsClosed() { return scheduledExecutor == null; }
+    protected boolean callbackExecutorIsClosed() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    protected boolean executorIsClosed() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    protected boolean connectExecutorIsClosed() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    protected boolean scheduledExecutorIsClosed() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
     // Should only be called from closeSocket or close
     protected void closeSocketImpl(boolean forceClose) {
-        clearCurrentServer();
-
-        // Signal both to stop.
-        final Future<Boolean> readStop = this.reader.stop();
-        final Future<Boolean> writeStop = this.writer.stop();
-
-        // Now wait until they both stop before closing the socket.
-        try {
-            readStop.get(1, TimeUnit.SECONDS);
-        }
-        catch (Exception ex) {
-            //
-        }
-        try {
-            writeStop.get(1, TimeUnit.SECONDS);
-        }
-        catch (Exception ex) {
-            //
-        }
-
-        // Close and reset the current data port and future
-        if (dataPortFuture != null) {
-            dataPortFuture.cancel(true);
-            dataPortFuture = null;
-        }
-
-        // Close the current socket and cancel anyone waiting for it
-        try {
-            if (dataPort != null) {
-                if (forceClose) {
-                    dataPort.forceClose();
-                }
-                else {
-                    dataPort.close();
-                }
-            }
-
-        }
-        catch (IOException ex) {
-            processException(ex);
-        }
-        cleanUpPongQueue();
-
-        try {
-            this.reader.stop().get(10, TimeUnit.SECONDS);
-        }
-        catch (Exception ex) {
-            processException(ex);
-        }
-        try {
-            this.writer.stop().get(10, TimeUnit.SECONDS);
-        }
-        catch (Exception ex) {
-            processException(ex);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void cleanUpPongQueue() {
-        Future<Boolean> b;
-        while ((b = pongQueue.poll()) != null) {
-            b.cancel(true);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -996,7 +356,7 @@ class NatsConnection implements Connection {
      */
     @Override
     public void publish(@NonNull String subject, byte @Nullable [] body) {
-        publishInternal(subject, null, null, body, false);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1004,7 +364,7 @@ class NatsConnection implements Connection {
      */
     @Override
     public void publish(@NonNull String subject, @Nullable Headers headers, byte @Nullable [] body) {
-        publishInternal(subject, null, headers, body, false);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1012,7 +372,7 @@ class NatsConnection implements Connection {
      */
     @Override
     public void publish(@NonNull String subject, @Nullable String replyTo, byte @Nullable [] body) {
-        publishInternal(subject, replyTo, null, body, false);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1020,7 +380,7 @@ class NatsConnection implements Connection {
      */
     @Override
     public void publish(@NonNull String subject, @Nullable String replyTo, @Nullable Headers headers, byte @Nullable [] body) {
-        publishInternal(subject, replyTo, headers, body, false);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1028,32 +388,11 @@ class NatsConnection implements Connection {
      */
     @Override
     public void publish(@NonNull Message message) {
-        Validator.validateNotNull(message, "Message");
-        publishInternal(message.getSubject(), message.getReplyTo(), message.getHeaders(), message.getData(), false);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void publishInternal(@NonNull String subject, @Nullable String replyTo, @Nullable Headers headers, byte @Nullable [] data, boolean flushImmediatelyAfterPublish) {
-        subject = subjectValidate(subject, true);
-        replyTo = replyValidate(replyTo, false);
-        NatsPublishableMessage npm = new NatsPublishableMessage(subject, replyTo, headers, data, flushImmediatelyAfterPublish);
-        if (npm.hasHeaders && !serverInfo.get().isHeadersSupported()) {
-            throw new IllegalArgumentException("Headers are not supported by the server, version: " + serverInfo.get().getVersion());
-        }
-
-        if (isClosed()) {
-            throw new IllegalStateException("Connection is Closed");
-        }
-        else if (blockPublishForDrain.get()) {
-            throw new IllegalStateException("Connection is Draining"); // Ok to publish while waiting on subs
-        }
-
-        if ((status == Status.RECONNECTING || status == Status.DISCONNECTED)
-            && !this.writer.canQueueDuringReconnect(npm)) {
-            throw new IllegalStateException(
-                "Unable to queue any more messages during reconnect, max buffer is " + options.getReconnectBufferSize());
-        }
-
-        queueOutgoing(npm);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1062,8 +401,7 @@ class NatsConnection implements Connection {
     @Override
     @NonNull
     public Subscription subscribe(@NonNull String subject) {
-        subjectValidate(subject, true);
-        return createSubscription(subject, null, null, null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1072,118 +410,41 @@ class NatsConnection implements Connection {
     @Override
     @NonNull
     public Subscription subscribe(@NonNull String subject, @NonNull String queueName) {
-        subjectValidate(subject, true);
-        Validator.validateQueueName(queueName, true);
-        return createSubscription(subject, queueName, null, null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void invalidate(NatsSubscription sub) {
-        remove(sub);
-        sub.invalidate();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void remove(NatsSubscription sub) {
-        CharSequence sid = sub.getSID();
-        subscribers.remove(sid);
-
-        if (sub.getNatsDispatcher() != null) {
-            sub.getNatsDispatcher().remove(sub);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void unsubscribe(NatsSubscription sub, int after) {
-        if (isClosed()) { // last chance, usually sub will catch this
-            throw new IllegalStateException("Connection is Closed");
-        }
-
-        if (after <= 0) {
-            this.invalidate(sub); // Will clean it up
-        }
-        else {
-            sub.setUnsubLimit(after);
-
-            if (sub.reachedUnsubLimit()) {
-                sub.invalidate();
-            }
-        }
-
-        if (!isConnected()) {
-            return; // We will set up sub on reconnect or ignore
-        }
-
-        sendUnsub(sub, after);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void sendUnsub(@NonNull NatsSubscription sub, int after) {
-        ByteArrayBuilder bab =
-            new ByteArrayBuilder().append(UNSUB_SP_BYTES).append(sub.getSID());
-        if (after > 0) {
-            bab.append(SP).append(after);
-        }
-        queueOutgoing(new ProtocolMessage(bab, true));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     // Assumes the null/empty checks were handled elsewhere
     @NonNull
-    protected NatsSubscription createSubscription(@NonNull String subject,
-                                        @Nullable String queueName,
-                                        @Nullable NatsDispatcher dispatcher,
-                                        @Nullable NatsSubscriptionFactory factory) {
-        if (isClosed()) {
-            throw new IllegalStateException("Connection is Closed");
-        }
-        else if (isDraining() && (dispatcher == null || dispatcher != this.inboxDispatcher.get())) {
-            throw new IllegalStateException("Connection is Draining");
-        }
-
-        NatsSubscription sub;
-        String sid = getNextSid();
-
-        if (factory == null) {
-            sub = new NatsSubscription(sid, subject, queueName, this, dispatcher);
-        }
-        else {
-            sub = factory.createNatsSubscription(sid, subject, queueName, this, dispatcher);
-        }
-        subscribers.put(sid, sub);
-
-        sendSubscriptionMessage(sid, subject, queueName, false);
-        return sub;
+    protected NatsSubscription createSubscription(@NonNull String subject, @Nullable String queueName, @Nullable NatsDispatcher dispatcher, @Nullable NatsSubscriptionFactory factory) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected String getNextSid() {
-        return Long.toString(nextSid.getAndIncrement());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected String reSubscribe(NatsSubscription sub, String subject, String queueName) {
-        String sid = getNextSid();
-        sendSubscriptionMessage(sid, subject, queueName, false);
-        subscribers.put(sid, sub);
-        return sid;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void sendSubscriptionMessage(String sid, String subject, String queueName, boolean treatAsInternal) {
-        if (!isConnected()) {
-            return; // We will set up sub on reconnect or ignore
-        }
-
-        ByteArrayBuilder bab = new ByteArrayBuilder(UTF_8).append(SUB_SP_BYTES).append(subject);
-        if (queueName != null) {
-            bab.append(SP).append(queueName);
-        }
-        bab.append(SP).append(sid);
-
-        // setting this to filter on stop.
-        // if it's an "internal" message, it won't be filtered
-        // if it's a normal message, the subscription will already be registered
-        // and therefore will be re-subscribed after a stop anyway
-        ProtocolMessage subMsg = new ProtocolMessage(bab, true);
-        if (treatAsInternal) {
-            queueInternalOutgoing(subMsg);
-        }
-        else {
-            queueOutgoing(subMsg);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1192,86 +453,25 @@ class NatsConnection implements Connection {
     @Override
     @NonNull
     public String createInbox() {
-        return options.getInboxPrefix() + nuid.next();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected int getRespInboxLength() {
-        return options.getInboxPrefix().length() + 22 + 1; // 22 for nuid, 1 for .
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected String createResponseInbox(String inbox) {
-        // Substring gets rid of the * [trailing]
-        return inbox.substring(0, getRespInboxLength()) + nuid.next();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     // If the inbox is long enough, pull out the end part, otherwise, just use the
     // full thing
     protected String getResponseToken(String responseInbox) {
-        int len = getRespInboxLength();
-        if (responseInbox.length() <= len) {
-            return responseInbox;
-        }
-        return responseInbox.substring(len);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void cleanResponses(boolean closing) {
-        ArrayList<String> toRemove = new ArrayList<>();
-        boolean wasInterrupted = false;
-
-        for (Map.Entry<String, NatsRequestCompletableFuture> entry : responsesAwaiting.entrySet()) {
-            boolean remove = false;
-            NatsRequestCompletableFuture future = entry.getValue();
-            if (future.hasExceededTimeout()) {
-                remove = true;
-                future.cancelTimedOut();
-            }
-            else if (closing) {
-                remove = true;
-                future.cancelClosing();
-            }
-            else if (future.isDone()) {
-                // done should have already been removed, not sure if
-                // this even needs checking, but it won't hurt
-                remove = true;
-                try {
-                    future.get();
-                }
-                catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    // We might have collected some entries already, but were interrupted.
-                    // Break out so we finish as quick as possible,
-                    // cleanResponses will be called again anyway
-                    wasInterrupted = true;
-                    break;
-                }
-                catch (Throwable ignore) {
-                }
-            }
-
-            if (remove) {
-                toRemove.add(entry.getKey());
-                statistics.decrementOutstandingRequests();
-            }
-        }
-
-        for (String key : toRemove) {
-            responsesAwaiting.remove(key);
-        }
-
-        if (advancedTracking && !wasInterrupted) {
-            toRemove.clear(); // we can reuse this but it needs to be cleared
-            for (Map.Entry<String, NatsRequestCompletableFuture> entry : responsesRespondedTo.entrySet()) {
-                NatsRequestCompletableFuture future = entry.getValue();
-                if (future.hasExceededTimeout()) {
-                    toRemove.add(entry.getKey());
-                    future.cancelTimedOut();
-                }
-            }
-
-            for (String token : toRemove) {
-                responsesRespondedTo.remove(token);
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1280,7 +480,7 @@ class NatsConnection implements Connection {
     @Override
     @Nullable
     public Message request(@NonNull String subject, byte @Nullable [] body, @Nullable Duration timeout) throws InterruptedException {
-        return requestInternal(subject, null, body, timeout, cancelAction, forceFlushOnRequest);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1289,7 +489,7 @@ class NatsConnection implements Connection {
     @Override
     @Nullable
     public Message request(@NonNull String subject, @Nullable Headers headers, byte @Nullable [] body, @Nullable Duration timeout) throws InterruptedException {
-        return requestInternal(subject, headers, body, timeout, cancelAction, forceFlushOnRequest);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1298,28 +498,12 @@ class NatsConnection implements Connection {
     @Override
     @Nullable
     public Message request(@NonNull Message message, @Nullable Duration timeout) throws InterruptedException {
-        Validator.validateNotNull(message, "Message");
-        return requestInternal(message.getSubject(), message.getHeaders(), message.getData(), timeout, cancelAction, forceFlushOnRequest);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Nullable
-    protected Message requestInternal(@NonNull String subject,
-                            @Nullable Headers headers,
-                            byte @Nullable [] data,
-                            @Nullable Duration timeout,
-                            @NonNull CancelAction cancelAction,
-                            boolean flushImmediatelyAfterPublish) throws InterruptedException
-    {
-        CompletableFuture<Message> incoming = requestFutureInternal(subject, headers, data, timeout, cancelAction, flushImmediatelyAfterPublish);
-        try {
-            if (timeout == null) {
-                timeout = getOptions().getConnectionTimeout();
-            }
-            return incoming.get(timeout.toNanos(), TimeUnit.NANOSECONDS);
-        }
-        catch (TimeoutException | ExecutionException | CancellationException e) {
-            return null;
-        }
+    protected Message requestInternal(@NonNull String subject, @Nullable Headers headers, byte @Nullable [] data, @Nullable Duration timeout, @NonNull CancelAction cancelAction, boolean flushImmediatelyAfterPublish) throws InterruptedException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1328,7 +512,7 @@ class NatsConnection implements Connection {
     @Override
     @NonNull
     public CompletableFuture<Message> request(@NonNull String subject, byte @Nullable [] body) {
-        return requestFutureInternal(subject, null, body, null, cancelAction, forceFlushOnRequest);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1337,7 +521,7 @@ class NatsConnection implements Connection {
     @Override
     @NonNull
     public CompletableFuture<Message> request(@NonNull String subject, @Nullable Headers headers, byte @Nullable [] body) {
-        return requestFutureInternal(subject, headers, body, null, cancelAction, forceFlushOnRequest);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1346,7 +530,7 @@ class NatsConnection implements Connection {
     @Override
     @NonNull
     public CompletableFuture<Message> requestWithTimeout(@NonNull String subject, byte @Nullable [] body, @Nullable Duration timeout) {
-        return requestFutureInternal(subject, null, body, timeout, cancelAction, forceFlushOnRequest);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1355,7 +539,7 @@ class NatsConnection implements Connection {
     @Override
     @NonNull
     public CompletableFuture<Message> requestWithTimeout(@NonNull String subject, @Nullable Headers headers, byte @Nullable [] body, Duration timeout) {
-        return requestFutureInternal(subject, headers, body, timeout, cancelAction, forceFlushOnRequest);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1364,8 +548,7 @@ class NatsConnection implements Connection {
     @Override
     @NonNull
     public CompletableFuture<Message> requestWithTimeout(@NonNull Message message, @Nullable Duration timeout) {
-        Validator.validateNotNull(message, "Message");
-        return requestFutureInternal(message.getSubject(), message.getHeaders(), message.getData(), timeout, cancelAction, forceFlushOnRequest);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1374,113 +557,16 @@ class NatsConnection implements Connection {
     @Override
     @NonNull
     public CompletableFuture<Message> request(@NonNull Message message) {
-        Validator.validateNotNull(message, "Message");
-        return requestFutureInternal(message.getSubject(), message.getHeaders(), message.getData(), null, cancelAction, forceFlushOnRequest);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @NonNull
-    protected CompletableFuture<Message> requestFutureInternal(@NonNull String subject,
-                                                     @Nullable Headers headers,
-                                                     byte @Nullable [] body,
-                                                     @Nullable Duration futureTimeout,
-                                                     @NonNull CancelAction cancelAction,
-                                                     boolean flushImmediatelyAfterPublish) {
-        if (isClosed()) {
-            throw new IllegalStateException("Connection is Closed");
-        }
-        else if (isDraining()) {
-            throw new IllegalStateException("Connection is Draining");
-        }
-
-        if (inboxDispatcher.get() == null) {
-            inboxDispatcherLock.lock();
-            try {
-                if (inboxDispatcher.get() == null) {
-                    NatsDispatcher d = dispatcherFactory.createDispatcher(this, this::deliverReply);
-
-                    // Ensure the dispatcher is started before publishing messages
-                    String id = this.nuid.next();
-                    this.dispatchers.put(id, d);
-                    d.start(id);
-                    d.subscribe(this.mainInbox);
-                    inboxDispatcher.set(d);
-                }
-            }
-            finally {
-                inboxDispatcherLock.unlock();
-            }
-        }
-
-        boolean oldStyle = options.isOldRequestStyle();
-        String responseInbox = oldStyle ? createInbox() : createResponseInbox(this.mainInbox);
-        String responseToken = getResponseToken(responseInbox);
-        NatsRequestCompletableFuture future =
-            new NatsRequestCompletableFuture(cancelAction,
-                futureTimeout == null ? options.getRequestCleanupInterval() : futureTimeout, options.useTimeoutException());
-
-        if (!oldStyle) {
-            responsesAwaiting.put(responseToken, future);
-        }
-        statistics.incrementOutstandingRequests();
-
-        if (oldStyle) {
-            NatsDispatcher dispatcher = this.inboxDispatcher.get();
-            NatsSubscription sub = dispatcher.subscribeReturningSubscription(responseInbox);
-            dispatcher.unsubscribe(responseInbox, 1);
-            // Unsubscribe when future is cancelled:
-            future.whenComplete((msg, exception) -> {
-                if (exception instanceof CancellationException) {
-                    dispatcher.unsubscribe(responseInbox);
-                }
-            });
-            responsesAwaiting.put(sub.getSID(), future);
-        }
-
-        publishInternal(subject, responseInbox, headers, body, flushImmediatelyAfterPublish);
-        statistics.incrementRequestsSent();
-
-        return future;
+    protected CompletableFuture<Message> requestFutureInternal(@NonNull String subject, @Nullable Headers headers, byte @Nullable [] body, @Nullable Duration futureTimeout, @NonNull CancelAction cancelAction, boolean flushImmediatelyAfterPublish) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void deliverReply(Message msg) {
-        boolean oldStyle = options.isOldRequestStyle();
-        String subject = msg.getSubject();
-        String token = getResponseToken(subject);
-        String key = oldStyle ? msg.getSID() : token;
-        NatsRequestCompletableFuture f = responsesAwaiting.remove(key);
-        if (f != null) {
-            if (advancedTracking) {
-                responsesRespondedTo.put(key, f);
-            }
-            statistics.decrementOutstandingRequests();
-            if (msg.isStatusMessage() && msg.getStatus().getCode() == 503) {
-                switch (f.getCancelAction()) {
-                    case COMPLETE:
-                        f.complete(msg);
-                        break;
-                    case REPORT:
-                        f.completeExceptionally(new JetStreamStatusException(msg.getStatus()));
-                        break;
-                    case CANCEL:
-                    default:
-                        f.cancel(true);
-                }
-            }
-            else {
-                f.complete(msg);
-            }
-            statistics.incrementRepliesReceived();
-        }
-        else if (!oldStyle && !subject.startsWith(mainInbox)) {
-            if (advancedTracking) {
-                if (responsesRespondedTo.get(key) != null) {
-                    statistics.incrementDuplicateRepliesReceived();
-                }
-                else {
-                    statistics.incrementOrphanRepliesReceived();
-                }
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1488,7 +574,7 @@ class NatsConnection implements Connection {
      */
     @NonNull
     public Dispatcher createDispatcher() {
-        return createDispatcher(null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1496,142 +582,55 @@ class NatsConnection implements Connection {
      */
     @NonNull
     public Dispatcher createDispatcher(@Nullable MessageHandler handler) {
-        if (isClosed()) {
-            throw new IllegalStateException("Connection is Closed");
-        }
-        else if (isDraining()) {
-            throw new IllegalStateException("Connection is Draining");
-        }
-
-        NatsDispatcher dispatcher = dispatcherFactory.createDispatcher(this, handler);
-        String id = this.nuid.next();
-        this.dispatchers.put(id, dispatcher);
-        dispatcher.start(id);
-        return dispatcher;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * {@inheritDoc}
      */
     public void closeDispatcher(@NonNull Dispatcher d) {
-        if (isClosed()) {
-            throw new IllegalStateException("Connection is Closed");
-        }
-        else if (!(d instanceof NatsDispatcher)) {
-            throw new IllegalArgumentException("Connection can only manage its own dispatchers");
-        }
-
-        NatsDispatcher nd = (NatsDispatcher) d;
-
-        if (nd.isDraining()) {
-            return; // No op while draining
-        }
-
-        if (!this.dispatchers.containsKey(nd.getId())) {
-            throw new IllegalArgumentException("Dispatcher is already closed.");
-        }
-
-        cleanupDispatcher(nd);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void cleanupDispatcher(NatsDispatcher nd) {
-        nd.stop(true);
-        this.dispatchers.remove(nd.getId());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected Map<String, Dispatcher> getDispatchers() {
-        return Collections.unmodifiableMap(dispatchers);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * {@inheritDoc}
      */
     public void addConnectionListener(@NonNull ConnectionListener connectionListener) {
-        connectionListeners.add(connectionListener);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * {@inheritDoc}
      */
     public void removeConnectionListener(@NonNull ConnectionListener connectionListener) {
-        connectionListeners.remove(connectionListener);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * {@inheritDoc}
      */
     public void flush(@Nullable Duration timeout) throws TimeoutException, InterruptedException {
-        Instant start = Instant.now();
-        waitForConnectOrClose(timeout);
-
-        if (isClosed()) {
-            throw new TimeoutException("Attempted to flush while closed");
-        }
-
-        if (timeout == null || timeout.isNegative()) {
-            timeout = Duration.ZERO;
-        }
-
-        Instant now = Instant.now();
-        Duration waitTime = Duration.between(start, now);
-
-        if (!timeout.equals(Duration.ZERO) && waitTime.compareTo(timeout) >= 0) {
-            throw new TimeoutException("Timeout out waiting for connection before flush.");
-        }
-
-        try {
-            Future<Boolean> waitForIt = sendPing();
-
-            if (waitForIt == null) { // error in the send ping code
-                return;
-            }
-
-            long nanos = timeout.toNanos();
-
-            if (nanos > 0) {
-
-                nanos -= waitTime.toNanos();
-
-                if (nanos <= 0) {
-                    nanos = 1; // let the future timeout if it isn't resolved
-                }
-
-                waitForIt.get(nanos, TimeUnit.NANOSECONDS);
-            }
-            else {
-                waitForIt.get();
-            }
-
-            this.statistics.incrementFlushCounter();
-        }
-        catch (ExecutionException | CancellationException e) {
-            throw new TimeoutException(e.toString());
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void sendConnect(NatsUri nuri) throws IOException {
-        try {
-            ServerInfo info = this.serverInfo.get();
-            // This is changed - we used to use info.isAuthRequired(), but are changing it to
-            // better match older versions of the server. It may change again in the future.
-            CharBuffer connectOptions = options.buildProtocolConnectOptionsString(
-                nuri.toString(), true, info.getNonce());
-            ByteArrayBuilder bab =
-                new ByteArrayBuilder(OP_CONNECT_SP_LEN + connectOptions.limit(), UTF_8)
-                    .append(CONNECT_SP_BYTES).append(connectOptions);
-            queueInternalOutgoing(new ProtocolMessage(bab, false));
-        }
-        catch (Exception exp) {
-            throw new IOException("Error sending connect string", exp);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected CompletableFuture<Boolean> sendPing() {
-        return this.sendPing(true);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void softPing() {
-        this.sendPing(false);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1640,29 +639,7 @@ class NatsConnection implements Connection {
     @Override
     @NonNull
     public Duration RTT() throws IOException {
-        if (!isConnected()) {
-            throw new IOException("Must be connected to do RTT.");
-        }
-
-        long timeout = options.getConnectionTimeout().toMillis();
-        CompletableFuture<Boolean> pongFuture = new CompletableFuture<>();
-        pongQueue.add(pongFuture);
-        try {
-            long time = NatsSystemClock.nanoTime();
-            writer.queue(new ProtocolMessage(PING_PROTO));
-            pongFuture.get(timeout, TimeUnit.MILLISECONDS);
-            return Duration.ofNanos(NatsSystemClock.nanoTime() - time);
-        }
-        catch (ExecutionException e) {
-            throw new IOException(e.getCause());
-        }
-        catch (TimeoutException e) {
-            throw new IOException(e);
-        }
-        catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new IOException(e);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     // Send a ping request and push a pong future on the queue.
@@ -1671,38 +648,7 @@ class NatsConnection implements Connection {
     // without setting a timeout.
     @Nullable
     protected CompletableFuture<Boolean> sendPing(boolean treatAsInternal) {
-        if (!isConnectedOrConnecting()) {
-            CompletableFuture<Boolean> retVal = new CompletableFuture<>();
-            retVal.complete(Boolean.FALSE);
-            return retVal;
-        }
-
-        if (!treatAsInternal && !this.needPing.get()) {
-            CompletableFuture<Boolean> retVal = new CompletableFuture<>();
-            retVal.complete(Boolean.TRUE);
-            this.needPing.set(true);
-            return retVal;
-        }
-
-        int max = options.getMaxPingsOut();
-        if (max > 0 && pongQueue.size() + 1 > max) {
-            handleCommunicationIssue(new IllegalStateException("Max outgoing Ping count exceeded."));
-            return null;
-        }
-
-        CompletableFuture<Boolean> pongFuture = new CompletableFuture<>();
-        pongQueue.add(pongFuture);
-
-        if (treatAsInternal) {
-            queueInternalOutgoing(new ProtocolMessage(PING_PROTO));
-        }
-        else {
-            queueOutgoing(new ProtocolMessage(PING_PROTO));
-        }
-
-        this.needPing.set(true);
-        this.statistics.incrementPingCount();
-        return pongFuture;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     // This is a minor speed / memory enhancement.
@@ -1712,231 +658,81 @@ class NatsConnection implements Connection {
     // reducing allocation of data for something that is often created and used.
     // These static instances are the ones that are used for copying in sendPing and sendPong
     protected static final ProtocolMessage PING_PROTO = new ProtocolMessage(OP_PING_BYTES, true);
+
     protected static final ProtocolMessage PONG_PROTO = new ProtocolMessage(OP_PONG_BYTES, true);
 
     protected void sendPong() {
-        queueInternalOutgoing(new ProtocolMessage(PONG_PROTO));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     // Called by the reader
     protected void handlePong() {
-        CompletableFuture<Boolean> pongFuture = pongQueue.pollFirst();
-        if (pongFuture != null) {
-            pongFuture.complete(Boolean.TRUE);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void readInitialInfo() throws IOException {
-        byte[] readBuffer = new byte[options.getBufferSize()];
-        ByteBuffer protocolBuffer = ByteBuffer.allocate(options.getBufferSize());
-        boolean gotCRLF = false;
-        boolean gotCR = false;
-
-        while (!gotCRLF) {
-            int read = this.dataPort.read(readBuffer, 0, readBuffer.length);
-
-            if (read < 0) {
-                break;
-            }
-
-            int i = 0;
-            while (i < read) {
-                byte b = readBuffer[i++];
-
-                if (gotCR) {
-                    if (b != LF) {
-                        throw new IOException("Missed LF after CR waiting for INFO.");
-                    }
-                    else if (i < read) {
-                        throw new IOException("Read past initial info message.");
-                    }
-
-                    gotCRLF = true;
-                    break;
-                }
-
-                if (b == CR) {
-                    gotCR = true;
-                }
-                else {
-                    if (!protocolBuffer.hasRemaining()) {
-                        protocolBuffer = enlargeBuffer(protocolBuffer); // just double it
-                    }
-                    protocolBuffer.put(b);
-                }
-            }
-        }
-
-        if (!gotCRLF) {
-            throw new IOException("Failed to read initial info message.");
-        }
-
-        protocolBuffer.flip();
-
-        String infoJson = UTF_8.decode(protocolBuffer).toString();
-        infoJson = infoJson.trim();
-        String[] msg = infoJson.split("\\s");
-        String op = msg[0].toUpperCase();
-
-        if (!OP_INFO.equals(op)) {
-            throw new IOException("Received non-info initial message.");
-        }
-
-        handleInfo(infoJson);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void handleInfo(String infoJson) {
-        ServerInfo serverInfo = new ServerInfo(infoJson);
-        this.serverInfo.set(serverInfo);
-
-        List<String> urls = this.serverInfo.get().getConnectURLs();
-        if (!urls.isEmpty()) {
-            if (serverPool.acceptDiscoveredUrls(urls)) {
-                processConnectionEvent(Events.DISCOVERED_SERVERS, urls.toString());
-            }
-        }
-
-        if (serverInfo.isLameDuckMode()) {
-            processConnectionEvent(Events.LAME_DUCK, uriDetail(currentServer));
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void validatePayloadAndControlLineSizes(NatsMessage msg) {
-        if (options.clientSideLimitChecks()) {
-            if (getMaxPayload() > 0 && msg.getPayloadSize() > getMaxPayload()) {
-                throw new IllegalArgumentException(
-                    "Message payload size exceed server configuration " + msg.getPayloadSize() + " vs " + this.getMaxPayload());
-            }
-            if (msg.getControlLineLength() > this.options.getMaxControlLine()) {
-                throw new IllegalArgumentException("Control line is too long");
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void queueOutgoing(NatsMessage msg) {
-        validatePayloadAndControlLineSizes(msg);
-        if (!writer.queue(msg)) {
-            makeCallback(() -> options.getErrorListener().messageDiscarded(this, msg));
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void queueInternalOutgoing(NatsMessage msg) {
-        validatePayloadAndControlLineSizes(msg);
-        this.writer.queueInternalMessage(msg);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void deliverMessage(NatsMessage msg) {
-        this.needPing.set(false);
-        this.statistics.incrementIn(msg.getSizeInBytes());
-
-        NatsSubscription sub = subscribers.get(msg.getSID());
-
-        if (sub != null) {
-            msg.setSubscription(sub);
-
-            NatsDispatcher d = sub.getNatsDispatcher();
-            NatsConsumer c = (d == null) ? sub : d;
-            ConsumerMessageQueue q = ((d == null) ? sub.getMessageQueue() : d.getMessageQueue());
-
-            if (c.hasReachedPendingLimits()) {
-                // Drop the message and count it
-                this.statistics.incrementDroppedCount();
-                c.incrementDroppedCount();
-
-                // Notify the first time
-                if (!c.isMarkedSlow()) {
-                    c.markSlow();
-                    processSlowConsumer(c);
-                }
-            }
-            else if (q != null) {
-                c.markNotSlow();
-
-                // beforeQueueProcessor returns true if the message is allowed to be queued
-                if (sub.getBeforeQueueProcessor().apply(msg)) {
-                    q.push(msg);
-                }
-            }
-
-        }
-//        else {
-//            // Drop messages we don't have a subscriber for (could be extras on an
-//            // auto-unsub for example)
-//        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void processOK() {
-        this.statistics.incrementOkCount();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void makeCallback(Runnable callback) {
-        if (callbackExecutor != null) {
-            try {
-                callbackExecutor.execute(() -> {
-                    try {
-                        callback.run();
-                    }
-                    catch (Exception ex) {
-                        statistics.incrementExceptionCount();
-                    }
-                });
-            }
-            catch (RejectedExecutionException re) {
-                // Timing with shutdown probably, let it go
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void processSlowConsumer(Consumer consumer) {
-        makeCallback(() -> options.getErrorListener().slowConsumerDetected(this, consumer));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void processException(Exception exp) {
-        this.statistics.incrementExceptionCount();
-        makeCallback(() -> options.getErrorListener().exceptionOccurred(this, exp));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void processError(String errorText) {
-        this.statistics.incrementErrCount();
-
-        this.lastError.set(errorText);
-        this.connectError.set(errorText); // even if this isn't during connection, save it just in case
-
-        // If we get an authentication error, save it
-        if (this.isAuthenticationError(errorText) && currentServer != null) {
-            this.serverAuthErrors.put(currentServer, errorText);
-        }
-
-        makeCallback(() -> options.getErrorListener().errorOccurred(this, errorText));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected interface ErrorListenerCaller {
+
         void call(Connection conn, ErrorListener el);
     }
 
     protected void notifyErrorListener(ErrorListenerCaller elc) {
-        makeCallback(() -> elc.call(this, options.getErrorListener()));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected String uriDetail(NatsUri uri) {
-        return uri == null ? null : uri.toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected String uriDetail(NatsUri uri, NatsUri hostOrlast) {
-        if (uri != null) {
-            if (hostOrlast == null || uri.equals(hostOrlast)) {
-                return uri.toString();
-            }
-            return uri + " [" + hostOrlast + "]";
-        }
-        return hostOrlast == null ? null : hostOrlast.toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void processConnectionEvent(Events type, String uriDetails) {
-        long time = System.currentTimeMillis();
-        for (ConnectionListener listener : connectionListeners) {
-            makeCallback(() -> listener.connectionEvent(this, type, time, uriDetails));
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1945,7 +741,7 @@ class NatsConnection implements Connection {
     @Override
     @NonNull
     public ServerInfo getServerInfo() {
-        return serverInfo.get();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1954,13 +750,7 @@ class NatsConnection implements Connection {
     @Override
     @Nullable
     public InetAddress getClientInetAddress() {
-        try {
-            ServerInfo si = getServerInfo();
-            return si == ServerInfo.EMPTY_INFO ? null : NatsInetAddress.getByName(si.getClientIp());
-        }
-        catch (Exception e) {
-            return null;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1969,7 +759,7 @@ class NatsConnection implements Connection {
     @Override
     @NonNull
     public Options getOptions() {
-        return this.options;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1978,20 +768,20 @@ class NatsConnection implements Connection {
     @Override
     @NonNull
     public Statistics getStatistics() {
-        return this.statistics;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected StatisticsCollector getStatisticsCollector() {
-        return this.statistics;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected DataPort getDataPort() {
-        return this.dataPort;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     // Used for testing
     protected int getConsumerCount() {
-        return this.subscribers.size() + this.dispatchers.size();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1999,13 +789,7 @@ class NatsConnection implements Connection {
      */
     @Override
     public long getMaxPayload() {
-        ServerInfo info = this.serverInfo.get();
-
-        if (info == null) {
-            return -1;
-        }
-
-        return info.getMaxPayload();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2014,46 +798,11 @@ class NatsConnection implements Connection {
     @Override
     @NonNull
     public Collection<String> getServers() {
-        return serverPool.getServerList();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected List<NatsUri> resolveHost(NatsUri nuri) {
-        // 1. If the nuri host is not already an ip address
-        //      -and- the nuri is not for websocket
-        //      -and- the HostnameResolveMode is Resolve
-        //    let the pool resolve it.
-        HostnameResolveMode resolveMode = options.hostnameResolveMode();
-        List<NatsUri> results = new ArrayList<>();
-        if (!nuri.hostIsIpAddress()
-            && !nuri.isWebsocket()
-            && resolveMode.resolve)
-        {
-            List<String> ips = serverPool.resolveHostToIps(
-                nuri.getHost(), resolveMode.maxOneResult, resolveMode.includeIPV6);
-            if (ips != null) {
-                for (String ip : ips) {
-                    try {
-                        results.add(nuri.reHost(ip));
-                    }
-                    catch (URISyntaxException u) {
-                        // ??? should never happen
-                        throw new RuntimeException(u);
-                    }
-                }
-            }
-        }
-
-        // 2. If there were no results,
-        //    - host was already an ip address
-        //    - host was for websocket
-        //    - hostnameResolveMode did not want to be resolved
-        //    - pool returned nothing
-        //    - resolving failed...
-        //    so the list just becomes the original host.
-        if (results.isEmpty()) {
-            results.add(nuri);
-        }
-        return results;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2062,7 +811,7 @@ class NatsConnection implements Connection {
     @Override
     @Nullable
     public String getConnectedUrl() {
-        return currentServer == null ? null : currentServer.toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2071,7 +820,7 @@ class NatsConnection implements Connection {
     @Override
     @NonNull
     public Status getStatus() {
-        return this.status;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2080,7 +829,7 @@ class NatsConnection implements Connection {
     @Override
     @Nullable
     public String getLastError() {
-        return lastError.get();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2088,210 +837,98 @@ class NatsConnection implements Connection {
      */
     @Override
     public void clearLastError() {
-        lastError.set(null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected ExecutorService getExecutor() {
-        return executor;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected ScheduledExecutorService getScheduledExecutor() {
-        return scheduledExecutor;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void updateStatus(Status newStatus) {
-        updateStatus(newStatus, uriDetail(currentServer == null ? lastServer : currentServer));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void updateStatus(Status newStatus, NatsUri resolvedUri, NatsUri hostUri) {
-        updateStatus(newStatus, uriDetail(resolvedUri, hostUri));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void updateStatus(Status newStatus, String uriDetail) {
-        Status oldStatus;
-        statusLock.lock();
-        try {
-            oldStatus = this.status;
-            if (oldStatus == Status.CLOSED || newStatus == oldStatus) {
-                return;
-            }
-            this.status = newStatus;
-            statusChanged.signalAll();
-        } finally {
-            statusLock.unlock();
-        }
-
-        if (newStatus == Status.DISCONNECTED) {
-            processConnectionEvent(Events.DISCONNECTED, uriDetail);
-        }
-        else if (newStatus == Status.CLOSED) {
-            processConnectionEvent(Events.CLOSED, uriDetail);
-        }
-        else if (oldStatus == Status.RECONNECTING && newStatus == Status.CONNECTED) {
-            processConnectionEvent(Events.RECONNECTED, uriDetail);
-        }
-        else if (newStatus == Status.CONNECTED) {
-            processConnectionEvent(Events.CONNECTED, uriDetail);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected boolean isClosing() {
-        return this.closing;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected boolean isClosed() {
-        return this.status == Status.CLOSED;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected boolean isConnected() {
-        return this.status == Status.CONNECTED;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected boolean isDisconnected() {
-        return this.status == Status.DISCONNECTED;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected boolean isConnectedOrConnecting() {
-        statusLock.lock();
-        try {
-            return this.status == Status.CONNECTED || this.connecting;
-        } finally {
-            statusLock.unlock();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected boolean isDisconnectingOrClosed() {
-        statusLock.lock();
-        try {
-            return this.status == Status.CLOSED || this.disconnecting;
-        } finally {
-            statusLock.unlock();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected boolean isDisconnecting() {
-        statusLock.lock();
-        try {
-            return this.disconnecting;
-        } finally {
-            statusLock.unlock();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void waitForDisconnectOrClose(Duration timeout) throws InterruptedException {
-        waitWhile(timeout, (Void) -> this.isDisconnecting() && !this.isClosed() );
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void waitForConnectOrClose(Duration timeout) throws InterruptedException {
-        waitWhile(timeout, (Void) -> !this.isConnected() && !this.isClosed());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void waitWhile(Duration timeout, Predicate<Void> waitWhileTrue) throws InterruptedException {
-        statusLock.lock();
-        try {
-            long currentWaitNanos = (timeout != null) ? timeout.toNanos() : -1;
-            long start = NatsSystemClock.nanoTime();
-            while (currentWaitNanos >= 0 && waitWhileTrue.test(null)) {
-                if (currentWaitNanos > 0) {
-                    if (statusChanged.await(currentWaitNanos, TimeUnit.NANOSECONDS) && !waitWhileTrue.test(null)) {
-                        break;
-                    }
-                    long now = NatsSystemClock.nanoTime();
-                    currentWaitNanos = currentWaitNanos - (now - start);
-                    start = now;
-
-                    if (currentWaitNanos <= 0) {
-                        break;
-                    }
-                }
-                else {
-                    statusChanged.await();
-                }
-            }
-        }
-        finally {
-            statusLock.unlock();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void invokeReconnectDelayHandler(long totalRounds) {
-        long currentWaitNanos = 0;
-
-        ReconnectDelayHandler handler = options.getReconnectDelayHandler();
-        if (handler == null) {
-            Duration dur = options.getReconnectWait();
-            if (dur != null) {
-                currentWaitNanos = dur.toNanos();
-                dur = serverPool.hasSecureServer() ? options.getReconnectJitterTls() : options.getReconnectJitter();
-                if (dur != null) {
-                    currentWaitNanos += ThreadLocalRandom.current().nextLong(dur.toNanos());
-                }
-            }
-        }
-        else {
-            Duration waitTime = handler.getWaitTime(totalRounds);
-            if (waitTime != null) {
-                currentWaitNanos = waitTime.toNanos();
-            }
-        }
-
-        this.reconnectWaiter = new CompletableFuture<>();
-
-        long start = NatsSystemClock.nanoTime();
-        while (currentWaitNanos > 0 && !isDisconnectingOrClosed() && !isConnected() && !this.reconnectWaiter.isDone()) {
-            try {
-                this.reconnectWaiter.get(currentWaitNanos, TimeUnit.NANOSECONDS);
-            } catch (Exception exp) {
-                // ignore, try to loop again
-            }
-            long now = NatsSystemClock.nanoTime();
-            currentWaitNanos = currentWaitNanos - (now - start);
-            start = now;
-        }
-
-        this.reconnectWaiter.complete(Boolean.TRUE);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected ByteBuffer enlargeBuffer(ByteBuffer buffer) {
-        int current = buffer.capacity();
-        int newSize = current * 2;
-        ByteBuffer newBuffer = ByteBuffer.allocate(newSize);
-        buffer.flip();
-        newBuffer.put(buffer);
-        return newBuffer;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     // For testing
     protected NatsConnectionReader getReader() {
-        return this.reader;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     // For testing
     protected NatsConnectionWriter getWriter() {
-        return this.writer;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     // For testing
     protected Future<DataPort> getDataPortFuture() {
-        return this.dataPortFuture;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected boolean isDraining() {
-        return this.draining.get() != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected boolean isDrained() {
-        CompletableFuture<Boolean> tracker = this.draining.get();
-
-        try {
-            if (tracker != null && tracker.getNow(false)) {
-                return true;
-            }
-        } catch (Exception e) {
-            // These indicate the tracker was cancelled/timed out
-        }
-
-        return false;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2300,111 +937,11 @@ class NatsConnection implements Connection {
     @Override
     @NonNull
     public CompletableFuture<Boolean> drain(@Nullable Duration timeout) throws TimeoutException, InterruptedException {
-
-        if (isClosing() || isClosed()) {
-            throw new IllegalStateException("A connection can't be drained during close.");
-        }
-
-        this.statusLock.lock();
-        try {
-            if (isDraining()) {
-                return this.draining.get();
-            }
-            this.draining.set(new CompletableFuture<>());
-        } finally {
-            this.statusLock.unlock();
-        }
-
-        final CompletableFuture<Boolean> tracker = this.draining.get();
-        Instant start = Instant.now();
-
-        // Don't include subscribers with dispatchers
-        HashSet<NatsSubscription> pureSubscribers = new HashSet<>(this.subscribers.values());
-        pureSubscribers.removeIf((s) -> s.getDispatcher() != null);
-
-        final HashSet<NatsConsumer> consumers = new HashSet<>();
-        consumers.addAll(pureSubscribers);
-        consumers.addAll(this.dispatchers.values());
-
-        NatsDispatcher inboxer = this.inboxDispatcher.get();
-
-        if (inboxer != null) {
-            consumers.add(inboxer);
-        }
-
-        // Stop the consumers NOW so that when this method returns they are blocked
-        consumers.forEach((cons) -> {
-            cons.markDraining(tracker);
-            cons.sendUnsubForDrain();
-        });
-
-        try {
-            this.flush(timeout); // Flush and wait up to the timeout, if this fails, let the caller know
-        } catch (Exception e) {
-            this.close(false, false);
-            throw e;
-        }
-
-        consumers.forEach(NatsConsumer::markUnsubedForDrain);
-
-        // Wait for the timeout or all consumers are drained
-        executor.submit(() -> {
-            try {
-                long timeoutNanos = (timeout == null || timeout.toNanos() <= 0)
-                    ? Long.MAX_VALUE : timeout.toNanos();
-                long startTime = System.nanoTime();
-                while (NatsSystemClock.nanoTime() - startTime < timeoutNanos && !Thread.interrupted()) {
-                    consumers.removeIf(NatsConsumer::isDrained);
-                    if (consumers.isEmpty()) {
-                        break;
-                    }
-                    //noinspection BusyWait
-                    Thread.sleep(1); // Sleep 1 milli
-                }
-
-                // Stop publishing
-                this.blockPublishForDrain.set(true);
-
-                // One last flush
-                if (timeout == null || timeout.equals(Duration.ZERO)) {
-                    this.flush(Duration.ZERO);
-                } else {
-                    Instant now = Instant.now();
-                    Duration passed = Duration.between(start, now);
-                    Duration newTimeout = timeout.minus(passed);
-                    if (newTimeout.toNanos() > 0) {
-                        this.flush(newTimeout);
-                    }
-                }
-                this.close(false, false); // close the connection after the last flush
-                tracker.complete(consumers.isEmpty());
-            } catch (TimeoutException e) {
-                this.processException(e);
-            } catch (InterruptedException e) {
-                this.processException(e);
-                Thread.currentThread().interrupt();
-            } finally {
-                try {
-                    this.close(false, false);// close the connection after the last flush
-                } catch (InterruptedException e) {
-                    processException(e);
-                    Thread.currentThread().interrupt();
-                }
-                tracker.complete(false);
-            }
-        });
-
-        return tracker;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected boolean isAuthenticationError(String err) {
-        if (err == null) {
-            return false;
-        }
-        err = err.toLowerCase();
-        return err.startsWith("user authentication")
-            || err.contains("authorization violation")
-            || err.startsWith("account authentication expired");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2412,20 +949,16 @@ class NatsConnection implements Connection {
      */
     @Override
     public void flushBuffer() throws IOException {
-        if (!isConnected()) {
-            throw new IllegalStateException("Connection is not active.");
-        }
-        writer.flushBuffer();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    @NonNull public StreamContext getStreamContext(@NonNull String streamName) throws IOException, JetStreamApiException {
-        Validator.validateStreamName(streamName, true);
-        ensureNotClosing();
-        return new NatsStreamContext(streamName, null, this, null);
+    @NonNull
+    public StreamContext getStreamContext(@NonNull String streamName) throws IOException, JetStreamApiException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2434,9 +967,7 @@ class NatsConnection implements Connection {
     @Override
     @NonNull
     public StreamContext getStreamContext(@NonNull String streamName, @Nullable JetStreamOptions options) throws IOException, JetStreamApiException {
-        Validator.validateStreamName(streamName, true);
-        ensureNotClosing();
-        return new NatsStreamContext(streamName, null, this, options);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2445,7 +976,7 @@ class NatsConnection implements Connection {
     @Override
     @NonNull
     public ConsumerContext getConsumerContext(@NonNull String streamName, @NonNull String consumerName) throws IOException, JetStreamApiException {
-        return getStreamContext(streamName).getConsumerContext(consumerName);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2454,7 +985,7 @@ class NatsConnection implements Connection {
     @Override
     @NonNull
     public ConsumerContext getConsumerContext(@NonNull String streamName, @NonNull String consumerName, @Nullable JetStreamOptions options) throws IOException, JetStreamApiException {
-        return getStreamContext(streamName, options).getConsumerContext(consumerName);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2463,7 +994,7 @@ class NatsConnection implements Connection {
     @Override
     @NonNull
     public JetStream jetStream() throws IOException {
-        return jetStream(null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2472,8 +1003,7 @@ class NatsConnection implements Connection {
     @Override
     @NonNull
     public JetStream jetStream(JetStreamOptions options) throws IOException {
-        ensureNotClosing();
-        return new NatsJetStream(this, options);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2482,7 +1012,7 @@ class NatsConnection implements Connection {
     @Override
     @NonNull
     public JetStreamManagement jetStreamManagement() throws IOException {
-        return jetStreamManagement(null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2491,8 +1021,7 @@ class NatsConnection implements Connection {
     @Override
     @NonNull
     public JetStreamManagement jetStreamManagement(JetStreamOptions options) throws IOException {
-        ensureNotClosing();
-        return new NatsJetStreamManagement(this, options);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2501,7 +1030,7 @@ class NatsConnection implements Connection {
     @Override
     @NonNull
     public KeyValue keyValue(@NonNull String bucketName) throws IOException {
-        return keyValue(bucketName, null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2510,9 +1039,7 @@ class NatsConnection implements Connection {
     @Override
     @NonNull
     public KeyValue keyValue(@NonNull String bucketName, @Nullable KeyValueOptions options) throws IOException {
-        Validator.validateBucketName(bucketName, true);
-        ensureNotClosing();
-        return new NatsKeyValue(bucketName, this, options, null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2521,7 +1048,7 @@ class NatsConnection implements Connection {
     @Override
     @NonNull
     public KeyValueManagement keyValueManagement() throws IOException {
-        return keyValueManagement(null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2530,8 +1057,7 @@ class NatsConnection implements Connection {
     @Override
     @NonNull
     public KeyValueManagement keyValueManagement(@Nullable KeyValueOptions options) throws IOException {
-        ensureNotClosing();
-        return new NatsKeyValueManagement(this, options, null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2540,7 +1066,7 @@ class NatsConnection implements Connection {
     @Override
     @NonNull
     public ObjectStore objectStore(@NonNull String bucketName) throws IOException {
-        return objectStore(bucketName, null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2549,9 +1075,7 @@ class NatsConnection implements Connection {
     @Override
     @NonNull
     public ObjectStore objectStore(@NonNull String bucketName, @Nullable ObjectStoreOptions options) throws IOException {
-        Validator.validateBucketName(bucketName, true);
-        ensureNotClosing();
-        return new NatsObjectStore(bucketName, this, options, null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2560,8 +1084,7 @@ class NatsConnection implements Connection {
     @Override
     @NonNull
     public ObjectStoreManagement objectStoreManagement() throws IOException {
-        ensureNotClosing();
-        return new NatsObjectStoreManagement(this, null, null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2570,14 +1093,11 @@ class NatsConnection implements Connection {
     @Override
     @NonNull
     public ObjectStoreManagement objectStoreManagement(@Nullable ObjectStoreOptions options) throws IOException {
-        ensureNotClosing();
-        return new NatsObjectStoreManagement(this, options, null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void ensureNotClosing() throws IOException {
-        if (isClosing() || isClosed()) {
-            throw new IOException("A JetStream context can't be established during close.");
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2585,13 +1105,7 @@ class NatsConnection implements Connection {
      */
     @Override
     public long outgoingPendingMessageCount() {
-        closeSocketLock.lock();
-        try {
-            return writer == null ? -1 : writer.outgoingPendingMessageCount();
-        }
-        finally {
-            closeSocketLock.unlock();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2599,12 +1113,6 @@ class NatsConnection implements Connection {
      */
     @Override
     public long outgoingPendingBytes() {
-        closeSocketLock.lock();
-        try {
-            return writer == null ? -1 : writer.outgoingPendingBytes();
-        }
-        finally {
-            closeSocketLock.unlock();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

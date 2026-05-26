@@ -10,20 +10,17 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.service;
 
 import io.nats.client.Connection;
 import io.nats.client.Message;
 import io.nats.client.NatsSystemClock;
 import io.nats.client.Subscription;
-
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-
 import static io.nats.client.support.NatsConstants.NANOS_PER_MILLI;
 import static io.nats.service.Service.*;
 
@@ -36,13 +33,21 @@ import static io.nats.service.Service.*;
  * <p>'maxResults' defaults tp {@value DEFAULT_DISCOVERY_MAX_RESULTS}</p>
  */
 public class Discovery {
-    /** Default discover time */
+
+    /**
+     * Default discover time
+     */
     public static final long DEFAULT_DISCOVERY_MAX_TIME_MILLIS = 5000;
-    /** Default discoverer max results */
+
+    /**
+     * Default discoverer max results
+     */
     public static final int DEFAULT_DISCOVERY_MAX_RESULTS = 10;
 
     private final Connection conn;
+
     private final long maxTimeNanos;
+
     private final int maxResults;
 
     private Supplier<String> inboxSupplier;
@@ -73,19 +78,18 @@ public class Discovery {
      * @param inboxSupplier the supplier
      */
     public void setInboxSupplier(Supplier<String> inboxSupplier) {
-        this.inboxSupplier = inboxSupplier == null ? conn::createInbox : inboxSupplier;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     // ----------------------------------------------------------------------------------------------------
     // ping
     // ----------------------------------------------------------------------------------------------------
-
     /**
      * Make a ping request to all services running on the server.
      * @return the list of {@link PingResponse}
      */
     public List<PingResponse> ping() {
-        return ping(null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -94,9 +98,7 @@ public class Discovery {
      * @return the list of {@link PingResponse}
      */
     public List<PingResponse> ping(String serviceName) {
-        List<PingResponse> list = new ArrayList<>();
-        discoverMany(SRV_PING, serviceName, jsonBytes -> list.add(new PingResponse(jsonBytes)));
-        return list;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -106,20 +108,18 @@ public class Discovery {
      * @return the list of {@link PingResponse}
      */
     public PingResponse ping(String serviceName, String serviceId) {
-        byte[] jsonBytes = discoverOne(SRV_PING, serviceName, serviceId);
-        return jsonBytes == null ? null : new PingResponse(jsonBytes);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     // ----------------------------------------------------------------------------------------------------
     // info
     // ----------------------------------------------------------------------------------------------------
-
     /**
      * Make an info request to all services running on the server.
      * @return the list of {@link InfoResponse}
      */
     public List<InfoResponse> info() {
-        return info(null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -128,9 +128,7 @@ public class Discovery {
      * @return the list of {@link InfoResponse}
      */
     public List<InfoResponse> info(String serviceName) {
-        List<InfoResponse> list = new ArrayList<>();
-        discoverMany(SRV_INFO, serviceName, jsonBytes -> list.add(new InfoResponse(jsonBytes)));
-        return list;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -140,20 +138,18 @@ public class Discovery {
      * @return the list of {@link InfoResponse}
      */
     public InfoResponse info(String serviceName, String serviceId) {
-        byte[] jsonBytes = discoverOne(SRV_INFO, serviceName, serviceId);
-        return jsonBytes == null ? null : new InfoResponse(jsonBytes);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     // ----------------------------------------------------------------------------------------------------
     // stats
     // ----------------------------------------------------------------------------------------------------
-
     /**
      * Make a stats request to all services running on the server.
      * @return the list of {@link StatsResponse}
      */
     public List<StatsResponse> stats() {
-        return stats(null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -162,9 +158,7 @@ public class Discovery {
      * @return the list of {@link StatsResponse}
      */
     public List<StatsResponse> stats(String serviceName) {
-        List<StatsResponse> list = new ArrayList<>();
-        discoverMany(SRV_STATS, serviceName, jsonBytes -> list.add(new StatsResponse(jsonBytes)));
-        return list;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -174,8 +168,7 @@ public class Discovery {
      * @return the list of {@link StatsResponse}
      */
     public StatsResponse stats(String serviceName, String serviceId) {
-        byte[] jsonBytes = discoverOne(SRV_STATS, serviceName, serviceId);
-        return jsonBytes == null ? null : new StatsResponse(jsonBytes);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     // ----------------------------------------------------------------------------------------------------
@@ -188,8 +181,7 @@ public class Discovery {
             if (m != null) {
                 return m.getData();
             }
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             // conn.request interrupted means data is not retrieved
             Thread.currentThread().interrupt();
             throw new RuntimeException(e);
@@ -202,10 +194,8 @@ public class Discovery {
         try {
             String replyTo = inboxSupplier.get();
             sub = conn.subscribe(replyTo);
-
             String subject = toDiscoverySubject(action, serviceName, null);
             conn.publish(subject, replyTo, null);
-
             int resultsLeft = maxResults;
             long start = NatsSystemClock.nanoTime();
             long timeLeft = maxTimeNanos;
@@ -219,20 +209,18 @@ public class Discovery {
                 // try again while we have time
                 timeLeft = maxTimeNanos - (NatsSystemClock.nanoTime() - start);
             }
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             // sub.nextMessage was fetching one message
             // and data is not completely read
             // so it seems like this is an error condition
             Thread.currentThread().interrupt();
             throw new RuntimeException(e);
-        }
-        finally {
+        } finally {
             try {
                 //noinspection DataFlowIssue
                 sub.unsubscribe();
+            } catch (Exception ignore) {
             }
-            catch (Exception ignore) {}
         }
     }
 }

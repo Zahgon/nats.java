@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import io.nats.client.*;
@@ -23,7 +22,7 @@ public class ErrorListenerConsoleImpl implements ErrorListener {
      */
     @Override
     public void errorOccurred(final Connection conn, final String error) {
-        System.out.println(supplyMessage("[SEVERE] errorOccurred", conn, null, null, "Error: ", error));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -31,7 +30,7 @@ public class ErrorListenerConsoleImpl implements ErrorListener {
      */
     @Override
     public void exceptionOccurred(final Connection conn, final Exception exp) {
-        System.out.println(supplyMessage("[SEVERE] exceptionOccurred", conn, null, null, "Exception: ", exp));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -39,7 +38,7 @@ public class ErrorListenerConsoleImpl implements ErrorListener {
      */
     @Override
     public void slowConsumerDetected(final Connection conn, final Consumer consumer) {
-        System.out.println(supplyMessage("[WARN] slowConsumerDetected", conn, consumer, null));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -47,16 +46,15 @@ public class ErrorListenerConsoleImpl implements ErrorListener {
      */
     @Override
     public void messageDiscarded(final Connection conn, final Message msg) {
-        System.out.println(supplyMessage("[INFO] messageDiscarded", conn, null, null, "Message: ", msg));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void heartbeatAlarm(final Connection conn, final JetStreamSubscription sub,
-                               final long lastStreamSequence, final long lastConsumerSequence) {
-        System.out.println(supplyMessage("[SEVERE] heartbeatAlarm", conn, null, sub, "lastStreamSequence: ", lastStreamSequence, "lastConsumerSequence: ", lastConsumerSequence));
+    public void heartbeatAlarm(final Connection conn, final JetStreamSubscription sub, final long lastStreamSequence, final long lastConsumerSequence) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -64,7 +62,7 @@ public class ErrorListenerConsoleImpl implements ErrorListener {
      */
     @Override
     public void unhandledStatus(final Connection conn, final JetStreamSubscription sub, final Status status) {
-        System.out.println(supplyMessage("[WARN] unhandledStatus", conn, null, sub, "Status: ", status));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -72,7 +70,7 @@ public class ErrorListenerConsoleImpl implements ErrorListener {
      */
     @Override
     public void pullStatusWarning(Connection conn, JetStreamSubscription sub, Status status) {
-        System.out.println(supplyMessage("[WARN] pullStatusWarning", conn, null, sub, "Status: ", status));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -80,7 +78,7 @@ public class ErrorListenerConsoleImpl implements ErrorListener {
      */
     @Override
     public void pullStatusError(Connection conn, JetStreamSubscription sub, Status status) {
-        System.out.println(supplyMessage("[SEVERE] pullStatusError", conn, null, sub, "Status: ", status));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -88,7 +86,7 @@ public class ErrorListenerConsoleImpl implements ErrorListener {
      */
     @Override
     public void flowControlProcessed(Connection conn, JetStreamSubscription sub, String id, FlowControlSource source) {
-        System.out.println(supplyMessage("[INFO] flowControlProcessed", conn, null, sub, "FlowControlSource: ", source));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -96,6 +94,6 @@ public class ErrorListenerConsoleImpl implements ErrorListener {
      */
     @Override
     public void socketWriteTimeout(Connection conn) {
-        System.out.println(supplyMessage("[SEVERE] socketWriteTimeout", conn, null, null));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

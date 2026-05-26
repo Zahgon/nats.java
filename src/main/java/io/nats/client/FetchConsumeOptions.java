@@ -10,12 +10,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client;
 
 import io.nats.client.api.ConsumerConfiguration;
 import io.nats.client.support.JsonValue;
-
 import static io.nats.client.support.ApiConstants.EXPIRES_IN;
 import static io.nats.client.support.ApiConstants.NO_WAIT;
 import static io.nats.client.support.JsonUtils.addFldWhenTrue;
@@ -26,6 +24,7 @@ import static io.nats.client.support.JsonValueUtils.readLong;
  * Fetch Consume Options are provided to customize the fetch operation.
  */
 public class FetchConsumeOptions extends BaseConsumeOptions {
+
     /**
      * An instance of FetchConsumeOptions representing the default fetch options
      */
@@ -40,7 +39,7 @@ public class FetchConsumeOptions extends BaseConsumeOptions {
 
     @Override
     protected void subclassSpecificToJson(StringBuilder sb) {
-        addFldWhenTrue(sb, NO_WAIT, noWait);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -48,7 +47,7 @@ public class FetchConsumeOptions extends BaseConsumeOptions {
      * @return the maximum number of messages to fetch
      */
     public int getMaxMessages() {
-        return messages;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -56,7 +55,7 @@ public class FetchConsumeOptions extends BaseConsumeOptions {
      * @return the maximum number of bytes to fetch
      */
     public long getMaxBytes() {
-        return bytes;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -64,7 +63,7 @@ public class FetchConsumeOptions extends BaseConsumeOptions {
      * @return the flag
      */
     public boolean isNoWait() {
-        return noWait;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -72,31 +71,29 @@ public class FetchConsumeOptions extends BaseConsumeOptions {
      * @return a builder
      */
     public static Builder builder() {
-        return new Builder();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * The builder for FetchConsumeOptions
      */
-    public static class Builder
-        extends BaseConsumeOptions.Builder<Builder, FetchConsumeOptions> {
+    public static class Builder extends BaseConsumeOptions.Builder<Builder, FetchConsumeOptions> {
 
         /**
          * Construct a builder for FetchConsumeOptions
          */
-        public Builder() {}
+        public Builder() {
+        }
 
         protected boolean noWait = false;
 
-        protected Builder getThis() { return this; }
+        protected Builder getThis() {
+            throw new UnsupportedOperationException("STUB: not implemented");
+        }
 
         @Override
         public Builder jsonValue(JsonValue jsonValue) {
-            super.jsonValue(jsonValue);
-            if (readBoolean(jsonValue, NO_WAIT, false)) {
-                noWaitExpiresIn(readLong(jsonValue, EXPIRES_IN, ConsumerConfiguration.LONG_UNSET));
-            }
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -107,8 +104,7 @@ public class FetchConsumeOptions extends BaseConsumeOptions {
          * @return the builder
          */
         public Builder maxMessages(int maxMessages) {
-            messages(maxMessages);
-            return bytes(-1);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -122,7 +118,7 @@ public class FetchConsumeOptions extends BaseConsumeOptions {
          * @return the builder
          */
         public Builder maxBytes(long maxBytes) {
-            return super.bytes(maxBytes);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -139,17 +135,12 @@ public class FetchConsumeOptions extends BaseConsumeOptions {
          * @return the builder
          */
         public Builder max(int maxBytes, int maxMessages) {
-            messages(maxMessages);
-            return bytes(maxBytes);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public Builder expiresIn(long expiresInMillis) {
-            if (noWait && expiresInMillis < 1) {
-                expiresIn = ConsumerConfiguration.LONG_UNSET;
-                return this;
-            }
-            return super.expiresIn(expiresInMillis);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -158,9 +149,7 @@ public class FetchConsumeOptions extends BaseConsumeOptions {
          * @return the builder
          */
         public Builder noWait() {
-            this.noWait = true;
-            expiresIn = ConsumerConfiguration.LONG_UNSET;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -171,8 +160,7 @@ public class FetchConsumeOptions extends BaseConsumeOptions {
          * @return the builder
          */
         public Builder noWaitExpiresIn(long expiresInMillis) {
-            this.noWait = true;
-            return expiresIn(expiresInMillis);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -180,7 +168,7 @@ public class FetchConsumeOptions extends BaseConsumeOptions {
          * @return a FetchConsumeOptions instance
          */
         public FetchConsumeOptions build() {
-            return new FetchConsumeOptions(this);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

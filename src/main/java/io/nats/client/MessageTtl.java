@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client;
 
 import io.nats.client.support.Validator;
@@ -19,6 +18,7 @@ import io.nats.client.support.Validator;
  * Class to make setting a per message ttl easier.
  */
 public class MessageTtl {
+
     private final String ttlString;
 
     private MessageTtl(String ttlString) {
@@ -30,12 +30,12 @@ public class MessageTtl {
      * @return the string
      */
     public String getTtlString() {
-        return ttlString;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return "MessageTtl{'" + ttlString + "'}";
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -44,10 +44,7 @@ public class MessageTtl {
      * @return The MessageTtl instance
      */
     public static MessageTtl seconds(int msgTtlSeconds) {
-        if (msgTtlSeconds < 1) {
-            throw new IllegalArgumentException("Must be at least 1 second.");
-        }
-        return new MessageTtl(msgTtlSeconds + "s");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -57,10 +54,7 @@ public class MessageTtl {
      * @return The MessageTtl instance
      */
     public static MessageTtl custom(String messageTtlCustom) {
-        if (Validator.nullOrEmpty(messageTtlCustom)) {
-            throw new IllegalArgumentException("Custom value required.");
-        }
-        return new MessageTtl(messageTtlCustom);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -68,6 +62,6 @@ public class MessageTtl {
      * @return The MessageTtl instance
      */
     public static MessageTtl never() {
-        return new MessageTtl("never");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

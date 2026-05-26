@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.Message;
@@ -18,10 +17,8 @@ import io.nats.client.support.DateTimeUtils;
 import io.nats.client.support.JsonValue;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import java.time.ZonedDateTime;
 import java.util.List;
-
 import static io.nats.client.support.ApiConstants.*;
 import static io.nats.client.support.JsonParser.parseUnchecked;
 import static io.nats.client.support.JsonValueUtils.readDate;
@@ -34,12 +31,19 @@ import static io.nats.client.support.NatsConstants.UNDEFINED;
 public class StreamInfo extends ApiResponse<StreamInfo> {
 
     private final ZonedDateTime createTime;
+
     private final StreamConfiguration config;
+
     private final StreamState streamState;
+
     private final ClusterInfo clusterInfo;
+
     private final MirrorInfo mirrorInfo;
+
     private final List<SourceInfo> sourceInfos;
+
     private final List<StreamAlternate> alternates;
+
     private final ZonedDateTime timestamp;
 
     /**
@@ -65,15 +69,10 @@ public class StreamInfo extends ApiResponse<StreamInfo> {
             sourceInfos = null;
             alternates = null;
             timestamp = null;
-        }
-        else {
+        } else {
             JsonValue jvConfig = nullValueIsError(jv, CONFIG, JsonValue.NULL);
-            config = (jvConfig == JsonValue.NULL)
-                ? StreamConfiguration.builder().name(UNDEFINED).build()
-                : StreamConfiguration.instance(jvConfig);
-
+            config = (jvConfig == JsonValue.NULL) ? StreamConfiguration.builder().name(UNDEFINED).build() : StreamConfiguration.instance(jvConfig);
             createTime = nullDateIsError(jv, CREATED);
-
             streamState = new StreamState(readValue(jv, STATE));
             clusterInfo = ClusterInfo.optionalInstance(readValue(jv, CLUSTER));
             mirrorInfo = MirrorInfo.optionalInstance(readValue(jv, MIRROR));
@@ -89,7 +88,7 @@ public class StreamInfo extends ApiResponse<StreamInfo> {
      */
     @NonNull
     public StreamConfiguration getConfiguration() {
-        return config;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -98,7 +97,7 @@ public class StreamInfo extends ApiResponse<StreamInfo> {
      */
     @NonNull
     public StreamConfiguration getConfig() {
-        return config;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -107,7 +106,7 @@ public class StreamInfo extends ApiResponse<StreamInfo> {
      */
     @NonNull
     public StreamState getStreamState() {
-        return streamState;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -116,7 +115,7 @@ public class StreamInfo extends ApiResponse<StreamInfo> {
      */
     @NonNull
     public ZonedDateTime getCreateTime() {
-        return createTime;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -125,7 +124,7 @@ public class StreamInfo extends ApiResponse<StreamInfo> {
      */
     @Nullable
     public MirrorInfo getMirrorInfo() {
-        return mirrorInfo;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -134,7 +133,7 @@ public class StreamInfo extends ApiResponse<StreamInfo> {
      */
     @Nullable
     public List<SourceInfo> getSourceInfos() {
-        return sourceInfos;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -143,7 +142,7 @@ public class StreamInfo extends ApiResponse<StreamInfo> {
      */
     @Nullable
     public ClusterInfo getClusterInfo() {
-        return clusterInfo;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -152,20 +151,21 @@ public class StreamInfo extends ApiResponse<StreamInfo> {
      */
     @Nullable
     public List<StreamAlternate> getAlternates() {
-        return alternates;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Gets the server time the info was gathered
      * @return the server gathered timed
      */
-    @Nullable // doesn't exist in some versions of the server
+    // doesn't exist in some versions of the server
+    @Nullable
     public ZonedDateTime getTimestamp() {
-        return timestamp;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return "StreamInfo " + jv;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -10,11 +10,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import io.nats.client.AuthHandler;
-
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
@@ -36,67 +34,61 @@ public class MemoryAuthHandler implements AuthHandler {
         boolean skipLine = false;
         int headerCount = 0;
         int linePos = -1;
-
         while (data.length() > 0) {
             char c = data.get();
             linePos++;
-
             // End of line, either we got it, or we should keep reading the new line
-            if (c == '\n' || c=='\r') {
-                if (buff.position() > 0) { // we wrote something
+            if (c == '\n' || c == '\r') {
+                if (buff.position() > 0) {
+                    // we wrote something
                     break;
                 }
                 skipLine = false;
-                linePos = -1; // so we can start right up
+                // so we can start right up
+                linePos = -1;
                 continue;
             }
-
             // skip to the new line
             if (skipLine) {
                 continue;
             }
-
             // Ignore whitespace
             if (Character.isWhitespace(c)) {
                 continue;
             }
-
             // If we are on a - skip that line, bump the header count
             if (c == '-' && linePos == 0) {
                 skipLine = true;
                 headerCount++;
                 continue;
             }
-
             // Skip the line, or add to buff
-            if (headerCount==headers) {
+            if (headerCount == headers) {
                 buff.put(c);
             }
         }
-
         // check for naked value
-        if (buff.position() == 0 && headers==1) {
+        if (buff.position() == 0 && headers == 1) {
             data.position(0);
             while (data.length() > 0) {
                 char c = data.get();
-                if (c == '\n' || c=='\r' || Character.isWhitespace(c)) {
-                    if (buff.position() > 0) { // we wrote something
+                if (c == '\n' || c == '\r' || Character.isWhitespace(c)) {
+                    if (buff.position() > 0) {
+                        // we wrote something
                         break;
                     }
                     continue;
                 }
-    
                 buff.put(c);
             }
             buff.flip();
         } else {
             buff.flip();
         }
-
         char[] retVal = new char[buff.length()];
         buff.get(retVal);
         buff.clear();
-        for (int i=0; i<buff.capacity();i++) {
+        for (int i = 0; i < buff.capacity(); i++) {
             buff.put('\0');
         }
         return retVal;
@@ -105,32 +97,32 @@ public class MemoryAuthHandler implements AuthHandler {
     /**
      * Sign is called by the library when the server sends a nonce.
      * The client's NKey should be used to sign the provided value.
-     * 
+     *
      * @param nonce the nonce to sign
      * @return the signature for the nonce
-     */ 
+     */
     public byte[] sign(byte[] nonce) {
-        return sah.sign(nonce);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * getID should return a public key associated with a client key known to the server.
      * If the server is not in nonce-mode, this array can be empty.
-     * 
+     *
      * @return the public key as a char array
      */
     public char[] getID() {
-        return sah.getID();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * getJWT should return the user JWT associated with this connection.
      * This can return null for challenge only authentication, but for account/user
      * JWT-based authentication you need to return the JWT bytes here.
-     * 
+     *
      * @return the user JWT
-     */ 
+     */
     public char[] getJWT() {
-        return sah.getJWT();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

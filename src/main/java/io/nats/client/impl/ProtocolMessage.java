@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import io.nats.client.support.ByteArrayBuilder;
@@ -19,12 +18,14 @@ import io.nats.client.support.ByteArrayBuilder;
 // Protocol message is a special version of a NatsPublishableMessage extends NatsMessage
 // ----------------------------------------------------------------------------------------------------
 class ProtocolMessage extends NatsPublishableMessage {
+
     final boolean filterOnStop;
 
     ProtocolMessage(ByteArrayBuilder babProtocol, boolean filterOnStop) {
         super(false);
         protocolBab = babProtocol;
-        sizeInBytes = controlLineLength = protocolBab.length() + 2; // CRLF, protocol doesn't have data
+        // CRLF, protocol doesn't have data
+        sizeInBytes = controlLineLength = protocolBab.length() + 2;
         this.filterOnStop = filterOnStop;
     }
 
@@ -38,16 +39,16 @@ class ProtocolMessage extends NatsPublishableMessage {
 
     @Override
     boolean isProtocol() {
-        return true;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     boolean isFilterOnStop() {
-        return filterOnStop;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     int copyNotEmptyHeaders(int destPosition, byte[] dest) {
-        return 0; // until a protocol messages gets headers, might as well shortcut this.
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

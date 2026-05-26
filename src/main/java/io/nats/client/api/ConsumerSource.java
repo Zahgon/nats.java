@@ -10,16 +10,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.support.JsonSerializable;
 import io.nats.client.support.JsonValue;
 import io.nats.client.support.JsonValueUtils;
 import org.jspecify.annotations.NonNull;
-
 import java.util.Objects;
-
 import static io.nats.client.support.ApiConstants.DELIVER_SUBJECT;
 import static io.nats.client.support.ApiConstants.NAME;
 import static io.nats.client.support.JsonUtils.*;
@@ -31,11 +28,13 @@ import static io.nats.client.support.Validator.validateSubject;
  * name is used for sourcing.
  */
 public class ConsumerSource implements JsonSerializable {
+
     private final String name;
+
     private final String deliverSubject;
 
     static ConsumerSource optionalInstance(JsonValue vConsumerSource) {
-        return vConsumerSource == null ? null : new ConsumerSource(vConsumerSource);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     ConsumerSource(JsonValue vConsumerSource) {
@@ -65,10 +64,7 @@ public class ConsumerSource implements JsonSerializable {
     @Override
     @NonNull
     public String toJson() {
-        StringBuilder sb = beginJson();
-        addField(sb, NAME, name);
-        addField(sb, DELIVER_SUBJECT, deliverSubject);
-        return endJson(sb).toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -77,7 +73,7 @@ public class ConsumerSource implements JsonSerializable {
      */
     @NonNull
     public String getName() {
-        return name;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -86,30 +82,22 @@ public class ConsumerSource implements JsonSerializable {
      */
     @NonNull
     public String getDeliverSubject() {
-        return deliverSubject;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return "ConsumerSource{" +
-                "name='" + name + '\'' +
-                ", deliverSubject='" + deliverSubject + '\'' +
-                '}';
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final boolean equals(Object o) {
-        if (!(o instanceof ConsumerSource)) return false;
-
-        ConsumerSource that = (ConsumerSource) o;
-        return Objects.equals(name, that.name) && Objects.equals(deliverSubject, that.deliverSubject);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hashCode(name);
-        result = 31 * result + Objects.hashCode(deliverSubject);
-        return result;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -117,20 +105,23 @@ public class ConsumerSource implements JsonSerializable {
      * @return the builder.
      */
     public static Builder builder() {
-        return new Builder();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * ConsumerSource can be created using a Builder.
      */
     public static class Builder {
+
         private String name;
+
         private String deliverSubject;
 
         /**
          * Construct a builder for a ConsumerSource object
          */
-        public Builder() {}
+        public Builder() {
+        }
 
         /**
          * Set the consumer name.
@@ -138,8 +129,7 @@ public class ConsumerSource implements JsonSerializable {
          * @return the builder
          */
         public Builder name(String name) {
-            this.name = name;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -148,8 +138,7 @@ public class ConsumerSource implements JsonSerializable {
          * @return the builder
          */
         public Builder deliverSubject(String deliverSubject) {
-            this.deliverSubject = deliverSubject;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -157,9 +146,7 @@ public class ConsumerSource implements JsonSerializable {
          * @return the ConsumerSource object
          */
         public ConsumerSource build() {
-            validateConsumerName(name, true);
-            validateSubject(deliverSubject, true);
-            return new ConsumerSource(name, deliverSubject);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

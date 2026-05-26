@@ -10,13 +10,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client;
 
 import io.nats.client.impl.*;
 import io.nats.client.support.*;
 import org.jspecify.annotations.NonNull;
-
 import javax.net.ssl.SSLContext;
 import java.io.File;
 import java.io.IOException;
@@ -38,7 +36,6 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
-
 import static io.nats.client.support.Encoding.*;
 import static io.nats.client.support.NatsConstants.*;
 import static io.nats.client.support.SSLUtils.DEFAULT_TLS_ALGORITHM;
@@ -52,6 +49,7 @@ import static io.nats.client.support.Validator.*;
  * starting with the {@link Options.Builder Builder}, since it has a simple list of methods that configure the connection.
  */
 public class Options {
+
     // ----------------------------------------------------------------------------------------------------
     // NOTE TO DEVS!!! To add an option, you have to address:
     // ----------------------------------------------------------------------------------------------------
@@ -70,7 +68,6 @@ public class Options {
     // ----------------------------------------------------------------------------------------------------
     // README - if you add a property or change its comment, add it to or update the readme
     // ----------------------------------------------------------------------------------------------------
-
     // ----------------------------------------------------------------------------------------------------
     // CONSTANTS
     // ----------------------------------------------------------------------------------------------------
@@ -260,6 +257,7 @@ public class Options {
      * and the level of subject validation.
      */
     public enum SubjectValidationType {
+
         /**
          * No Subject Validation
          */
@@ -271,49 +269,47 @@ public class Options {
         /**
          * Strict Subject Validation
          */
-        Strict;
+        Strict
     }
 
     /**
      * The mode of hostname resolving
      */
     public enum HostnameResolveMode {
+
         /**
          * Resolve host to all ip addresses allowing for connection attempts to try all ip addresses for a given hostname.
          * Default mode. Does not include IPV6 addresses.
          */
         ResolveToAll(true, false, false),
-
         /**
          * Resolve host to the first ip addresses allowing for connection attempts to try just that first ip addresses for a given hostname.
          * Does not include IPV6 addresses.
          */
         ResolveToFirst(true, true, false),
-
         /**
          * Resolve host to all ip addresses allowing for connection attempts to try all ip addresses for a given hostname.
          * Includes IPV6 addresses.
          */
         ResolveToAllIncludeIPV6(true, false, true),
-
         /**
          * Resolve host to the first ip addresses allowing for connection attempts to try just that first ip addresses for a given hostname.
          * Includes IPV6 addresses.
          */
         ResolveToFirstIncludeIPV6(true, true, true),
-
         /**
          * Do not resolve, instead use InetSocketAddress.createUnresolved while creating the socket.
          */
         Unresolved(false, false, false),
-
         /**
          * Attempt to connect to the fastest ip for a host via the Happy Eyeballs algorithm as described in RFC 6555/8305
          */
         HappyEyeballs(false, false, false);
 
         public final boolean resolve;
+
         public final boolean maxOneResult;
+
         public final boolean includeIPV6;
 
         HostnameResolveMode(boolean resolve, boolean maxOneResult, boolean includeIPV6) {
@@ -323,12 +319,7 @@ public class Options {
         }
 
         public static HostnameResolveMode get(String value) {
-            for (HostnameResolveMode mode : HostnameResolveMode.values()) {
-                if (mode.name().equalsIgnoreCase(value)) {
-                    return mode;
-                }
-            }
-            return null;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -336,6 +327,7 @@ public class Options {
     // ENVIRONMENT PROPERTIES
     // ----------------------------------------------------------------------------------------------------
     static final String PFX = "io.nats.client.";
+
     static final int PFX_LEN = PFX.length();
 
     /**
@@ -343,137 +335,165 @@ public class Options {
      * {@link Builder#connectionListener(ConnectionListener) connectionListener}.
      */
     public static final String PROP_CONNECTION_CB = PFX + "callback.connection";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see
      * {@link Builder#dataPortType(String) dataPortType}.
      */
     public static final String PROP_DATA_PORT_TYPE = PFX + "dataport.type";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see
      * {@link Builder#errorListener(ErrorListener) errorListener}.
      */
     public static final String PROP_ERROR_LISTENER = PFX + "callback.error";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see
      * {@link Builder#timeTraceLogger(TimeTraceLogger) timeTraceLogger}.
      */
     public static final String PROP_TIME_TRACE_LOGGER = PFX + "time.trace";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see
      * {@link Builder#statisticsCollector(StatisticsCollector) statisticsCollector}.
      */
     public static final String PROP_STATISTICS_COLLECTOR = PFX + "statisticscollector";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see {@link Builder#maxPingsOut(int) maxPingsOut}.
      */
     public static final String PROP_MAX_PINGS = PFX + "maxpings";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see {@link Builder#pingInterval(Duration)
      * pingInterval}.
      */
     public static final String PROP_PING_INTERVAL = PFX + "pinginterval";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see {@link Builder#requestCleanupInterval(Duration)
      * requestCleanupInterval}.
      */
     public static final String PROP_CLEANUP_INTERVAL = PFX + "cleanupinterval";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see {@link Builder#writeQueuePushTimeout(Duration)
      * writeQueuePushTimeout}.
      */
     public static final String PROP_WRITE_QUEUE_PUSH_TIMEOUT = PFX + "writeQueuePushTimeout";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see
      * {@link Builder#connectionTimeout(Duration) connectionTimeout}.
      */
     public static final String PROP_CONNECTION_TIMEOUT = PFX + "timeout";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see
      * {@link Builder#socketReadTimeoutMillis(int) socketReadTimeoutMillis}.
      */
     public static final String PROP_SOCKET_READ_TIMEOUT_MS = PFX + "socket.read.timeout.ms";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see
      * {@link Builder#socketWriteTimeout(long) socketWriteTimeout}.
      */
     public static final String PROP_SOCKET_WRITE_TIMEOUT = PFX + "socket.write.timeout";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see
      * {@link Builder#socketSoLinger(int) socketSoLinger}.
      */
     public static final String PROP_SOCKET_SO_LINGER = PFX + "socket.so.linger";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see
      * {@link Builder#receiveBufferSize(int) receiveBufferSize}.
      * OVERRIDES THE UNDERLYING JAVA SOCKET IMPLEMENTATION - USE AT YOUR OWN RISK
      */
     public static final String PROP_SOCKET_RECEIVE_BUFFER_SIZE = PFX + "socket.receive.buffer.size";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see
      * {@link Builder#sendBufferSize(int) sendBufferSize}.
      * OVERRIDES THE UNDERLYING JAVA SOCKET IMPLEMENTATION - USE AT YOUR OWN RISK
      */
     public static final String PROP_SOCKET_SEND_BUFFER_SIZE = PFX + "socket.send.buffer.size";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see
      * {@link Builder#reconnectBufferSize(long) reconnectBufferSize}.
      */
     public static final String PROP_RECONNECT_BUF_SIZE = PFX + "reconnect.buffer.size";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see {@link Builder#reconnectWait(Duration)
      * reconnectWait}.
      */
     public static final String PROP_RECONNECT_WAIT = PFX + "reconnect.wait";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see {@link Builder#maxReconnects(int)
      * maxReconnects}.
      */
     public static final String PROP_MAX_RECONNECT = PFX + "reconnect.max";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see {@link Builder#reconnectJitter(Duration)
      * reconnectJitter}.
      */
     public static final String PROP_RECONNECT_JITTER = PFX + "reconnect.jitter";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see {@link Builder#reconnectJitterTls(Duration)
      * reconnectJitterTls}.
      */
     public static final String PROP_RECONNECT_JITTER_TLS = PFX + "reconnect.jitter.tls";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see {@link Builder#pedantic() pedantic}.
      */
     public static final String PROP_PEDANTIC = PFX + "pedantic";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see {@link Builder#verbose() verbose}.
      */
     public static final String PROP_VERBOSE = PFX + "verbose";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see {@link Builder#noEcho() noEcho}.
      */
     public static final String PROP_NO_ECHO = PFX + "noecho";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see {@link Builder#noHeaders() noHeaders}.
      */
     public static final String PROP_NO_HEADERS = PFX + "noheaders";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see {@link Builder#connectionName(String)
      * connectionName}.
      */
     public static final String PROP_CONNECTION_NAME = PFX + "name";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see {@link Builder#noNoResponders() noNoResponders}.
      */
     public static final String PROP_NO_NORESPONDERS = PFX + "nonoresponders";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see {@link Builder#noRandomize() noRandomize}.
      */
     public static final String PROP_NORANDOMIZE = PFX + "norandomize";
+
     /**
      * @deprecated Prefer to use hostname resolve mode
      * Property used to configure a builder from a Properties object. {@value}, see {@link Builder#noResolveHostnames() noResolveHostnames}.
      */
     @Deprecated
     public static final String PROP_NO_RESOLVE_HOSTNAMES = PFX + "noResolveHostnames";
+
     /**
      * @deprecated Prefer to use hostname resolve mode
      * Property used to enable fast fallback algorithm for socket connection.
@@ -481,54 +501,66 @@ public class Options {
      */
     @Deprecated
     public static final String PROP_FAST_FALLBACK = PFX + "fast.fallback";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see {@link Builder#hostnameResolveMode(HostnameResolveMode) hostnameResolveMode}.
      * Takes precedence over PROP_NO_RESOLVE_HOSTNAMES and PROP_FAST_FALLBACK
      */
     public static final String PROP_HOSTNAME_RESOLVE_MODE = PFX + "hostnameResolveMode";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see {@link Builder#noSubjectValidation() noSubjectValidation}.
      */
     public static final String PROP_NO_SUBJECT_VALIDATION = PFX + "noSubjectValidation";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see {@link Builder#noSubjectValidation() noSubjectValidation}.
      */
     public static final String PROP_STRICT_SUBJECT_VALIDATION = PFX + "strictSubjectValidation";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see {@link Builder#reportNoResponders() reportNoResponders}.
      */
     public static final String PROP_REPORT_NO_RESPONDERS = PFX + "reportNoResponders";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see {@link Builder#clientSideLimitChecks() clientSideLimitChecks}.
      */
     public static final String PROP_CLIENT_SIDE_LIMIT_CHECKS = PFX + "clientsidelimitchecks";
+
     /**
      * Property used to configure a builder from a Properties object. {@value},
      * see {@link Builder#servers(String[]) servers}. The value can be a comma-separated list of server URLs.
      */
     public static final String PROP_SERVERS = PFX + "servers";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see {@link Builder#userInfo(String, String)
      * userInfo}.
      */
     public static final String PROP_PASSWORD = PFX + "password";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see {@link Builder#userInfo(String, String)
      * userInfo}.
      */
     public static final String PROP_USERNAME = PFX + "username";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see {@link Builder#token(String) token}.
      */
     public static final String PROP_TOKEN = PFX + "token";
+
     /**
      * Property used to configure the token supplier from a Properties object. {@value}, see {@link Builder#tokenSupplier(Supplier) tokenSupplier}.
      */
     public static final String PROP_TOKEN_SUPPLIER = PFX + "token.supplier";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see {@link Builder#server(String) server}.
      */
     public static final String PROP_URL = PFX + "url";
+
     /**
      * Property used to configure a builder from a Properties object. {@value},
      *  see {@link Builder#sslContext(SSLContext) sslContext}.
@@ -536,6 +568,7 @@ public class Options {
      * default SSL context. Set the default context before creating the options.
      */
     public static final String PROP_SECURE = PFX + "secure";
+
     /**
      * Property used to configure a builder from a Properties object.
      * {@value}, see {@link Builder#sslContext(SSLContext) sslContext}.
@@ -544,137 +577,166 @@ public class Options {
      * its own. The server must have tls_verify turned OFF for this option to work.
      */
     public static final String PROP_OPENTLS = PFX + "opentls";
+
     /**
      * Property used to configure a builder from a Properties object.
      * {@value}, see {@link Builder#maxMessagesInOutgoingQueue(int) maxMessagesInOutgoingQueue}.
      */
     public static final String PROP_MAX_MESSAGES_IN_OUTGOING_QUEUE = PFX + "outgoingqueue.maxmessages";
+
     /**
      * Property used to configure a builder from a Properties object.
      * {@value}, see {@link Builder#discardMessagesWhenOutgoingQueueFull()
      * discardMessagesWhenOutgoingQueueFull}.
      */
     public static final String PROP_DISCARD_MESSAGES_WHEN_OUTGOING_QUEUE_FULL = PFX + "outgoingqueue.discardwhenfull";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see {@link Builder#oldRequestStyle()
      * oldRequestStyle}.
      */
     public static final String PROP_USE_OLD_REQUEST_STYLE = "use.old.request.style";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see {@link Builder#maxControlLine(int)
      * maxControlLine}.
      */
     public static final String PROP_MAX_CONTROL_LINE = "max.control.line";
+
     /**
      * Property used to set the inbox prefix
      */
     public static final String PROP_INBOX_PREFIX = "inbox.prefix";
+
     /**
      * Property used to set whether to ignore discovered servers when connecting
      */
     public static final String PROP_IGNORE_DISCOVERED_SERVERS = "ignore_discovered_servers";
+
     /**
      * Preferred property used to set whether to ignore discovered servers when connecting
      */
     public static final String PROP_IGNORE_DISCOVERED_SERVERS_PREFERRED = "ignore.discovered.servers";
+
     /**
      * Property used to set class name for ServerPool implementation
      * {@link Builder#serverPool(ServerPool) serverPool}.
      */
     public static final String PROP_SERVERS_POOL_IMPLEMENTATION_CLASS = "servers_pool_implementation_class";
+
     /**
      * Preferred property used to set class name for ServerPool implementation
      * {@link Builder#serverPool(ServerPool) serverPool}.
      */
     public static final String PROP_SERVERS_POOL_IMPLEMENTATION_CLASS_PREFERRED = "servers.pool.implementation.class";
+
     /**
      * Property used to set class name for the Dispatcher Factory
      * {@link Builder#dispatcherFactory(DispatcherFactory) dispatcherFactory}.
      */
     public static final String PROP_DISPATCHER_FACTORY_CLASS = "dispatcher.factory.class";
+
     /**
      * Property used to set class name for the SSLContextFactory
      * {@link Builder#sslContextFactory(SSLContextFactory) sslContextFactory}.
      */
     public static final String PROP_SSL_CONTEXT_FACTORY_CLASS = "ssl.context.factory.class";
+
     /**
      * Property for the keystore path used to create an SSLContext
      */
     public static final String PROP_KEYSTORE = PFX + "keyStore";
+
     /**
      * Property for the keystore password used to create an SSLContext
      */
     public static final String PROP_KEYSTORE_PASSWORD = PFX + "keyStorePassword";
+
     /**
      * Property for the truststore path used to create an SSLContext
      */
     public static final String PROP_TRUSTSTORE = PFX + "trustStore";
+
     /**
      * Property for the truststore password used to create an SSLContext
      */
     public static final String PROP_TRUSTSTORE_PASSWORD = PFX + "trustStorePassword";
+
     /**
      * Property for the algorithm used to create an SSLContext
      */
     public static final String PROP_TLS_ALGORITHM = PFX + "tls.algorithm";
+
     /**
      * Property used to set the path to a credentials file to be used in a FileAuthHandler
      */
     public static final String PROP_CREDENTIAL_PATH = PFX + "credential.path";
+
     /**
      * Property used to configure tls first behavior
      * This property is a boolean flag, telling connections whether
      * to do TLS upgrade first, before INFO
      */
     public static final String PROP_TLS_FIRST = PFX + "tls.first";
+
     /**
      * This property is used to enable support for UTF8 subjects. See {@link Builder#supportUTF8Subjects() supportUTF8Subjects()}
      */
     public static final String PROP_UTF8_SUBJECTS = "allow.utf8.subjects";
+
     /**
      * Property used to throw {@link java.util.concurrent.TimeoutException} on timeout instead of {@link java.util.concurrent.CancellationException}.
      * {@link Builder#useTimeoutException()}.
      */
     public static final String PROP_USE_TIMEOUT_EXCEPTION = PFX + "use.timeout.exception";
+
     /**
      * Property used to a dispatcher that dispatches messages via the executor service instead of with a blocking call.
      * {@link Builder#useDispatcherWithExecutor()}.
      */
     public static final String PROP_USE_DISPATCHER_WITH_EXECUTOR = PFX + "use.dispatcher.with.executor";
+
     /**
      * Property used to configure a builder from a Properties object. {@value}, see {@link Builder#forceFlushOnRequest() forceFlushOnRequest}.
      */
     public static final String PROP_FORCE_FLUSH_ON_REQUEST = PFX + "force.flush.on.request";
+
     /**
      * Property used to set class name for the Executor Service (executor) class
      * {@link Builder#executor(ExecutorService) executor}.
      */
     public static final String PROP_EXECUTOR_SERVICE_CLASS = "executor.service.class";
+
     /**
      * Property used to set class name for the Executor Service (executor) class
      * {@link Builder#executor(ExecutorService) executor}.
      */
     public static final String PROP_SCHEDULED_EXECUTOR_SERVICE_CLASS = "scheduled.executor.service.class";
+
     /**
      * Property used to set class name for the Connect Executor Service (executor) class
      * {@link Builder#connectExecutor(ExecutorService) connectExecutor}.
      */
     public static final String PROP_CONNECT_EXECUTOR_SERVICE_CLASS = "connect.executor.service.class";
+
     /**
      * Property used to set class name for the Callback Executor Service (executor) class
      * {@link Builder#callbackExecutor(ExecutorService) callbackExecutor}.
      */
     public static final String PROP_CALLBACK_EXECUTOR_SERVICE_CLASS = "callback.executor.service.class";
+
     /**
      * Property used to set class name for the Connect Thread Factory
      * {@link Builder#connectThreadFactory(ThreadFactory) connectThreadFactory}.
      */
     public static final String PROP_CONNECT_THREAD_FACTORY_CLASS = "connect.thread.factory.class";
+
     /**
      * Property used to set class name for the Callback Thread Factory
      * {@link Builder#callbackThreadFactory(ThreadFactory) callbackThreadFactory}.
      */
     public static final String PROP_CALLBACK_THREAD_FACTORY_CLASS = "callback.thread.factory.class";
+
     /**
      * Property used to set class name for the ReaderListener implementation
      * {@link Builder#readListener(ReadListener) readListener}.
@@ -775,112 +837,167 @@ public class Options {
     // CLASS VARIABLES
     // ----------------------------------------------------------------------------------------------------
     private final List<NatsUri> natsServerUris;
+
     private final List<String> unprocessedServers;
+
     private final boolean noRandomize;
+
     private final HostnameResolveMode hostnameResolveMode;
+
     private final SubjectValidationType subjectValidationType;
+
     private final boolean reportNoResponders;
+
     private final String connectionName;
+
     private final boolean verbose;
+
     private final boolean pedantic;
+
     private final SSLContext sslContext;
+
     private final int maxReconnect;
+
     private final int maxControlLine;
+
     private final Duration reconnectWait;
+
     private final Duration reconnectJitter;
+
     private final Duration reconnectJitterTls;
+
     private final Duration connectionTimeout;
+
     private final int socketReadTimeoutMillis;
+
     private final Duration socketWriteTimeout;
+
     private final int socketSoLinger;
+
     private final int receiveBufferSize;
+
     private final int sendBufferSize;
+
     private final Duration pingInterval;
+
     private final Duration requestCleanupInterval;
+
     private final Duration writeQueuePushTimeout;
+
     private final int maxPingsOut;
+
     private final long reconnectBufferSize;
+
     private final char[] username;
+
     private final char[] password;
+
     private final Supplier<char[]> tokenSupplier;
+
     private final String inboxPrefix;
+
     private boolean useOldRequestStyle;
+
     private final int bufferSize;
+
     private final boolean noEcho;
+
     private final boolean noHeaders;
+
     private final boolean noNoResponders;
+
     private final boolean clientSideLimitChecks;
+
     private final boolean supportUTF8Subjects;
+
     private final int maxMessagesInOutgoingQueue;
+
     private final boolean discardMessagesWhenOutgoingQueueFull;
+
     private final boolean ignoreDiscoveredServers;
+
     private final boolean tlsFirst;
+
     private final boolean useTimeoutException;
+
     private final boolean useDispatcherWithExecutor;
+
     private final boolean forceFlushOnRequest;
 
     private final AuthHandler authHandler;
+
     private final ReconnectDelayHandler reconnectDelayHandler;
 
     private final ErrorListener errorListener;
+
     private final TimeTraceLogger timeTraceLogger;
+
     private final ConnectionListener connectionListener;
+
     private final ReadListener readListener;
+
     private final StatisticsCollector statisticsCollector;
+
     private final String dataPortType;
 
     private final boolean trackAdvancedStats;
+
     private final boolean traceConnection;
 
     private final ReentrantLock executorsLock;
 
     private final ExecutorService userExecutor;
+
     private final ScheduledExecutorService userScheduledExecutor;
+
     private final ThreadFactory userConnectThreadFactory;
+
     private final ThreadFactory userCallbackThreadFactory;
+
     private final ExecutorService userConnectExecutor;
+
     private final ExecutorService userCallbackExecutor;
 
     // these are not final b/c they are lazy initialized
     // and nulled during shutdownInternalExecutors
     private ExecutorService resolvedExecutor;
+
     private ScheduledExecutorService resolvedScheduledExecutor;
+
     private ExecutorService resolvedConnectExecutor;
+
     private ExecutorService resolvedCallbackExecutor;
 
     private final ServerPool serverPool;
+
     private final DispatcherFactory dispatcherFactory;
 
     private final List<java.util.function.Consumer<HttpRequest>> httpRequestInterceptors;
+
     private final Proxy proxy;
 
     // STATE VARIABLES
     private int executorUseCount = 0;
 
     static class DefaultThreadFactory implements ThreadFactory {
+
         final String name;
+
         final AtomicInteger threadNumber;
 
-        public DefaultThreadFactory (String name){
+        public DefaultThreadFactory(String name) {
             this.name = name;
             threadNumber = new AtomicInteger(0);
         }
 
         @Override
-		public Thread newThread(@NonNull Runnable r) {
-            String threadName = name + ":" + threadNumber.incrementAndGet();
-            Thread t = new Thread(r, threadName);
-            if (t.isDaemon()) {
-                t.setDaemon(false);
-            }
-            if (t.getPriority() != Thread.NORM_PRIORITY) {
-                t.setPriority(Thread.NORM_PRIORITY);
-            }
-            return t;
+        public Thread newThread(@NonNull Runnable r) {
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     static class DefaultTokenSupplier implements Supplier<char[]> {
+
         final char[] token;
 
         public DefaultTokenSupplier() {
@@ -898,7 +1015,7 @@ public class Options {
 
         @Override
         public char[] get() {
-            return token;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -920,7 +1037,7 @@ public class Options {
      * @return the builder.
      */
     public static Builder builder() {
-        return new Builder();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -936,80 +1053,151 @@ public class Options {
         // BUILDER VARIABLES
         // ----------------------------------------------------------------------------------------------------
         private final List<NatsUri> natsServerUris = new ArrayList<>();
+
         private final List<String> unprocessedServers = new ArrayList<>();
+
         private boolean noRandomize = false;
+
         private HostnameResolveMode hostnameResolveMode = HostnameResolveMode.ResolveToAll;
+
         private SubjectValidationType subjectValidationType = SubjectValidationType.Lenient;
+
         private boolean reportNoResponders = false;
-        private String connectionName = null; // Useful for debugging -> "test: " + NatsTestServer.currentPort();
+
+        // Useful for debugging -> "test: " + NatsTestServer.currentPort();
+        private String connectionName = null;
+
         private boolean verbose = false;
+
         private boolean pedantic = false;
+
         private SSLContext sslContext = null;
+
         private SSLContextFactory sslContextFactory = null;
+
         private int maxControlLine = DEFAULT_MAX_CONTROL_LINE;
+
         private int maxReconnect = DEFAULT_MAX_RECONNECT;
+
         private Duration reconnectWait = DEFAULT_RECONNECT_WAIT;
+
         private Duration reconnectJitter = DEFAULT_RECONNECT_JITTER;
+
         private Duration reconnectJitterTls = DEFAULT_RECONNECT_JITTER_TLS;
+
         private Duration connectionTimeout = DEFAULT_CONNECTION_TIMEOUT;
+
         private int socketReadTimeoutMillis = 0;
+
         private Duration socketWriteTimeout = DEFAULT_SOCKET_WRITE_TIMEOUT;
+
         private int socketSoLinger = -1;
+
         private int receiveBufferSize = -1;
+
         private int sendBufferSize = -1;
+
         private Duration pingInterval = DEFAULT_PING_INTERVAL;
+
         private Duration requestCleanupInterval = DEFAULT_REQUEST_CLEANUP_INTERVAL;
+
         private Duration writeQueuePushTimeout = DEFAULT_WRITE_QUEUE_PUSH_TIMEOUT;
+
         private int maxPingsOut = DEFAULT_MAX_PINGS_OUT;
+
         private long reconnectBufferSize = DEFAULT_RECONNECT_BUF_SIZE;
+
         private char[] username = null;
+
         private char[] password = null;
+
         private Supplier<char[]> tokenSupplier = new DefaultTokenSupplier();
+
         private boolean useOldRequestStyle = false;
+
         private int bufferSize = DEFAULT_BUFFER_SIZE;
+
         private boolean trackAdvancedStats = false;
+
         private boolean traceConnection = false;
+
         private boolean noEcho = false;
+
         private boolean noHeaders = false;
+
         private boolean noNoResponders = false;
+
         private boolean clientSideLimitChecks = true;
+
         private boolean supportUTF8Subjects = false;
+
         private String inboxPrefix = DEFAULT_INBOX_PREFIX;
+
         private int maxMessagesInOutgoingQueue = DEFAULT_MAX_MESSAGES_IN_OUTGOING_QUEUE;
+
         private boolean discardMessagesWhenOutgoingQueueFull = DEFAULT_DISCARD_MESSAGES_WHEN_OUTGOING_QUEUE_FULL;
+
         private boolean ignoreDiscoveredServers = false;
+
         private boolean tlsFirst = false;
+
         private boolean useTimeoutException = false;
+
         private boolean useDispatcherWithExecutor = false;
-        private boolean forceFlushOnRequest = true; // true since it's the original b/w compatible way
+
+        // true since it's the original b/w compatible way
+        private boolean forceFlushOnRequest = true;
+
         private ServerPool serverPool = null;
+
         private DispatcherFactory dispatcherFactory = null;
 
         private AuthHandler authHandler;
+
         private ReconnectDelayHandler reconnectDelayHandler;
 
         private ErrorListener errorListener = null;
+
         private TimeTraceLogger timeTraceLogger = null;
+
         private ConnectionListener connectionListener = null;
+
         private ReadListener readListener = null;
+
         private StatisticsCollector statisticsCollector = null;
+
         private String dataPortType = DEFAULT_DATA_PORT_TYPE;
+
         private ExecutorService userExecutor;
+
         private ScheduledExecutorService userScheduledExecutor;
+
         private ExecutorService userConnectExecutor;
+
         private ExecutorService userCallbackExecutor;
+
         private ThreadFactory userConnectThreadFactory;
+
         private ThreadFactory userCallbackThreadFactory;
+
         private List<java.util.function.Consumer<HttpRequest>> httpRequestInterceptors;
+
         private Proxy proxy;
 
         private boolean useDefaultTls;
+
         private boolean useTrustAllTls;
+
         private String keystore;
+
         private char[] keystorePassword;
+
         private String truststore;
+
         private char[] truststorePassword;
+
         private String tlsAlgorithm = DEFAULT_TLS_ALGORITHM;
+
         private String credentialPath;
 
         /**
@@ -1017,7 +1205,8 @@ public class Options {
          * <p>When {@link #build() build()} is called on a default builder it will add the {@link Options#DEFAULT_URL
          * default url} to its list of servers if there were no servers defined.</p>
          */
-        public Builder() {}
+        public Builder() {
+        }
 
         // ----------------------------------------------------------------------------------------------------
         // BUILD CONSTRUCTOR PROPS
@@ -1045,7 +1234,6 @@ public class Options {
         // ----------------------------------------------------------------------------------------------------
         // BUILDER METHODS
         // ----------------------------------------------------------------------------------------------------
-
         /**
          * Add settings defined in the properties object
          * @param props the properties object
@@ -1053,111 +1241,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder properties(Properties props) {
-            if (props == null) {
-                throw new IllegalArgumentException("Properties cannot be null");
-            }
-            stringProperty(props, PROP_URL, this::server);
-            stringProperty(props, PROP_SERVERS, str -> {
-                String[] servers = str.trim().split(",\\s*");
-                this.servers(servers);
-            });
-
-            charArrayProperty(props, PROP_USERNAME, ca -> this.username = ca);
-            charArrayProperty(props, PROP_PASSWORD, ca -> this.password = ca);
-            charArrayProperty(props, PROP_TOKEN, ca -> this.tokenSupplier = new DefaultTokenSupplier(ca));
-            //noinspection unchecked
-            classnameProperty(props, PROP_TOKEN_SUPPLIER, o -> this.tokenSupplier = (Supplier<char[]>) o);
-
-            booleanProperty(props, PROP_SECURE, b -> this.useDefaultTls = b);
-            booleanProperty(props, PROP_OPENTLS, b -> this.useTrustAllTls = b);
-
-            classnameProperty(props, PROP_SSL_CONTEXT_FACTORY_CLASS, o -> this.sslContextFactory = (SSLContextFactory) o);
-            stringProperty(props, PROP_KEYSTORE, s -> this.keystore = s);
-            charArrayProperty(props, PROP_KEYSTORE_PASSWORD, ca -> this.keystorePassword = ca);
-            stringProperty(props, PROP_TRUSTSTORE, s -> this.truststore = s);
-            charArrayProperty(props, PROP_TRUSTSTORE_PASSWORD, ca -> this.truststorePassword = ca);
-            stringProperty(props, PROP_TLS_ALGORITHM, s -> this.tlsAlgorithm = s);
-
-            stringProperty(props, PROP_CREDENTIAL_PATH, s -> this.credentialPath = s);
-
-            stringProperty(props, PROP_CONNECTION_NAME, s -> this.connectionName = s);
-
-            booleanProperty(props, PROP_NORANDOMIZE, b -> this.noRandomize = b);
-            booleanPropertyIfTrue(props, PROP_NO_SUBJECT_VALIDATION, b -> subjectValidationType = SubjectValidationType.None);
-            booleanPropertyIfTrue(props, PROP_STRICT_SUBJECT_VALIDATION, b -> subjectValidationType = SubjectValidationType.Strict);
-            booleanProperty(props, PROP_REPORT_NO_RESPONDERS, b -> this.reportNoResponders = b);
-
-            stringProperty(props, PROP_CONNECTION_NAME, s -> this.connectionName = s);
-            booleanProperty(props, PROP_VERBOSE, b -> this.verbose = b);
-            booleanProperty(props, PROP_NO_ECHO, b -> this.noEcho = b);
-            booleanProperty(props, PROP_NO_HEADERS, b -> this.noHeaders = b);
-            booleanProperty(props, PROP_NO_NORESPONDERS, b -> this.noNoResponders = b);
-            booleanProperty(props, PROP_CLIENT_SIDE_LIMIT_CHECKS, b -> this.clientSideLimitChecks = b);
-            booleanProperty(props, PROP_UTF8_SUBJECTS, b -> this.supportUTF8Subjects = b);
-            booleanProperty(props, PROP_PEDANTIC, b -> this.pedantic = b);
-
-            intProperty(props, PROP_MAX_RECONNECT, i -> this.maxReconnect = i);
-            durationProperty(props, PROP_RECONNECT_WAIT, d -> this.reconnectWait = d);
-            durationProperty(props, PROP_RECONNECT_JITTER, d -> this.reconnectJitter = d);
-            durationProperty(props, PROP_RECONNECT_JITTER_TLS, d -> this.reconnectJitterTls = d);
-            longProperty(props, PROP_RECONNECT_BUF_SIZE, l -> this.reconnectBufferSize = l);
-            durationProperty(props, PROP_CONNECTION_TIMEOUT, d -> this.connectionTimeout = d);
-            intProperty(props, PROP_SOCKET_READ_TIMEOUT_MS, i -> this.socketReadTimeoutMillis = i);
-            durationProperty(props, PROP_SOCKET_WRITE_TIMEOUT, d -> this.socketWriteTimeout = d);
-            intProperty(props, PROP_SOCKET_SO_LINGER, i -> socketSoLinger = i);
-            intProperty(props, PROP_SOCKET_RECEIVE_BUFFER_SIZE, i -> this.receiveBufferSize = i);
-            intProperty(props, PROP_SOCKET_SEND_BUFFER_SIZE, i -> this.sendBufferSize = i);
-
-            intGtEqZeroProperty(props, PROP_MAX_CONTROL_LINE, i -> this.maxControlLine = i);
-            durationProperty(props, PROP_PING_INTERVAL, d -> this.pingInterval = d);
-            durationProperty(props, PROP_CLEANUP_INTERVAL, d -> this.requestCleanupInterval = d);
-            durationProperty(props, PROP_WRITE_QUEUE_PUSH_TIMEOUT, d -> this.writeQueuePushTimeout = d);
-            intProperty(props, PROP_MAX_PINGS, i -> this.maxPingsOut = i);
-            booleanProperty(props, PROP_USE_OLD_REQUEST_STYLE, b -> this.useOldRequestStyle = b);
-
-            classnameProperty(props, PROP_ERROR_LISTENER, o -> this.errorListener = (ErrorListener) o);
-            classnameProperty(props, PROP_TIME_TRACE_LOGGER, o -> this.timeTraceLogger = (TimeTraceLogger) o);
-            classnameProperty(props, PROP_CONNECTION_CB, o -> this.connectionListener = (ConnectionListener) o);
-            classnameProperty(props, PROP_READ_LISTENER_CLASS, o -> this.readListener = (ReadListener) o);
-            classnameProperty(props, PROP_STATISTICS_COLLECTOR, o -> this.statisticsCollector = (StatisticsCollector) o);
-
-            stringProperty(props, PROP_DATA_PORT_TYPE, s -> this.dataPortType = s);
-            stringProperty(props, PROP_INBOX_PREFIX, this::inboxPrefix);
-            intGtEqZeroProperty(props, PROP_MAX_MESSAGES_IN_OUTGOING_QUEUE, i -> this.maxMessagesInOutgoingQueue = i);
-            booleanProperty(props, PROP_DISCARD_MESSAGES_WHEN_OUTGOING_QUEUE_FULL, b -> this.discardMessagesWhenOutgoingQueueFull = b);
-
-            booleanProperty(props, PROP_IGNORE_DISCOVERED_SERVERS, b -> this.ignoreDiscoveredServers = b);
-            booleanProperty(props, PROP_TLS_FIRST, b -> this.tlsFirst = b);
-            booleanProperty(props, PROP_USE_TIMEOUT_EXCEPTION, b -> this.useTimeoutException = b);
-            booleanProperty(props, PROP_USE_DISPATCHER_WITH_EXECUTOR, b -> this.useDispatcherWithExecutor = b);
-            booleanProperty(props, PROP_FORCE_FLUSH_ON_REQUEST, b -> this.forceFlushOnRequest = b);
-
-            booleanProperty(props, PROP_NO_RESOLVE_HOSTNAMES, b -> {
-                if (b) {
-                    hostnameResolveMode = HostnameResolveMode.ResolveToFirst;
-                }
-            });
-            booleanProperty(props, PROP_FAST_FALLBACK, b -> {
-                if (b) {
-                    hostnameResolveMode = HostnameResolveMode.HappyEyeballs;
-                }
-            });
-            stringProperty(props, PROP_HOSTNAME_RESOLVE_MODE, s -> {
-                HostnameResolveMode mode = HostnameResolveMode.get(s);
-                if (mode != null) {
-                    hostnameResolveMode = mode;
-                }
-            });
-
-            classnameProperty(props, PROP_SERVERS_POOL_IMPLEMENTATION_CLASS, o -> this.serverPool = (ServerPool) o);
-            classnameProperty(props, PROP_DISPATCHER_FACTORY_CLASS, o -> this.dispatcherFactory = (DispatcherFactory) o);
-            classnameProperty(props, PROP_EXECUTOR_SERVICE_CLASS, o -> this.userExecutor = (ExecutorService) o);
-            classnameProperty(props, PROP_CONNECT_EXECUTOR_SERVICE_CLASS, o -> this.userConnectExecutor = (ExecutorService) o);
-            classnameProperty(props, PROP_CALLBACK_EXECUTOR_SERVICE_CLASS, o -> this.userCallbackExecutor = (ExecutorService) o);
-            classnameProperty(props, PROP_SCHEDULED_EXECUTOR_SERVICE_CLASS, o -> this.userScheduledExecutor = (ScheduledExecutorService) o);
-            classnameProperty(props, PROP_CONNECT_THREAD_FACTORY_CLASS, o -> this.userConnectThreadFactory = (ThreadFactory) o);
-            classnameProperty(props, PROP_CALLBACK_THREAD_FACTORY_CLASS, o -> this.userCallbackThreadFactory = (ThreadFactory) o);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1168,7 +1252,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder server(String serverURL) {
-            return servers(serverURL.trim().split(","));
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1179,22 +1263,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder servers(String[] servers) {
-            for (String s : servers) {
-                if (s != null && !s.isEmpty()) {
-                    try {
-                        String unprocessed = s.trim();
-                        NatsUri nuri = new NatsUri(unprocessed);
-                        if (!natsServerUris.contains(nuri)) {
-                            natsServerUris.add(nuri);
-                            unprocessedServers.add(unprocessed);
-                        }
-                    }
-                    catch (URISyntaxException e) {
-                        throw new IllegalArgumentException(e);
-                    }
-                }
-            }
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1203,8 +1272,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder oldRequestStyle() {
-            this.useOldRequestStyle = true;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1216,8 +1284,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder noRandomize() {
-            this.noRandomize = true;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1248,8 +1315,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder hostnameResolveMode(HostnameResolveMode hostnameResolveMode) {
-            this.hostnameResolveMode = hostnameResolveMode == null ? HostnameResolveMode.ResolveToAll : hostnameResolveMode;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1261,8 +1327,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder noSubjectValidation() {
-            this.subjectValidationType = SubjectValidationType.None;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1273,8 +1338,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder strictSubjectValidation() {
-            this.subjectValidationType = SubjectValidationType.Strict;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1283,8 +1347,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder subjectValidationType(SubjectValidationType subjectValidationType) {
-            this.subjectValidationType = subjectValidationType == null ? SubjectValidationType.Lenient : subjectValidationType;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1292,8 +1355,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder reportNoResponders() {
-            this.reportNoResponders = true;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1303,8 +1365,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder noEcho() {
-            this.noEcho = true;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1313,8 +1374,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder noHeaders() {
-            this.noHeaders = true;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1322,8 +1382,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder noNoResponders() {
-            this.noNoResponders = true;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1332,8 +1391,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder clientSideLimitChecks(boolean checks) {
-            this.clientSideLimitChecks = checks;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1344,8 +1402,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder supportUTF8Subjects() {
-            this.supportUTF8Subjects = true;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1355,8 +1412,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder connectionName(String name) {
-            this.connectionName = name;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1366,12 +1422,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder inboxPrefix(String prefix) {
-            this.inboxPrefix = prefix;
-
-            if (!this.inboxPrefix.endsWith(".")) {
-                this.inboxPrefix = this.inboxPrefix + ".";
-            }
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1379,8 +1430,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder verbose() {
-            this.verbose = true;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1388,8 +1438,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder pedantic() {
-            this.pedantic = true;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1398,8 +1447,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder turnOnAdvancedStats() {
-            this.trackAdvancedStats = true;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1408,8 +1456,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder traceConnection() {
-            this.traceConnection = true;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1418,8 +1465,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder secure() throws NoSuchAlgorithmException {
-            useDefaultTls = true;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1428,8 +1474,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder opentls() throws NoSuchAlgorithmException {
-            useTrustAllTls = true;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1441,8 +1486,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder sslContext(SSLContext ctx) {
-            this.sslContext = ctx;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1452,8 +1496,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder sslContextFactory(SSLContextFactory sslContextFactory) {
-            this.sslContextFactory = sslContextFactory;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1462,8 +1505,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder keystorePath(String keystore) {
-            this.keystore = emptyAsNull(keystore);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1472,8 +1514,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder keystorePassword(char[] keystorePassword) {
-            this.keystorePassword = keystorePassword == null || keystorePassword.length == 0 ? null : keystorePassword;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1482,8 +1523,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder truststorePath(String truststore) {
-            this.truststore = emptyAsNull(truststore);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1492,8 +1532,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder truststorePassword(char[] truststorePassword) {
-            this.truststorePassword = truststorePassword == null || truststorePassword.length == 0 ? null : truststorePassword;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1502,8 +1541,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder tlsAlgorithm(String tlsAlgorithm) {
-            this.tlsAlgorithm = emptyOrNullAs(tlsAlgorithm, DEFAULT_TLS_ALGORITHM);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1512,8 +1550,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder credentialPath(String credentialPath) {
-            this.credentialPath = emptyAsNull(credentialPath);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1521,8 +1558,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder noReconnect() {
-            this.maxReconnect = 0;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1544,8 +1580,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder maxReconnects(int max) {
-            this.maxReconnect = max;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1559,8 +1594,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder reconnectWait(Duration time) {
-            this.reconnectWait = time;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1571,8 +1605,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder reconnectJitter(Duration time) {
-            this.reconnectJitter = time;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1584,8 +1617,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder reconnectJitterTls(Duration time) {
-            this.reconnectJitterTls = time;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1597,8 +1629,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder maxControlLine(int bytes) {
-            this.maxControlLine = bytes < 0 ? DEFAULT_MAX_CONTROL_LINE : bytes;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1609,8 +1640,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder connectionTimeout(Duration connectionTimeout) {
-            this.connectionTimeout = connectionTimeout;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1621,8 +1651,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder connectionTimeout(long connectionTimeoutMillis) {
-            this.connectionTimeout = Duration.ofMillis(connectionTimeoutMillis);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1631,8 +1660,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder socketReadTimeoutMillis(int socketReadTimeoutMillis) {
-            this.socketReadTimeoutMillis = socketReadTimeoutMillis;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1641,8 +1669,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder socketWriteTimeout(long socketWriteTimeoutMillis) {
-            socketWriteTimeout = Duration.ofMillis(socketWriteTimeoutMillis);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1651,8 +1678,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder socketWriteTimeout(Duration socketWriteTimeout) {
-            this.socketWriteTimeout = socketWriteTimeout;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1666,8 +1692,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder socketSoLinger(int socketSoLinger) {
-            this.socketSoLinger = socketSoLinger;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1678,8 +1703,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder receiveBufferSize(int receiveBufferSize) {
-            this.receiveBufferSize = receiveBufferSize;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1690,8 +1714,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder sendBufferSize(int sendBufferSize) {
-            this.sendBufferSize = sendBufferSize;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1709,8 +1732,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder pingInterval(Duration time) {
-            this.pingInterval = time == null ? DEFAULT_PING_INTERVAL : time;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1724,8 +1746,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder requestCleanupInterval(Duration time) {
-            this.requestCleanupInterval = time;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1734,8 +1755,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder writeQueuePushTimeout(Duration time) {
-            this.writeQueuePushTimeout = time;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1745,8 +1765,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder maxPingsOut(int max) {
-            this.maxPingsOut = max;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1755,8 +1774,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder bufferSize(int size) {
-            this.bufferSize = size;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1771,8 +1789,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder reconnectBufferSize(long size) {
-            this.reconnectBufferSize = size;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1786,9 +1803,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder userInfo(String userName, String password) {
-            this.username = userName.toCharArray();
-            this.password = password.toCharArray();
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1801,9 +1816,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder userInfo(char[] userName, char[] password) {
-            this.username = userName;
-            this.password = password;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1828,8 +1841,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder token(char[] token) {
-            this.tokenSupplier = new DefaultTokenSupplier(token);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1840,8 +1852,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder tokenSupplier(Supplier<char[]> tokenSupplier) {
-            this.tokenSupplier = tokenSupplier == null ? new DefaultTokenSupplier() : tokenSupplier;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1852,8 +1863,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder authHandler(AuthHandler handler) {
-            this.authHandler = handler;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1863,8 +1873,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder reconnectDelayHandler(ReconnectDelayHandler handler) {
-            this.reconnectDelayHandler = handler;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1875,8 +1884,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder errorListener(ErrorListener listener) {
-            this.errorListener = listener;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1885,8 +1893,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder timeTraceLogger(TimeTraceLogger logger) {
-            this.timeTraceLogger = logger;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1897,8 +1904,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder connectionListener(ConnectionListener listener) {
-            this.connectionListener = listener;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1908,8 +1914,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder readListener(ReadListener readListener) {
-            this.readListener = readListener;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1921,8 +1926,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder statisticsCollector(StatisticsCollector collector) {
-            this.statisticsCollector = collector;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1938,8 +1942,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder executor(ExecutorService executor) {
-            this.userExecutor = executor;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1951,8 +1954,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder scheduledExecutor(ScheduledExecutorService scheduledExecutor) {
-            this.userScheduledExecutor = scheduledExecutor;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1962,8 +1964,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder connectExecutor(ExecutorService connectExecutor) {
-            this.userConnectExecutor = connectExecutor;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1973,8 +1974,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder callbackExecutor(ExecutorService callbackExecutor) {
-            this.userCallbackExecutor = callbackExecutor;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1984,8 +1984,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder connectThreadFactory(ThreadFactory threadFactory) {
-            this.userConnectThreadFactory = threadFactory;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1995,8 +1994,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder callbackThreadFactory(ThreadFactory threadFactory) {
-            this.userCallbackThreadFactory = threadFactory;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -2006,11 +2004,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder httpRequestInterceptor(java.util.function.Consumer<HttpRequest> interceptor) {
-            if (null == this.httpRequestInterceptors) {
-                this.httpRequestInterceptors = new ArrayList<>();
-            }
-            this.httpRequestInterceptors.add(interceptor);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -2020,8 +2014,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder httpRequestInterceptors(Collection<? extends java.util.function.Consumer<HttpRequest>> interceptors) {
-            this.httpRequestInterceptors = new ArrayList<>(interceptors);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -2031,8 +2024,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder proxy(Proxy proxy) {
-            this.proxy = proxy;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -2043,8 +2035,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder dataPortType(String dataPortClassName) {
-            this.dataPortType = dataPortClassName == null ? DEFAULT_DATA_PORT_TYPE : dataPortClassName;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -2054,10 +2045,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder maxMessagesInOutgoingQueue(int maxMessagesInOutgoingQueue) {
-            this.maxMessagesInOutgoingQueue = maxMessagesInOutgoingQueue < 0
-                ? DEFAULT_MAX_MESSAGES_IN_OUTGOING_QUEUE
-                : maxMessagesInOutgoingQueue;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -2066,8 +2054,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder discardMessagesWhenOutgoingQueueFull() {
-            this.discardMessagesWhenOutgoingQueueFull = true;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -2075,8 +2062,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder ignoreDiscoveredServers() {
-            this.ignoreDiscoveredServers = true;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -2089,8 +2075,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder tlsFirst() {
-            this.tlsFirst = true;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -2098,8 +2083,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder useTimeoutException() {
-            this.useTimeoutException = true;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -2107,8 +2091,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder useDispatcherWithExecutor() {
-            this.useDispatcherWithExecutor = true;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -2116,8 +2099,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder dontForceFlushOnRequest() {
-            this.forceFlushOnRequest = false;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -2126,8 +2108,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder serverPool(ServerPool serverPool) {
-            this.serverPool = serverPool;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -2136,8 +2117,7 @@ public class Options {
          * @return the Builder for chaining
          */
         public Builder dispatcherFactory(DispatcherFactory dispatcherFactory) {
-            this.dispatcherFactory = dispatcherFactory;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -2159,137 +2139,7 @@ public class Options {
          * @throws IllegalStateException if there is a conflict in the options, like a token and a user/pass
          */
         public Options build() throws IllegalStateException {
-            // ----------------------------------------------------------------------------------------------------
-            // BUILD IMPL
-            // ----------------------------------------------------------------------------------------------------
-            if (this.username != null && tokenSupplier.get() != null) {
-                throw new IllegalStateException("Options can't have token and username");
-            }
-
-            if (inboxPrefix == null) {
-                inboxPrefix = DEFAULT_INBOX_PREFIX;
-            }
-
-            boolean checkUrisForSecure = true;
-            if (natsServerUris.isEmpty()) {
-                server(DEFAULT_URL);
-                checkUrisForSecure = false;
-            }
-
-            // ssl context can be directly provided, but if it's not
-            // there might be a factory, or just see if we should make it ourselves
-            if (sslContext == null) {
-                if (sslContextFactory != null) {
-                    sslContext = sslContextFactory.createSSLContext(new SSLContextFactoryProperties.Builder()
-                        .keystore(keystore)
-                        .keystorePassword(keystorePassword)
-                        .truststore(truststore)
-                        .truststorePassword(truststorePassword)
-                        .tlsAlgorithm(tlsAlgorithm)
-                        .build());
-                }
-                else {
-                    if (keystore != null || truststore != null) {
-                        // the user provided keystore/truststore properties, the want us to make the sslContext that way
-                        try {
-                            sslContext = SSLUtils.createSSLContext(keystore, keystorePassword, truststore, truststorePassword, tlsAlgorithm);
-                        }
-                        catch (Exception e) {
-                            throw new IllegalStateException("Unable to create SSL context", e);
-                        }
-                    }
-                    else {
-                        // the sslContext has not been requested via factory or keystore/truststore properties
-                        // If we haven't been told to use the default or the trust all context
-                        // and the server isn't the default url, check to see if the server uris
-                        // suggest we need the ssl context.
-                        if (!useDefaultTls && !useTrustAllTls && checkUrisForSecure) {
-                            for (int i = 0; sslContext == null && i < natsServerUris.size(); i++) {
-                                NatsUri natsUri = natsServerUris.get(i);
-                                switch (natsUri.getScheme()) {
-                                    case TLS_PROTOCOL:
-                                    case SECURE_WEBSOCKET_PROTOCOL:
-                                        useDefaultTls = true;
-                                        break;
-                                    case OPENTLS_PROTOCOL:
-                                        useTrustAllTls = true;
-                                        break;
-                                }
-                            }
-                        }
-
-                        // check trust all (open) first, in case they provided both
-                        // PROP_SECURE (secure) and PROP_OPENTLS (opentls)
-                        if (useTrustAllTls) {
-                            try {
-                                this.sslContext = SSLUtils.createTrustAllTlsContext();
-                            }
-                            catch (GeneralSecurityException e) {
-                                throw new IllegalStateException("Unable to create SSL context", e);
-                            }
-                        }
-                        else if (useDefaultTls) {
-                            try {
-                                this.sslContext = SSLContext.getDefault();
-                            }
-                            catch (NoSuchAlgorithmException e) {
-                                throw new IllegalStateException("Unable to create default SSL context", e);
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (tlsFirst && sslContext == null) {
-                throw new IllegalStateException("SSL context required for tls handshake first");
-            }
-
-            if (credentialPath != null) {
-                File file = new File(credentialPath).getAbsoluteFile();
-                authHandler = Nats.credentials(file.toString());
-            }
-
-            if (socketReadTimeoutMillis < 1) {
-                socketReadTimeoutMillis = 0; // just for consistency. The connection compares to gt 0
-            }
-
-            if (socketWriteTimeout != null && socketWriteTimeout.toNanos() < MINIMUM_SOCKET_WRITE_TIMEOUT_NANOS) {
-                throw new IllegalArgumentException("Socket Write Timeout cannot be less than " + MINIMUM_SOCKET_WRITE_TIMEOUT_NANOS + " nanoseconds.");
-            }
-
-            if (socketSoLinger < 1) {
-                socketSoLinger = -1;
-            }
-
-            if (receiveBufferSize < 1) {
-                receiveBufferSize = -1;
-            }
-
-            if (sendBufferSize < 1) {
-                sendBufferSize = -1;
-            }
-
-            if (errorListener == null) {
-                errorListener = new ErrorListenerLoggerImpl();
-            }
-
-            if (timeTraceLogger == null) {
-                if (traceConnection) {
-                    timeTraceLogger = (format, args) -> {
-                        String timeStr = DateTimeFormatter.ISO_TIME.format(LocalDateTime.now());
-                        System.out.println("[" + timeStr + "] connect trace: " + String.format(format, args));
-                    };
-                }
-                else {
-                    timeTraceLogger = (f, a) -> {};
-                }
-            }
-            else {
-                // if the dev provided an impl, we assume they meant to time trace the connection
-                traceConnection = true;
-            }
-
-            return new Options(this);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         // ----------------------------------------------------------------------------------------------------
@@ -2303,7 +2153,6 @@ public class Options {
             if (o == null) {
                 throw new IllegalArgumentException("Options cannot be null");
             }
-
             this.natsServerUris.addAll(o.natsServerUris);
             this.unprocessedServers.addAll(o.unprocessedServers);
             this.noRandomize = o.noRandomize;
@@ -2344,10 +2193,8 @@ public class Options {
             this.traceConnection = o.traceConnection;
             this.maxMessagesInOutgoingQueue = o.maxMessagesInOutgoingQueue;
             this.discardMessagesWhenOutgoingQueueFull = o.discardMessagesWhenOutgoingQueueFull;
-
             this.authHandler = o.authHandler;
             this.reconnectDelayHandler = o.reconnectDelayHandler;
-
             this.errorListener = o.errorListener;
             this.timeTraceLogger = o.timeTraceLogger;
             this.connectionListener = o.connectionListener;
@@ -2355,23 +2202,19 @@ public class Options {
             this.statisticsCollector = o.statisticsCollector;
             this.dataPortType = o.dataPortType;
             this.trackAdvancedStats = o.trackAdvancedStats;
-
             this.userExecutor = o.userExecutor;
             this.userScheduledExecutor = o.userScheduledExecutor;
             this.userConnectExecutor = o.userConnectExecutor;
             this.userCallbackExecutor = o.userCallbackExecutor;
             this.userCallbackThreadFactory = o.userCallbackThreadFactory;
             this.userConnectThreadFactory = o.userConnectThreadFactory;
-
             this.httpRequestInterceptors = o.httpRequestInterceptors;
             this.proxy = o.proxy;
-
             this.ignoreDiscoveredServers = o.ignoreDiscoveredServers;
             this.tlsFirst = o.tlsFirst;
             this.useTimeoutException = o.useTimeoutException;
             this.useDispatcherWithExecutor = o.useDispatcherWithExecutor;
             this.forceFlushOnRequest = o.forceFlushOnRequest;
-
             this.serverPool = o.serverPool;
             this.dispatcherFactory = o.dispatcherFactory;
         }
@@ -2382,7 +2225,8 @@ public class Options {
     // ----------------------------------------------------------------------------------------------------
     private Options(Builder b) {
         this.natsServerUris = Collections.unmodifiableList(b.natsServerUris);
-        this.unprocessedServers = Collections.unmodifiableList(b.unprocessedServers);  // exactly how the user gave them
+        // exactly how the user gave them
+        this.unprocessedServers = Collections.unmodifiableList(b.unprocessedServers);
         this.noRandomize = b.noRandomize;
         this.hostnameResolveMode = b.hostnameResolveMode;
         this.subjectValidationType = b.subjectValidationType;
@@ -2421,10 +2265,8 @@ public class Options {
         this.traceConnection = b.traceConnection;
         this.maxMessagesInOutgoingQueue = b.maxMessagesInOutgoingQueue;
         this.discardMessagesWhenOutgoingQueueFull = b.discardMessagesWhenOutgoingQueueFull;
-
         this.authHandler = b.authHandler;
         this.reconnectDelayHandler = b.reconnectDelayHandler;
-
         this.errorListener = b.errorListener;
         this.timeTraceLogger = b.timeTraceLogger;
         this.connectionListener = b.connectionListener;
@@ -2432,7 +2274,6 @@ public class Options {
         this.statisticsCollector = b.statisticsCollector;
         this.dataPortType = b.dataPortType;
         this.trackAdvancedStats = b.trackAdvancedStats;
-
         executorsLock = new ReentrantLock();
         this.userExecutor = b.userExecutor;
         this.userScheduledExecutor = b.userScheduledExecutor;
@@ -2440,16 +2281,13 @@ public class Options {
         this.userCallbackExecutor = b.userCallbackExecutor;
         this.userCallbackThreadFactory = b.userCallbackThreadFactory;
         this.userConnectThreadFactory = b.userConnectThreadFactory;
-
         this.httpRequestInterceptors = b.httpRequestInterceptors;
         this.proxy = b.proxy;
-
         this.ignoreDiscoveredServers = b.ignoreDiscoveredServers;
         this.tlsFirst = b.tlsFirst;
         this.useTimeoutException = b.useTimeoutException;
         this.useDispatcherWithExecutor = b.useDispatcherWithExecutor;
         this.forceFlushOnRequest = b.forceFlushOnRequest;
-
         this.serverPool = b.serverPool;
         this.dispatcherFactory = b.dispatcherFactory;
     }
@@ -2462,24 +2300,12 @@ public class Options {
      * @return the executor, see {@link Builder#executor(ExecutorService) executor()} in the builder doc
      */
     public ExecutorService getExecutor() {
-        executorsLock.lock();
-        try {
-            if (resolvedExecutor == null || resolvedExecutor.isShutdown()) {
-                resolvedExecutor = userExecutor == null ? _getInternalExecutor() : userExecutor;
-            }
-            return resolvedExecutor;
-        }
-        finally {
-            executorsLock.unlock();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private ExecutorService _getInternalExecutor() {
         String threadPrefix = nullOrEmpty(this.connectionName) ? DEFAULT_THREAD_NAME_PREFIX : this.connectionName;
-        return new ThreadPoolExecutor(0, Integer.MAX_VALUE,
-            500L, TimeUnit.MILLISECONDS,
-            new SynchronousQueue<>(),
-            new DefaultThreadFactory(threadPrefix));
+        return new ThreadPoolExecutor(0, Integer.MAX_VALUE, 500L, TimeUnit.MILLISECONDS, new SynchronousQueue<>(), new DefaultThreadFactory(threadPrefix));
     }
 
     /**
@@ -2487,16 +2313,7 @@ public class Options {
      * @return the ScheduledExecutorService, see {@link Builder#scheduledExecutor(ScheduledExecutorService) scheduledExecutor()} in the builder doc
      */
     public ScheduledExecutorService getScheduledExecutor() {
-        executorsLock.lock();
-        try {
-            if (resolvedScheduledExecutor == null || resolvedScheduledExecutor.isShutdown()) {
-                resolvedScheduledExecutor = userScheduledExecutor == null ? _getInternalScheduledExecutor() : userScheduledExecutor;
-            }
-            return resolvedScheduledExecutor;
-        }
-        finally {
-            executorsLock.unlock();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private ScheduledExecutorService _getInternalScheduledExecutor() {
@@ -2516,24 +2333,7 @@ public class Options {
      * @return the executor
      */
     public ExecutorService getCallbackExecutor() {
-        executorsLock.lock();
-        try {
-            if (resolvedCallbackExecutor == null || resolvedCallbackExecutor.isShutdown()) {
-                if (userCallbackExecutor != null) {
-                    resolvedCallbackExecutor = userCallbackExecutor;
-                }
-                else if (userCallbackThreadFactory != null) {
-                    resolvedCallbackExecutor = Executors.newSingleThreadExecutor(userCallbackThreadFactory);
-                }
-                else {
-                    resolvedCallbackExecutor = DEFAULT_SINGLE_THREAD_EXECUTOR.get();
-                }
-            }
-            return resolvedCallbackExecutor;
-        }
-        finally {
-            executorsLock.unlock();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2542,24 +2342,7 @@ public class Options {
      * @return the executor
      */
     public ExecutorService getConnectExecutor() {
-        executorsLock.lock();
-        try {
-            if (resolvedConnectExecutor == null || resolvedConnectExecutor.isShutdown()) {
-                if (userConnectExecutor != null) {
-                    resolvedConnectExecutor = userConnectExecutor;
-                }
-                else if (userConnectThreadFactory != null) {
-                    resolvedConnectExecutor = Executors.newSingleThreadExecutor(userConnectThreadFactory);
-                }
-                else {
-                    resolvedConnectExecutor = DEFAULT_SINGLE_THREAD_EXECUTOR.get();
-                }
-            }
-            return resolvedConnectExecutor;
-        }
-        finally {
-            executorsLock.unlock();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2567,7 +2350,7 @@ public class Options {
      * @return true if the executor is internal
      */
     public boolean executorIsInternal() {
-        return this.userExecutor == null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2575,7 +2358,7 @@ public class Options {
      * @return true if the executor is internal
      */
     public boolean scheduledExecutorIsInternal() {
-        return this.userScheduledExecutor == null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2583,7 +2366,7 @@ public class Options {
      * @return true if the executor is internal
      */
     public boolean callbackExecutorIsInternal() {
-        return userCallbackExecutor == null && userCallbackThreadFactory == null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2591,7 +2374,7 @@ public class Options {
      * @return true if the executor is internal
      */
     public boolean connectExecutorIsInternal() {
-        return userConnectExecutor == null && userConnectThreadFactory == null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2600,14 +2383,7 @@ public class Options {
      * is shared among multiple connections.
      */
     public void incrementExecutorUse() {
-        // Lock intentionally used of Atomic to synchronize fully with shutdownExecutors
-        executorsLock.lock();
-        try {
-            executorUseCount++;
-        }
-        finally {
-            executorsLock.unlock();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2617,45 +2393,7 @@ public class Options {
      * @throws InterruptedException if any shutdown was interrupted
      */
     public void shutdownExecutors() throws InterruptedException {
-        executorsLock.lock();
-        try {
-            if (--executorUseCount == 0) {
-                if (resolvedCallbackExecutor != null && callbackExecutorIsInternal()) {
-                    // we don't just shutdownNow to give any callbacks a chance to finish
-                    ExecutorService es = resolvedCallbackExecutor;
-                    resolvedCallbackExecutor = null;
-                    es.shutdown();
-                    try {
-                        //noinspection ResultOfMethodCallIgnored
-                        es.awaitTermination(getConnectionTimeout().toNanos(), TimeUnit.NANOSECONDS);
-                    }
-                    finally {
-                        es.shutdownNow();
-                    }
-                }
-
-                if (resolvedConnectExecutor != null && connectExecutorIsInternal()) {
-                    ExecutorService es = resolvedConnectExecutor;
-                    resolvedConnectExecutor = null;
-                    es.shutdownNow(); // There's no need to wait...
-                }
-
-                if (resolvedExecutor != null && executorIsInternal()) {
-                    ExecutorService es = resolvedExecutor;
-                    resolvedExecutor = null;
-                    es.shutdownNow(); // There's no need to wait...
-                }
-
-                if (resolvedScheduledExecutor != null && scheduledExecutorIsInternal()) {
-                    ScheduledExecutorService ses = resolvedScheduledExecutor;
-                    resolvedScheduledExecutor = null;
-                    ses.shutdownNow(); // There's no need to wait...
-                }
-            }
-        }
-        finally {
-            executorsLock.unlock();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2663,9 +2401,7 @@ public class Options {
      * @return the list
      */
     public List<java.util.function.Consumer<HttpRequest>> getHttpRequestInterceptors() {
-        return null == this.httpRequestInterceptors
-            ? Collections.emptyList()
-            : Collections.unmodifiableList(this.httpRequestInterceptors);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2673,7 +2409,7 @@ public class Options {
      * @return the proxy
      */
     public Proxy getProxy() {
-        return this.proxy;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2681,7 +2417,7 @@ public class Options {
      * @return the listener
      */
     public ErrorListener getErrorListener() {
-        return this.errorListener;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2691,7 +2427,7 @@ public class Options {
      * @return the time trace logger
      */
     public TimeTraceLogger getTimeTraceLogger() {
-        return this.timeTraceLogger;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2699,7 +2435,7 @@ public class Options {
      * @return the listener
      */
     public ConnectionListener getConnectionListener() {
-        return this.connectionListener;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2707,7 +2443,7 @@ public class Options {
      * @return the listener
      */
     public ReadListener getReadListener() {
-        return this.readListener;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2715,7 +2451,7 @@ public class Options {
      * @return the collector
      */
     public StatisticsCollector getStatisticsCollector() {
-        return this.statisticsCollector;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2723,7 +2459,7 @@ public class Options {
      * @return the handler
      */
     public AuthHandler getAuthHandler() {
-        return this.authHandler;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2731,7 +2467,7 @@ public class Options {
      * @return the handler
      */
     public ReconnectDelayHandler getReconnectDelayHandler() {
-        return this.reconnectDelayHandler;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2739,7 +2475,7 @@ public class Options {
      * @return the DataPort class type
      */
     public String getDataPortType() {
-        return this.dataPortType;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2747,20 +2483,7 @@ public class Options {
      * @return the data port
      */
     public DataPort buildDataPort() {
-        DataPort dp;
-        if (dataPortType.equals(DEFAULT_DATA_PORT_TYPE)) {
-            if (socketWriteTimeout == null) {
-                dp = new SocketDataPort();
-            }
-            else {
-                dp = new SocketDataPortWithWriteTimeout();
-            }
-        }
-        else {
-            dp = (DataPort) Options.createInstanceOf(dataPortType);
-        }
-        dp.afterConstruct(this);
-        return dp;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2768,11 +2491,7 @@ public class Options {
      * @return the processed servers
      */
     public List<URI> getServers() {
-        List<URI> list = new ArrayList<>();
-        for (NatsUri nuri : natsServerUris) {
-            list.add(nuri.getUri());
-        }
-        return list;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2780,7 +2499,7 @@ public class Options {
      * @return the processed servers
      */
     public List<NatsUri> getNatsServerUris() {
-        return natsServerUris;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2788,7 +2507,7 @@ public class Options {
      * @return the raw servers
      */
     public List<String> getUnprocessedServers() {
-        return unprocessedServers;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2796,7 +2515,7 @@ public class Options {
      * @return true if we should turn off randomization
      */
     public boolean isNoRandomize() {
-        return noRandomize;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2823,7 +2542,7 @@ public class Options {
      * @return the mode
      */
     public HostnameResolveMode hostnameResolveMode() {
-        return hostnameResolveMode;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2831,7 +2550,7 @@ public class Options {
      * @return the configured SubjectValidationType
      */
     public SubjectValidationType subjectValidationType() {
-        return subjectValidationType;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2839,7 +2558,7 @@ public class Options {
      * @return true if we should report no responders instead of cancelling them
      */
     public boolean isReportNoResponders() {
-        return reportNoResponders;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2847,7 +2566,7 @@ public class Options {
      * @return the connectionName
      */
     public String getConnectionName() {
-        return connectionName;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2855,7 +2574,7 @@ public class Options {
      * @return true if we are in verbose mode
      */
     public boolean isVerbose() {
-        return verbose;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2863,7 +2582,7 @@ public class Options {
      * @return true if echo-ing is disabled
      */
     public boolean isNoEcho() {
-        return noEcho;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2871,7 +2590,7 @@ public class Options {
      * @return true if headers are disabled
      */
     public boolean isNoHeaders() {
-        return noHeaders;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2879,7 +2598,7 @@ public class Options {
      * @return true if no no-responders
      */
     public boolean isNoNoResponders() {
-        return noNoResponders;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2887,7 +2606,7 @@ public class Options {
      * @return true if the client will perform limit checks
      */
     public boolean clientSideLimitChecks() {
-        return clientSideLimitChecks;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2895,7 +2614,7 @@ public class Options {
      * @return true if utf8 subjects are supported
      */
     public boolean supportUTF8Subjects() {
-        return supportUTF8Subjects;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2903,7 +2622,7 @@ public class Options {
      * @return true if using pedantic protocol
      */
     public boolean isPedantic() {
-        return pedantic;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2911,7 +2630,7 @@ public class Options {
      * @return true is advance stat tracking is on
      */
     public boolean isTrackAdvancedStats() {
-        return trackAdvancedStats;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2919,7 +2638,7 @@ public class Options {
      * @return should we trace the connection?
      */
     public boolean isTraceConnection() {
-        return traceConnection;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2927,16 +2646,15 @@ public class Options {
      * @return the maximum length
      */
     public int getMaxControlLine() {
-        return maxControlLine;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     *
      * is there an sslContext for these Options, otherwise false, see {@link Builder#secure() secure()} in the builder doc
      * @return true if there is an sslContext
      */
     public boolean isTLSRequired() {
-        return sslContext != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2944,7 +2662,7 @@ public class Options {
      * @return the sslContext
      */
     public SSLContext getSslContext() {
-        return sslContext;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2952,7 +2670,7 @@ public class Options {
      * @return the maxReconnect attempts
      */
     public int getMaxReconnect() {
-        return maxReconnect;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2960,7 +2678,7 @@ public class Options {
      * @return the reconnectWait
      */
     public Duration getReconnectWait() {
-        return reconnectWait;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2968,7 +2686,7 @@ public class Options {
      * @return the reconnectJitter
      */
     public Duration getReconnectJitter() {
-        return reconnectJitter;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2976,7 +2694,7 @@ public class Options {
      * @return the reconnectJitterTls
      */
     public Duration getReconnectJitterTls() {
-        return reconnectJitterTls;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2984,7 +2702,7 @@ public class Options {
      * @return the connectionTimeout
      */
     public Duration getConnectionTimeout() {
-        return connectionTimeout;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2992,7 +2710,7 @@ public class Options {
      * @return the socketReadTimeoutMillis
      */
     public int getSocketReadTimeoutMillis() {
-        return socketReadTimeoutMillis;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -3000,7 +2718,7 @@ public class Options {
      * @return the socketWriteTimeout
      */
     public Duration getSocketWriteTimeout() {
-        return socketWriteTimeout;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -3008,7 +2726,7 @@ public class Options {
      * @return the socket so linger number of seconds
      */
     public int getSocketSoLinger() {
-        return socketSoLinger;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -3016,7 +2734,7 @@ public class Options {
      * @return the number of bytes
      */
     public int getReceiveBufferSize() {
-        return receiveBufferSize;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -3024,7 +2742,7 @@ public class Options {
      * @return the number of bytes
      */
     public int getSendBufferSize() {
-        return sendBufferSize;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -3032,7 +2750,7 @@ public class Options {
      * @return interval
      */
     public Duration getPingInterval() {
-        return pingInterval;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -3040,7 +2758,7 @@ public class Options {
      * @return the interval
      */
     public Duration getRequestCleanupInterval() {
-        return requestCleanupInterval;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -3048,7 +2766,7 @@ public class Options {
      * @return the time given to lock and offer a message to the outgoing queue
      */
     public Duration getWriteQueuePushTimeout() {
-        return writeQueuePushTimeout;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -3056,7 +2774,7 @@ public class Options {
      * @return the max pings out
      */
     public int getMaxPingsOut() {
-        return maxPingsOut;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -3065,7 +2783,7 @@ public class Options {
      * @return the reconnectBufferSize
      */
     public long getReconnectBufferSize() {
-        return reconnectBufferSize;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -3073,7 +2791,7 @@ public class Options {
      * @return the default size in bytes
      */
     public int getBufferSize() {
-        return bufferSize;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -3090,7 +2808,7 @@ public class Options {
      * @return the username
      */
     public char[] getUsernameChars() {
-        return username;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -3107,7 +2825,7 @@ public class Options {
      * @return the password
      */
     public char[] getPasswordChars() {
-        return password;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -3126,7 +2844,7 @@ public class Options {
      * @return the token
      */
     public char[] getTokenChars() {
-        return tokenSupplier.get();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -3134,7 +2852,7 @@ public class Options {
      * @return the flag
      */
     public boolean isOldRequestStyle() {
-        return useOldRequestStyle;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -3142,7 +2860,7 @@ public class Options {
      * @return the inbox prefix
      */
     public String getInboxPrefix() {
-        return inboxPrefix;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -3151,7 +2869,7 @@ public class Options {
      * @return the maximum number of messages
      */
     public int getMaxMessagesInOutgoingQueue() {
-        return maxMessagesInOutgoingQueue;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -3160,7 +2878,7 @@ public class Options {
      * @return true if we should discard messages when the outgoing queue is full
      */
     public boolean isDiscardMessagesWhenOutgoingQueueFull() {
-        return discardMessagesWhenOutgoingQueueFull;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -3168,7 +2886,7 @@ public class Options {
      * @return the flag
      */
     public boolean isIgnoreDiscoveredServers() {
-        return ignoreDiscoveredServers;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -3176,7 +2894,7 @@ public class Options {
      * @return the flag
      */
     public boolean isTlsFirst() {
-        return tlsFirst;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -3184,21 +2902,23 @@ public class Options {
      * @return the flag
      */
     public boolean useTimeoutException() {
-        return useTimeoutException;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Whether the dispatcher should use an executor to async messages to handlers
      * @return the flag
      */
-    public boolean useDispatcherWithExecutor() { return useDispatcherWithExecutor; }
+    public boolean useDispatcherWithExecutor() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
     /**
      * Whether to flush on any user request
      * @return the flag
      */
     public boolean forceFlushOnRequest() {
-        return forceFlushOnRequest;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -3206,7 +2926,7 @@ public class Options {
      * @return the ServerPool implementation
      */
     public ServerPool getServerPool() {
-        return serverPool;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -3214,7 +2934,7 @@ public class Options {
      * @return the DispatcherFactory implementation
      */
     public DispatcherFactory getDispatcherFactory() {
-        return dispatcherFactory;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -3224,7 +2944,7 @@ public class Options {
      * @throws URISyntaxException if the text version is malformed or illegal
      */
     public URI createURIForServer(String serverURI) throws URISyntaxException {
-        return new NatsUri(serverURI).getUri();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -3237,102 +2957,7 @@ public class Options {
      * @return the options String, basically JSON
      */
     public CharBuffer buildProtocolConnectOptionsString(String serverURI, boolean includeAuth, byte[] nonce) {
-        CharBuffer connectString = CharBuffer.allocate(this.maxControlLine);
-        connectString.append("{");
-
-        appendOption(connectString, Options.OPTION_LANG, Nats.CLIENT_LANGUAGE, true, false);
-        appendOption(connectString, Options.OPTION_VERSION, Nats.CLIENT_VERSION, true, true);
-
-        if (this.connectionName != null) {
-            appendOption(connectString, Options.OPTION_NAME, this.connectionName, true, true);
-        }
-
-        appendOption(connectString, Options.OPTION_PROTOCOL, "1", false, true);
-
-        appendOption(connectString, Options.OPTION_VERBOSE, String.valueOf(this.isVerbose()), false, true);
-        appendOption(connectString, Options.OPTION_PEDANTIC, String.valueOf(this.isPedantic()), false, true);
-        appendOption(connectString, Options.OPTION_TLS_REQUIRED, String.valueOf(this.isTLSRequired()), false, true);
-        appendOption(connectString, Options.OPTION_ECHO, String.valueOf(!this.isNoEcho()), false, true);
-        appendOption(connectString, Options.OPTION_HEADERS, String.valueOf(!this.isNoHeaders()), false, true);
-        appendOption(connectString, Options.OPTION_NORESPONDERS, String.valueOf(!this.isNoNoResponders()), false, true);
-
-        if (includeAuth) {
-            if (nonce != null && this.getAuthHandler() != null) {
-                char[] nkey = this.getAuthHandler().getID();
-                byte[] sig = this.getAuthHandler().sign(nonce);
-                char[] jwt = this.getAuthHandler().getJWT();
-
-                if (sig == null) {
-                    sig = new byte[0];
-                }
-
-                if (jwt == null) {
-                    jwt = new char[0];
-                }
-
-                if (nkey == null) {
-                    nkey = new char[0];
-                }
-
-                String encodedSig = base64UrlEncodeToString(sig);
-
-                appendOption(connectString, Options.OPTION_NKEY, nkey, true);
-                appendOption(connectString, Options.OPTION_SIG, encodedSig, true, true);
-                appendOption(connectString, Options.OPTION_JWT, jwt, true);
-            }
-
-            String uriUser = null;
-            String uriPass = null;
-            String uriToken = null;
-
-            // Values from URI override options
-            try {
-                URI uri = this.createURIForServer(serverURI);
-                String userInfo = uri.getRawUserInfo();
-                if (userInfo != null) {
-                    int at = userInfo.indexOf(":");
-                    if (at == -1) {
-                        uriToken = uriDecode(userInfo);
-                    }
-                    else {
-                        uriUser = uriDecode(userInfo.substring(0, at));
-                        uriPass = uriDecode(userInfo.substring(at + 1));
-                    }
-                }
-            }
-            catch (URISyntaxException e) {
-                // the createURIForServer call is the one that potentially throws this
-                // uriUser, uriPass and uriToken will already be null
-            }
-
-            if (uriUser != null) {
-                appendOption(connectString, Options.OPTION_USER, jsonEncode(uriUser), true, true);
-            }
-            else if (this.username != null) {
-                appendOption(connectString, Options.OPTION_USER, jsonEncode(this.username), true, true);
-            }
-
-            if (uriPass != null) {
-                appendOption(connectString, Options.OPTION_PASSWORD, jsonEncode(uriPass), true, true);
-            }
-            else if (this.password != null) {
-                appendOption(connectString, Options.OPTION_PASSWORD, jsonEncode(this.password), true, true);
-            }
-
-            if (uriToken != null) {
-                appendOption(connectString, Options.OPTION_AUTH_TOKEN, uriToken, true, true);
-            }
-            else {
-                char[] token = this.tokenSupplier.get();
-                if (token != null) {
-                    appendOption(connectString, Options.OPTION_AUTH_TOKEN, token, true);
-                }
-            }
-        }
-
-        connectString.append("}");
-        connectString.flip();
-        return connectString;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     // ----------------------------------------------------------------------------------------------------
@@ -3369,20 +2994,7 @@ public class Options {
     }
 
     public static String getPropertyValue(Properties props, String key) {
-        String value = emptyAsNull(props.getProperty(key));
-        if (value != null) {
-            return value;
-        }
-        if (key.startsWith(PFX)) { // if the key starts with the PFX, check the non PFX
-            return emptyAsNull(props.getProperty(key.substring(PFX_LEN)));
-        }
-        // otherwise check with the PFX
-        value = emptyAsNull(props.getProperty(PFX + key));
-        if (value == null && key.contains("_")) {
-            // addressing where underscore was used in a key value instead of dot
-            return getPropertyValue(props, key.replace("_", "."));
-        }
-        return value;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private static void stringProperty(Properties props, String key, java.util.function.Consumer<String> consumer) {
@@ -3407,7 +3019,8 @@ public class Options {
     }
 
     private static void booleanPropertyIfTrue(Properties props, String key, java.util.function.Consumer<Boolean> consumer) {
-        if (Boolean.parseBoolean(getPropertyValue(props, key))) { // parseBoolean treats null as false
+        if (Boolean.parseBoolean(getPropertyValue(props, key))) {
+            // parseBoolean treats null as false
             consumer.accept(true);
         }
     }
@@ -3444,8 +3057,7 @@ public class Options {
                 if (d.toNanos() >= 0) {
                     consumer.accept(d);
                 }
-            }
-            catch (DateTimeParseException pe) {
+            } catch (DateTimeParseException pe) {
                 int ms = Integer.parseInt(value);
                 if (ms >= 0) {
                     consumer.accept(Duration.ofMillis(ms));

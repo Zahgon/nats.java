@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.support;
 
 import java.io.IOException;
@@ -44,71 +43,17 @@ public class HappyEyeballsConnector {
      * @return a connected socket
      * @throws IOException if no IP could be reached
      */
-    public static Socket connect(ExecutorService executor, Callable<Socket> socketCreator,
-                                 String hostname, int port, int timeoutMillis) throws IOException
-    {
-        InetAddress[] ips = NatsInetAddress.getAllByName(hostname);
-
-        // Short circuit for single IP
-        if (ips.length == 1) {
-            try {
-                Socket socket = socketCreator.call();
-                socket.connect(new InetSocketAddress(ips[0], port), timeoutMillis);
-                return socket;
-            }
-            catch (IOException e) {
-                throw e;
-            }
-            catch (Exception e) {
-                throw new IOException(e);
-            }
-        }
-
-        // Track all sockets so losers can be closed
-        List<Socket> allSockets = Collections.synchronizedList(new ArrayList<>());
-
-        // Create connection tasks with staggered delays (0ms, 250ms, 500ms, ...)
-        List<Callable<Socket>> tasks = new ArrayList<>();
-        for (int i = 0; i < ips.length; i++) {
-            final InetAddress ip = ips[i];
-            final int delayMillis = i * CONNECT_DELAY_MILLIS;
-
-            tasks.add(() -> {
-                if (delayMillis > 0) {
-                    try {
-                        Thread.sleep(delayMillis);
-                    }
-                    catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                        throw e;
-                    }
-                }
-
-                Socket socket = socketCreator.call();
-                allSockets.add(socket);
-                socket.connect(new InetSocketAddress(ip, port), timeoutMillis);
-                return socket;
-            });
-        }
-
-        try {
-            Socket winner = executor.invokeAny(tasks);
-            closeAllExcept(allSockets, winner);
-            return winner;
-        }
-        catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-        catch (ExecutionException ignored) {}
-
-        closeAllExcept(allSockets, null);
-        throw new IOException("No responsive IP found for " + hostname);
+    public static Socket connect(ExecutorService executor, Callable<Socket> socketCreator, String hostname, int port, int timeoutMillis) throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private static void closeAllExcept(List<Socket> sockets, Socket keep) {
         for (Socket s : sockets) {
             if (s != keep) {
-                try { s.close(); } catch (IOException ignore) {}
+                try {
+                    s.close();
+                } catch (IOException ignore) {
+                }
             }
         }
     }

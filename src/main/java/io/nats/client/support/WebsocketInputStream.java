@@ -10,18 +10,20 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.support;
 
 import io.nats.client.support.WebsocketFrameHeader.OpCode;
-
 import java.io.IOException;
 import java.io.InputStream;
 
 public class WebsocketInputStream extends InputStream {
+
     private byte[] buffer = new byte[WebsocketFrameHeader.MAX_FRAME_HEADER_SIZE];
+
     private WebsocketFrameHeader header = new WebsocketFrameHeader();
+
     private InputStream in;
+
     private byte[] oneByte = new byte[1];
 
     public WebsocketInputStream(InputStream in) {
@@ -30,58 +32,37 @@ public class WebsocketInputStream extends InputStream {
 
     @Override
     public int available() throws IOException {
-        return in.available();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void close() throws IOException {
-        in.close();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void mark(int readLimit) {
-
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean markSupported() {
-        return false;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int read(byte[] buffer) throws IOException {
-        return read(buffer, 0, buffer.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int read(byte[] buffer, int offset, int length) throws IOException {
-        // Just in case we get headers with empty payloads:
-        while (0 == header.getPayloadLength()) {
-            if (!readHeader()) {
-                return -1;
-            }
-        }
-        if (header.getOpCode() == OpCode.CLOSE) {
-            // Ignore the websocket close message body:
-            in.skip(header.getPayloadLength());
-            return -1;
-        }
-        final long headerPayloadLength = header.getPayloadLength();
-        final int payloadLength = Math.min(length, headerPayloadLength > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int)headerPayloadLength);
-        length = in.read(buffer, offset, payloadLength);
-        if (-1 == length) {
-            return length;
-        }
-        return header.filterPayload(buffer, offset, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int read() throws IOException {
-        int result = read(oneByte, 0, 1);
-        if (-1 == result) {
-            return result;
-        }
-        return oneByte[0];
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private boolean readHeader() throws IOException {

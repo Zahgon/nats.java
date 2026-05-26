@@ -10,14 +10,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import io.nats.client.JetStreamApiException;
 import io.nats.client.Message;
 import io.nats.client.api.*;
 import org.jspecify.annotations.NonNull;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,42 +40,38 @@ public class NatsKeyValueWatchSubscription extends NatsWatchSubscription<KeyValu
         if (watchOptions != null) {
             for (KeyValueWatchOption wo : watchOptions) {
                 if (wo != null) {
-                    switch (wo) {
-                        case META_ONLY: headersOnly = true; break;
-                        case IGNORE_DELETE: ignoreDeletes = true; break;
-                        case UPDATES_ONLY: deliverPolicy = DeliverPolicy.New; break;
-                        case INCLUDE_HISTORY: deliverPolicy = DeliverPolicy.All; break;
+                    switch(wo) {
+                        case META_ONLY:
+                            headersOnly = true;
+                            break;
+                        case IGNORE_DELETE:
+                            ignoreDeletes = true;
+                            break;
+                        case UPDATES_ONLY:
+                            deliverPolicy = DeliverPolicy.New;
+                            break;
+                        case INCLUDE_HISTORY:
+                            deliverPolicy = DeliverPolicy.All;
+                            break;
                     }
                 }
             }
         }
-
         // convert each key to a read subject
         List<String> readSubjects = new ArrayList<>();
         for (String keyPattern : keyPatterns) {
             readSubjects.add(kv.readSubject(keyPattern.trim()));
         }
-
-        finishInit(kv,
-            readSubjects,
-            deliverPolicy,
-            headersOnly,
-            fromRevision,
-            getHandler(watcher, !ignoreDeletes),
-            watcher.getConsumerNamePrefix());
+        finishInit(kv, readSubjects, deliverPolicy, headersOnly, fromRevision, getHandler(watcher, !ignoreDeletes), watcher.getConsumerNamePrefix());
     }
 
-    private static @NonNull WatchMessageHandler<KeyValueEntry> getHandler(KeyValueWatcher watcher, boolean includeDeletes) {
+    @NonNull
+    private static WatchMessageHandler<KeyValueEntry> getHandler(KeyValueWatcher watcher, boolean includeDeletes) {
         return new WatchMessageHandler<KeyValueEntry>(watcher) {
+
             @Override
             public void onMessage(Message m) throws InterruptedException {
-                KeyValueEntry kve = new KeyValueEntry(m);
-                if (includeDeletes || kve.getOperation() == KeyValueOperation.PUT) {
-                    watcher.watch(kve);
-                }
-                if (!endOfDataSent && kve.getDelta() == 0) {
-                    sendEndOfData();
-                }
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
         };
     }

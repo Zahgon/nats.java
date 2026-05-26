@@ -10,12 +10,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import io.nats.client.Consumer;
 import io.nats.client.NatsSystemClock;
-
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeoutException;
@@ -26,11 +24,17 @@ import java.util.concurrent.atomic.AtomicReference;
 abstract class NatsConsumer implements Consumer {
 
     NatsConnection connection;
+
     private final AtomicLong maxMessages;
+
     private final AtomicLong maxBytes;
+
     private final AtomicLong droppedMessages;
+
     private final AtomicLong messagesDelivered;
+
     private final AtomicBoolean slow;
+
     private final AtomicReference<CompletableFuture<Boolean>> drainingFuture;
 
     NatsConsumer(NatsConnection conn) {
@@ -58,8 +62,7 @@ abstract class NatsConsumer implements Consumer {
      *                    {@value #DEFAULT_MAX_BYTES}.
      */
     public void setPendingLimits(long maxMessages, long maxBytes) {
-        this.maxMessages.set(maxMessages <= 0 ? 0 : maxMessages);
-        this.maxBytes.set(maxBytes <= 0 ? 0 : maxBytes);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -67,7 +70,7 @@ abstract class NatsConsumer implements Consumer {
      *         setPendingLimits}.
      */
     public long getPendingMessageLimit() {
-        return this.maxMessages.get();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -75,7 +78,7 @@ abstract class NatsConsumer implements Consumer {
      *         setPendingLimits}.
      */
     public long getPendingByteLimit() {
-        return this.maxBytes.get();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -83,7 +86,7 @@ abstract class NatsConsumer implements Consumer {
      *         {@link #setPendingLimits(long, long) setPendingLimits}.
      */
     public long getPendingMessageCount() {
-        return this.getMessageQueue() != null ? this.getMessageQueue().length() : 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -91,7 +94,7 @@ abstract class NatsConsumer implements Consumer {
      *         {@link #setPendingLimits(long, long) setPendingLimits}.
      */
     public long getPendingByteCount() {
-        return this.getMessageQueue() != null ? this.getMessageQueue().sizeInBytes() : 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -99,15 +102,15 @@ abstract class NatsConsumer implements Consumer {
      *         time.
      */
     public long getDeliveredCount() {
-        return this.messagesDelivered.get();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void incrementDeliveredCount() {
-        this.messagesDelivered.incrementAndGet();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void incrementDroppedCount() {
-        this.droppedMessages.incrementAndGet();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -115,117 +118,66 @@ abstract class NatsConsumer implements Consumer {
      *         call to {@link #clearDroppedCount}.
      */
     public long getDroppedCount() {
-        return this.droppedMessages.get();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Reset the drop count to 0.
      */
     public void clearDroppedCount() {
-        this.droppedMessages.set(0);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void markSlow() {
-        this.slow.set(true);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void markNotSlow() {
-        this.slow.set(false);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     boolean isMarkedSlow() {
-        return this.slow.get();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     boolean hasReachedPendingLimits() {
-        long ml = maxMessages.get();
-        if (ml > 0 && getPendingMessageCount() >= ml) {
-            return true;
-        }
-        long bl = maxBytes.get();
-        return bl > 0 && getPendingByteCount() >= bl;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void markDraining(CompletableFuture<Boolean> future) {
-        this.drainingFuture.set(future);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void markUnsubedForDrain() {
-        if (this.getMessageQueue() != null) {
-            this.getMessageQueue().drain();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     CompletableFuture<Boolean> getDrainingFuture() {
-        return this.drainingFuture.get();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     boolean isDraining() {
-        return this.drainingFuture.get() != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     boolean isDrained() {
-        return isDraining() && this.getPendingMessageCount() == 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-    * Drain tells the consumer to process in flight, or cached messages, but stop receiving new ones. The library will
-    * flush the unsubscribe call(s) insuring that any publish calls made by this client are included. When all messages
-    * are processed the consumer effectively becomes unsubscribed.
-    * 
-    * @param timeout The time to wait for the drain to succeed, pass 0 to wait
-    *                    forever. Drain involves moving messages to and from the server
-    *                    so a very short timeout is not recommended.
-    * @return A future that can be used to check if the drain has completed
-    * @throws InterruptedException if the thread is interrupted
-    */
-   public CompletableFuture<Boolean> drain(Duration timeout) throws InterruptedException {
-       if (!this.isActive() || this.connection==null) {
-           throw new IllegalStateException("Consumer is closed");
-       }
-
-       if (isDraining()) {
-           return this.getDrainingFuture();
-       }
-
-       final CompletableFuture<Boolean> tracker = new CompletableFuture<>();
-       this.markDraining(tracker);
-       this.sendUnsubForDrain();
-
-       try {
-            this.connection.flush(timeout); // Flush and wait up to the timeout
-       } catch (TimeoutException e) {
-           this.connection.processException(e);
-       }
-
-       this.markUnsubedForDrain();
-
-        // Wait for the timeout or consumer is drained
-        // Skipped if conn is draining
-        connection.getExecutor().submit(() -> {
-            try {
-                long timeoutNanos = (timeout == null || timeout.toNanos() <= 0)
-                    ? Long.MAX_VALUE : timeout.toNanos();
-                long startTime = System.nanoTime();
-                while (NatsSystemClock.nanoTime() - startTime < timeoutNanos && !Thread.interrupted()) {
-                    if (this.isDrained()) {
-                        break;
-                    }
-                    //noinspection BusyWait
-                    Thread.sleep(1); // Sleep 1 milli
-                }
-
-                this.cleanUpAfterDrain();
-            } catch (InterruptedException e) {
-                this.connection.processException(e);
-                Thread.currentThread().interrupt();
-            } finally {
-                tracker.complete(this.isDrained());
-            }
-       });
-
-       return getDrainingFuture();
-   }
+     * Drain tells the consumer to process in flight, or cached messages, but stop receiving new ones. The library will
+     * flush the unsubscribe call(s) insuring that any publish calls made by this client are included. When all messages
+     * are processed the consumer effectively becomes unsubscribed.
+     *
+     * @param timeout The time to wait for the drain to succeed, pass 0 to wait
+     *                    forever. Drain involves moving messages to and from the server
+     *                    so a very short timeout is not recommended.
+     * @return A future that can be used to check if the drain has completed
+     * @throws InterruptedException if the thread is interrupted
+     */
+    public CompletableFuture<Boolean> drain(Duration timeout) throws InterruptedException {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
     /**
      * @return whether this consumer is still processing messages. For a
@@ -239,7 +191,7 @@ abstract class NatsConsumer implements Consumer {
     /**
      * Called during drain to tell the consumer to send appropriate unsub requests
      * to the connection.
-     * 
+     *
      * A subscription will unsub itself, while a dispatcher will unsub all of its
      * subscriptions.
      */

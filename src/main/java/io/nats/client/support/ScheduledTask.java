@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.support;
 
 import java.util.concurrent.ScheduledExecutorService;
@@ -20,7 +19,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
-
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! *
  * WARNING: THIS CLASS IS PUBLIC BUT ITS API IS NOT GUARANTEED TO *
@@ -28,15 +26,21 @@ import java.util.concurrent.atomic.AtomicReference;
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! *
  */
 public class ScheduledTask implements Runnable {
+
     private static final AtomicLong ID_GENERATOR = new AtomicLong();
 
     private final String id;
+
     private final Runnable runnable;
+
     protected final AtomicReference<ScheduledFuture<?>> scheduledFutureRef;
 
     protected final AtomicBoolean notShutdown;
+
     protected final AtomicBoolean executing;
+
     protected final long initialDelayNanos;
+
     protected final long periodNanos;
 
     public ScheduledTask(ScheduledExecutorService ses, long initialAndPeriodMillis, Runnable runnable) {
@@ -66,76 +70,44 @@ public class ScheduledTask implements Runnable {
         executing = new AtomicBoolean(false);
         this.initialDelayNanos = unit.toNanos(initialDelay);
         this.periodNanos = unit.toNanos(period);
-        scheduledFutureRef = new AtomicReference<>(
-            ses.scheduleAtFixedRate(this, initialDelayNanos, periodNanos, TimeUnit.NANOSECONDS));
+        scheduledFutureRef = new AtomicReference<>(ses.scheduleAtFixedRate(this, initialDelayNanos, periodNanos, TimeUnit.NANOSECONDS));
     }
 
     public long getInitialDelayNanos() {
-        return initialDelayNanos;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public long getPeriodNanos() {
-        return periodNanos;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void run() {
-        try {
-            if (notShutdown.get()) {
-                executing.set(true);
-                runnable.run();
-            }
-        }
-        finally {
-            executing.set(false);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public boolean isShutdown() {
-        return !notShutdown.get();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public boolean isExecuting() {
-        return executing.get();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public boolean isDone() {
-        ScheduledFuture<?> f = scheduledFutureRef.get();
-        return f == null || f.isDone();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public String getId() {
-        return id;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public void shutdown() {
-        try {
-            notShutdown.set(false);
-            ScheduledFuture<?> f = scheduledFutureRef.get();
-            if (f != null) {
-                scheduledFutureRef.set(null); // just releasing resources.
-                if (!f.isDone()) {
-                    f.cancel(false);
-                }
-            }
-        }
-        catch (Exception ignore) {
-            // don't want this to be passed along
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder(id);
-        if (notShutdown.get()) {
-            sb.append(" [live");
-        }
-        else {
-            sb.append(" [shutdown");
-        }
-        sb.append(isDone() ? "/done" : "/!done");
-        sb.append(executing.get() ? "/executing" : "/!executing");
-        sb.append("]");
-        return sb.toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -10,23 +10,26 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client;
 
 /**
  * Bridge to the NatsSystemClockProvider implementation
  */
 public final class NatsSystemClock {
-    private static NatsSystemClockProvider PROVIDER = new NatsSystemClockProvider() {};
 
-    private NatsSystemClock() {}  /* ensures cannot be constructed */
+    private static NatsSystemClockProvider PROVIDER = new NatsSystemClockProvider() {
+    };
 
+    private NatsSystemClock() {
+    }
+
+    /* ensures cannot be constructed */
     /**
      * Set the provider. Null will reset to system default
      * @param provider the provider
      */
     public static void setProvider(final NatsSystemClockProvider provider) {
-        PROVIDER = provider == null ? new NatsSystemClockProvider() {} : provider;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -34,7 +37,7 @@ public final class NatsSystemClock {
      * @return the milliseconds
      */
     public static long currentTimeMillis() {
-        return PROVIDER.currentTimeMillis();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -42,6 +45,6 @@ public final class NatsSystemClock {
      * @return the nano time
      */
     public static long nanoTime() {
-        return PROVIDER.nanoTime();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

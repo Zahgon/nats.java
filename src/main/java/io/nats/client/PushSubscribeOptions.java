@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client;
 
 import static io.nats.client.support.Validator.emptyAsNull;
@@ -20,13 +19,13 @@ import static io.nats.client.support.Validator.emptyAsNull;
  * Options are set using the {@link PushSubscribeOptions.Builder} or static helper methods.
  */
 public class PushSubscribeOptions extends SubscribeOptions {
+
     /**
      * An instance of PushSubscribeOptions with all the default options.
      */
     public static final PushSubscribeOptions DEFAULT_PUSH_OPTS = PushSubscribeOptions.builder().build();
 
-    private PushSubscribeOptions(Builder builder, String deliverSubject, String deliverGroup,
-                                 long pendingMessageLimit, long pendingByteLimit) {
+    private PushSubscribeOptions(Builder builder, String deliverSubject, String deliverGroup, long pendingMessageLimit, long pendingByteLimit) {
         super(builder, false, deliverSubject, deliverGroup, pendingMessageLimit, pendingByteLimit);
     }
 
@@ -35,7 +34,7 @@ public class PushSubscribeOptions extends SubscribeOptions {
      * @return the deliver subject
      */
     public String getDeliverSubject() {
-        return consumerConfig.getDeliverSubject();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -43,7 +42,7 @@ public class PushSubscribeOptions extends SubscribeOptions {
      * @return the deliver group
      */
     public String getDeliverGroup() {
-        return consumerConfig.getDeliverGroup();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -69,7 +68,7 @@ public class PushSubscribeOptions extends SubscribeOptions {
      * @return push subscribe options
      */
     public static PushSubscribeOptions stream(String stream) {
-        return new Builder().stream(stream).build();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -85,7 +84,7 @@ public class PushSubscribeOptions extends SubscribeOptions {
      * @return push subscribe options
      */
     public static PushSubscribeOptions bind(String stream, String name) {
-        return new Builder().stream(stream).name(name).bind(true).build();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -93,28 +92,32 @@ public class PushSubscribeOptions extends SubscribeOptions {
      * @return push subscribe options builder
      */
     public static Builder builder() {
-        return new Builder();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * PushSubscribeOptions can be created using a Builder. The builder supports chaining and will
      * create a default set of options if no methods are calls.
      */
-    public static class Builder
-            extends SubscribeOptions.Builder<Builder, PushSubscribeOptions> {
+    public static class Builder extends SubscribeOptions.Builder<Builder, PushSubscribeOptions> {
+
         private String deliverSubject;
+
         private String deliverGroup;
+
         private long pendingMessageLimit = Consumer.DEFAULT_MAX_MESSAGES;
+
         private long pendingByteLimit = Consumer.DEFAULT_MAX_BYTES;
 
         /**
          * Construct an instance of the builder
          */
-        public Builder() {}
+        public Builder() {
+        }
 
         @Override
         protected Builder getThis() {
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -123,8 +126,7 @@ public class PushSubscribeOptions extends SubscribeOptions {
          * @return the builder.
          */
         public Builder ordered(boolean ordered) {
-            this.ordered = ordered;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -134,8 +136,7 @@ public class PushSubscribeOptions extends SubscribeOptions {
          * @return the builder.
          */
         public Builder deliverSubject(String deliverSubject) {
-            this.deliverSubject = emptyAsNull(deliverSubject);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -145,8 +146,7 @@ public class PushSubscribeOptions extends SubscribeOptions {
          * @return the builder.
          */
         public Builder deliverGroup(String deliverGroup) {
-            this.deliverGroup = emptyAsNull(deliverGroup);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -156,8 +156,7 @@ public class PushSubscribeOptions extends SubscribeOptions {
          * @return the builder
          */
         public Builder pendingMessageLimit(long pendingMessageLimit) {
-            this.pendingMessageLimit = pendingMessageLimit;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -167,8 +166,7 @@ public class PushSubscribeOptions extends SubscribeOptions {
          * @return the builder
          */
         public Builder pendingByteLimit(long pendingByteLimit) {
-            this.pendingByteLimit = pendingByteLimit;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -177,9 +175,7 @@ public class PushSubscribeOptions extends SubscribeOptions {
          */
         @Override
         public PushSubscribeOptions build() {
-            return new PushSubscribeOptions(this, deliverSubject, deliverGroup,
-                pendingMessageLimit, pendingByteLimit);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }
-

@@ -18,11 +18,18 @@ import org.jspecify.annotations.Nullable;
  * Key Value Operations Enum
  */
 public enum KeyValueOperation {
-    /** Put operation */
+
+    /**
+     * Put operation
+     */
     PUT("PUT"),
-    /** Delete operation */
+    /**
+     * Delete operation
+     */
     DELETE("DEL"),
-    /** Purge operation */
+    /**
+     * Purge operation
+     */
     PURGE("PURGE");
 
     private final String headerValue;
@@ -36,7 +43,7 @@ public enum KeyValueOperation {
      * @return the value
      */
     public String getHeaderValue() {
-        return headerValue;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -46,10 +53,7 @@ public enum KeyValueOperation {
      */
     @Nullable
     public static KeyValueOperation instance(String s) {
-        if (PUT.headerValue.equals(s)) return PUT;
-        if (DELETE.headerValue.equals(s)) return DELETE;
-        if (PURGE.headerValue.equals(s)) return PURGE;
-        return null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -60,8 +64,7 @@ public enum KeyValueOperation {
      */
     @Nullable
     public static KeyValueOperation getOrDefault(String s, KeyValueOperation dflt) {
-        KeyValueOperation kvo = instance(s);
-        return kvo == null ? dflt : kvo;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -71,12 +74,6 @@ public enum KeyValueOperation {
      */
     @Nullable
     public static KeyValueOperation instanceByMarkerReason(String markerReason) {
-        if ("Remove".equals(markerReason)) {
-            return DELETE;
-        }
-        if ("MaxAge".equals(markerReason) || "Purge".equals(markerReason)) {
-            return PURGE;
-        }
-        return null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

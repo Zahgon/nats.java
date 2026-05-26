@@ -10,14 +10,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.support.JsonValue;
 import org.jspecify.annotations.Nullable;
-
 import java.time.ZonedDateTime;
-
 import static io.nats.client.support.ApiConstants.LAST_ACTIVE;
 import static io.nats.client.support.JsonValueUtils.readDate;
 
@@ -40,15 +37,11 @@ public class SequenceInfo extends SequencePair {
      */
     @Nullable
     public ZonedDateTime getLastActive() {
-        return lastActive;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return "SequenceInfo{" +
-            "consumerSeq=" + consumerSeq +
-            ", streamSeq=" + streamSeq +
-            ", lastActive=" + lastActive +
-            '}';
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

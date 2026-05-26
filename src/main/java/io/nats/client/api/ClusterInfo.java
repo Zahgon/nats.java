@@ -10,15 +10,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.support.JsonValue;
 import org.jspecify.annotations.Nullable;
-
 import java.time.ZonedDateTime;
 import java.util.List;
-
 import static io.nats.client.support.ApiConstants.*;
 import static io.nats.client.support.JsonValueUtils.*;
 
@@ -28,15 +25,21 @@ import static io.nats.client.support.JsonValueUtils.*;
 public class ClusterInfo {
 
     private final String name;
+
     private final String raftGroup;
+
     private final String leader;
+
     private final ZonedDateTime leaderSince;
+
     private final boolean systemAccount;
+
     private final String trafficAccount;
+
     private final List<Replica> replicas;
 
     static ClusterInfo optionalInstance(JsonValue v) {
-        return v == null ? null : new ClusterInfo(v);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     ClusterInfo(JsonValue v) {
@@ -55,7 +58,7 @@ public class ClusterInfo {
      */
     @Nullable
     public String getName() {
-        return name;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -64,7 +67,7 @@ public class ClusterInfo {
      */
     @Nullable
     public String getRaftGroup() {
-        return raftGroup;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -73,7 +76,7 @@ public class ClusterInfo {
      */
     @Nullable
     public String getLeader() {
-        return leader;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -82,7 +85,7 @@ public class ClusterInfo {
      */
     @Nullable
     public ZonedDateTime getLeaderSince() {
-        return leaderSince;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -90,7 +93,7 @@ public class ClusterInfo {
      * @return true if the traffic_account is the system account
      */
     public boolean isSystemAccount() {
-        return systemAccount;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -99,7 +102,7 @@ public class ClusterInfo {
      */
     @Nullable
     public String getTrafficAccount() {
-        return trafficAccount;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -108,19 +111,11 @@ public class ClusterInfo {
      */
     @Nullable
     public List<Replica> getReplicas() {
-        return replicas;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return "ClusterInfo{" +
-            "name='" + name + '\'' +
-            ", raftGroup='" + raftGroup + '\'' +
-            ", leader='" + leader + '\'' +
-            ", leaderSince=" + leaderSince +
-            ", systemAccount=" + systemAccount +
-            ", trafficAccount=" + trafficAccount +
-            ", replicas=" + replicas +
-            '}';
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

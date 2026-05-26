@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.support;
 
 import java.net.InetAddress;
@@ -20,6 +19,7 @@ import java.net.UnknownHostException;
  * Interface to implement to provide a InetAddress implementation
  */
 public interface NatsInetAddressProvider {
+
     /**
      * Creates an InetAddress based on the provided host name and IP address.
      * @param host the specified host
@@ -28,7 +28,7 @@ public interface NatsInetAddressProvider {
      * @throws     UnknownHostException  if IP address is of illegal length
      */
     default InetAddress getByAddress(String host, byte[] addr) throws UnknownHostException {
-        return InetAddress.getByAddress(host, addr);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -42,7 +42,7 @@ public interface NatsInetAddressProvider {
      *             and its checkConnect method doesn't allow the operation
      */
     default InetAddress getByName(String host) throws UnknownHostException {
-        return InetAddress.getByName(host);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -57,7 +57,7 @@ public interface NatsInetAddressProvider {
      *               {@code checkConnect} method doesn't allow the operation.
      */
     default InetAddress[] getAllByName(String host) throws UnknownHostException {
-        return InetAddress.getAllByName(host);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -65,7 +65,7 @@ public interface NatsInetAddressProvider {
      * @return  the InetAddress loopback instance.
      */
     default InetAddress getLoopbackAddress() {
-        return InetAddress.getLoopbackAddress();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -75,7 +75,7 @@ public interface NatsInetAddressProvider {
      * @throws     UnknownHostException  if IP address is of illegal length
      */
     default InetAddress getByAddress(byte[] addr) throws UnknownHostException {
-        return InetAddress.getByAddress(addr);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -85,6 +85,6 @@ public interface NatsInetAddressProvider {
      *             be resolved into an address.
      */
     default InetAddress getLocalHost() throws UnknownHostException {
-        return InetAddress.getLocalHost();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

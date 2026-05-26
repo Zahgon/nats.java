@@ -10,14 +10,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client;
 
 import io.nats.client.impl.AckType;
 import io.nats.client.impl.Headers;
 import io.nats.client.impl.NatsJetStreamMetaData;
 import io.nats.client.support.Status;
-
 import java.time.Duration;
 import java.util.concurrent.TimeoutException;
 
@@ -37,145 +35,147 @@ import java.util.concurrent.TimeoutException;
  */
 public interface Message {
 
-	/**
-	 * the subject that this message was sent to
-	 * @return the subject
-	 */
-	String getSubject();
+    /**
+     * the subject that this message was sent to
+     * @return the subject
+     */
+    String getSubject();
 
-	/**
-	 * the subject the application is expected to send a reply message on
-	 * @return the reply to
-	 */
-	String getReplyTo();
+    /**
+     * the subject the application is expected to send a reply message on
+     * @return the reply to
+     */
+    String getReplyTo();
 
-	/**
-	 * true if there are headers
-	 * @return the flag
-	 */
-	boolean hasHeaders();
+    /**
+     * true if there are headers
+     * @return the flag
+     */
+    boolean hasHeaders();
 
-	/**
-	 * the headers object for the message
-	 * @return the headers
-	 */
-	Headers getHeaders();
+    /**
+     * the headers object for the message
+     * @return the headers
+     */
+    Headers getHeaders();
 
-	/**
-	 * true if there is status
-	 * @return the flag
-	 */
-	boolean isStatusMessage();
+    /**
+     * true if there is status
+     * @return the flag
+     */
+    boolean isStatusMessage();
 
-	/**
-	 * the status object message if this is a status message
-	 * @return the status object
-	 */
-	Status getStatus();
+    /**
+     * the status object message if this is a status message
+     * @return the status object
+     */
+    Status getStatus();
 
-	/**
-	 * the data from the message
-	 * @return the data
-	 */
-	byte[] getData();
+    /**
+     * the data from the message
+     * @return the data
+     */
+    byte[] getData();
 
-	/**
-	 * @deprecated because the mode doesn't matter
-	 * if is utf8Mode
-	 * @return always false
-	 */
-	@Deprecated
-	boolean isUtf8mode();
+    /**
+     * @deprecated because the mode doesn't matter
+     * if is utf8Mode
+     * @return always false
+     */
+    @Deprecated
+    boolean isUtf8mode();
 
-	/**
-	 * the Subscription associated with this message, may be owned by a Dispatcher
-	 * @return the subscription
-	 */
-	Subscription getSubscription();
+    /**
+     * the Subscription associated with this message, may be owned by a Dispatcher
+     * @return the subscription
+     */
+    Subscription getSubscription();
 
-	/**
-	 * the id associated with the subscription, used by the connection when processing an incoming
-	 * message from the server
-	 * @return the SID
-	 */
-	String getSID();
+    /**
+     * the id associated with the subscription, used by the connection when processing an incoming
+     * message from the server
+     * @return the SID
+     */
+    String getSID();
 
-	/**
-	 * the connection which can be used for publishing, will be null if the subscription is null
-	 * @return the connection
-	 */
-	Connection getConnection();
+    /**
+     * the connection which can be used for publishing, will be null if the subscription is null
+     * @return the connection
+     */
+    Connection getConnection();
 
-	/**
-	 * Gets the metadata associated with a JetStream message.
-	 * metadata or null if the message is not a JetStream message.
-	 * @return the metadata
-	 */
-	NatsJetStreamMetaData metaData();
+    /**
+     * Gets the metadata associated with a JetStream message.
+     * metadata or null if the message is not a JetStream message.
+     * @return the metadata
+     */
+    NatsJetStreamMetaData metaData();
 
-	/**
-	 * the last ack that was done with this message
-	 * the last ack or null
-	 * @return the last ack
-	 */
-	AckType lastAck();
+    /**
+     * the last ack that was done with this message
+     * the last ack or null
+     * @return the last ack
+     */
+    AckType lastAck();
 
-	/**
-	 * ack acknowledges a JetStream messages received from a Consumer, indicating the message
-	 * should not be received again later.
-	 */
-	void ack();
+    /**
+     * ack acknowledges a JetStream messages received from a Consumer, indicating the message
+     * should not be received again later.
+     */
+    void ack();
 
-	/**
-	 * ack acknowledges a JetStream messages received from a Consumer, indicating the message
-	 * should not be received again later.  Duration.ZERO does not confirm the acknowledgement.
-	 * @param timeout the duration to wait for an ack confirmation
+    /**
+     * ack acknowledges a JetStream messages received from a Consumer, indicating the message
+     * should not be received again later.  Duration.ZERO does not confirm the acknowledgement.
+     * @param timeout the duration to wait for an ack confirmation
      * @throws TimeoutException if a timeout was specified and the NATS server does not return a response
      * @throws InterruptedException if the thread is interrupted
-	 */
-	void ackSync(Duration timeout) throws TimeoutException, InterruptedException;
+     */
+    void ackSync(Duration timeout) throws TimeoutException, InterruptedException;
 
-	/**
-	 * nak acknowledges a JetStream message has been received but indicates that the message
-	 * is not completely processed and should be sent again later.
-	 */
-	void nak();
+    /**
+     * nak acknowledges a JetStream message has been received but indicates that the message
+     * is not completely processed and should be sent again later.
+     */
+    void nak();
 
-	/**
-	 * nak acknowledges a JetStream message has been received but indicates that the message
-	 * is not completely processed and should be sent again later, after at least the delay amount.
-	 * @param nakDelay tell the server how long to delay before processing the ack
-	 */
-	void nakWithDelay(Duration nakDelay);
+    /**
+     * nak acknowledges a JetStream message has been received but indicates that the message
+     * is not completely processed and should be sent again later, after at least the delay amount.
+     * @param nakDelay tell the server how long to delay before processing the ack
+     */
+    void nakWithDelay(Duration nakDelay);
 
-	/**
-	 * nak acknowledges a JetStream message has been received but indicates that the message
-	 * is not completely processed and should be sent again later, after at least the delay amount.
-	 * @param nakDelayMillis tell the server how long to delay before processing the ack
-	 */
-	void nakWithDelay(long nakDelayMillis);
+    /**
+     * nak acknowledges a JetStream message has been received but indicates that the message
+     * is not completely processed and should be sent again later, after at least the delay amount.
+     * @param nakDelayMillis tell the server how long to delay before processing the ack
+     */
+    void nakWithDelay(long nakDelayMillis);
 
-	/**
-	 * term instructs the server to stop redelivery of this message without acknowledging it as
-	 * successfully processed.
-	 */
-	void term();
+    /**
+     * term instructs the server to stop redelivery of this message without acknowledging it as
+     * successfully processed.
+     */
+    void term();
 
-	/**
-	 *  Indicates that this message is being worked on and reset redelivery timer in the server.
-	 */
-	void inProgress();
+    /**
+     *  Indicates that this message is being worked on and reset redelivery timer in the server.
+     */
+    void inProgress();
 
-	/**
-	 * Checks if a message is from JetStream or is a standard message.
-	 * @return true if the message is from JetStream.
-	 */
-	boolean isJetStream();
+    /**
+     * Checks if a message is from JetStream or is a standard message.
+     * @return true if the message is from JetStream.
+     */
+    boolean isJetStream();
 
-	/**
-	 * The number of bytes the server counts for the message when calculating byte counts.
-	 * Only applies to JetStream messages received from the server.
-	 * @return the consumption byte count or -1 if the message implementation does not support this method
-	 */
-	default long consumeByteCount() { return -1; }
+    /**
+     * The number of bytes the server counts for the message when calculating byte counts.
+     * Only applies to JetStream messages received from the server.
+     * @return the consumption byte count or -1 if the message implementation does not support this method
+     */
+    default long consumeByteCount() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 }

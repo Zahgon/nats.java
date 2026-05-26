@@ -10,16 +10,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.support.*;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import java.time.Duration;
 import java.util.*;
-
 import static io.nats.client.support.ApiConstants.*;
 import static io.nats.client.support.JsonUtils.*;
 import static io.nats.client.support.JsonValueUtils.*;
@@ -38,87 +35,85 @@ public class StreamConfiguration implements JsonSerializable {
 
     // see builder for defaults
     private final String name;
+
     private final String description;
+
     private final List<String> subjects;
+
     private final RetentionPolicy retentionPolicy;
+
     private final CompressionOption compressionOption;
+
     private final long maxConsumers;
+
     private final long maxMsgs;
+
     private final long maxMsgsPerSubject;
+
     private final long maxBytes;
+
     private final Duration maxAge;
+
     private final int maxMsgSize;
+
     private final StorageType storageType;
+
     private final int replicas;
+
     private final boolean noAck;
+
     private final String templateOwner;
+
     private final DiscardPolicy discardPolicy;
+
     private final Duration duplicateWindow;
+
     private final Placement placement;
+
     private final Republish republish;
+
     private final SubjectTransform subjectTransform;
+
     private final ConsumerLimits consumerLimits;
+
     private final Mirror mirror;
+
     private final List<Source> sources;
+
     private final boolean sealed;
+
     private final boolean allowRollup;
+
     private final boolean allowDirect;
+
     private final boolean mirrorDirect;
+
     private final boolean denyDelete;
+
     private final boolean denyPurge;
+
     private final boolean discardNewPerSubject;
+
     private final Map<String, String> metadata;
+
     private final long firstSequence;
+
     private final Duration subjectDeleteMarkerTtl;
+
     private final boolean allowMessageTtl;
+
     private final boolean allowMsgSchedules;
+
     private final boolean allowMessageCounter;
+
     private final boolean allowAtomicPublish;
+
     private final boolean allowBatched;
+
     private final PersistMode persistMode;
 
     static StreamConfiguration instance(JsonValue v) {
-        return new Builder()
-            .retentionPolicy(RetentionPolicy.get(readString(v, RETENTION)))
-            .compressionOption(CompressionOption.get(readString(v, COMPRESSION)))
-            .storageType(StorageType.get(readString(v, STORAGE)))
-            .discardPolicy(DiscardPolicy.get(readString(v, DISCARD)))
-            .name(readString(v, NAME))
-            .description(readString(v, DESCRIPTION))
-            .maxConsumers(readLong(v, MAX_CONSUMERS, -1))
-            .maxMessages(readLong(v, MAX_MSGS, -1))
-            .maxMessagesPerSubject(readLong(v, MAX_MSGS_PER_SUB, -1))
-            .maxBytes(readLong(v, MAX_BYTES, -1))
-            .maxAge(readNanos(v, MAX_AGE))
-            .maximumMessageSize(readInteger(v, MAX_MSG_SIZE, -1))
-            .replicas(readInteger(v, NUM_REPLICAS, 1))
-            .noAck(readBoolean(v, NO_ACK))
-            .templateOwner(readString(v, TEMPLATE_OWNER))
-            .duplicateWindow(readNanos(v, DUPLICATE_WINDOW))
-            .subjects(readStringList(v, SUBJECTS))
-            .placement(Placement.optionalInstance(readValue(v, PLACEMENT)))
-            .republish(Republish.optionalInstance(readValue(v, REPUBLISH)))
-            .subjectTransform(SubjectTransform.optionalInstance(readValue(v, SUBJECT_TRANSFORM)))
-            .consumerLimits(ConsumerLimits.optionalInstance(readValue(v, CONSUMER_LIMITS)))
-            .mirror(Mirror.optionalInstance(readValue(v, MIRROR)))
-            .sources(Source.optionalListOf(readValue(v, SOURCES)))
-            .sealed(readBoolean(v, SEALED))
-            .allowRollup(readBoolean(v, ALLOW_ROLLUP_HDRS))
-            .allowDirect(readBoolean(v, ALLOW_DIRECT))
-            .mirrorDirect(readBoolean(v, MIRROR_DIRECT))
-            .denyDelete(readBoolean(v, DENY_DELETE))
-            .denyPurge(readBoolean(v, DENY_PURGE))
-            .discardNewPerSubject(readBoolean(v, DISCARD_NEW_PER_SUBJECT))
-            .metadata(readStringStringMap(v, METADATA))
-            .firstSequence(readLong(v, FIRST_SEQ, 1))
-            .subjectDeleteMarkerTtl(readNanos(v, SUBJECT_DELETE_MARKER_TTL))
-            .allowMessageTtl(readBoolean(v, ALLOW_MSG_TTL))
-            .allowMessageSchedules(readBoolean(v, ALLOW_MSG_SCHEDULES))
-            .allowMessageCounter(readBoolean(v, ALLOW_MSG_COUNTER))
-            .allowAtomicPublish(readBoolean(v, ALLOW_ATOMIC))
-            .allowBatched(readBoolean(v, ALLOW_BATCHED))
-            .persistMode(PersistMode.get(readString(v, PERSIST_MODE)))
-            .build();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     // For the builder, assumes all validations are already done in builder
@@ -173,7 +168,7 @@ public class StreamConfiguration implements JsonSerializable {
      * @throws JsonParseException if there is a problem parsing the json
      */
     public static StreamConfiguration instance(String json) throws JsonParseException {
-        return instance(JsonParser.parse(json));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -184,54 +179,7 @@ public class StreamConfiguration implements JsonSerializable {
     @Override
     @NonNull
     public String toJson() {
-
-        StringBuilder sb = beginJson();
-
-        addField(sb, NAME, name);
-        JsonUtils.addField(sb, DESCRIPTION, description);
-        addStrings(sb, SUBJECTS, subjects);
-        addField(sb, RETENTION, retentionPolicy.toString());
-        addEnumWhenNot(sb, COMPRESSION, compressionOption, CompressionOption.None);
-        addField(sb, MAX_CONSUMERS, maxConsumers);
-        addField(sb, MAX_MSGS, maxMsgs);
-        addField(sb, MAX_MSGS_PER_SUB, maxMsgsPerSubject);
-        addField(sb, MAX_BYTES, maxBytes);
-        addFieldAsNanos(sb, MAX_AGE, maxAge);
-        addField(sb, MAX_MSG_SIZE, maxMsgSize);
-        addField(sb, STORAGE, storageType.toString());
-        addField(sb, NUM_REPLICAS, replicas);
-        addFldWhenTrue(sb, NO_ACK, noAck);
-        addField(sb, TEMPLATE_OWNER, templateOwner);
-        addField(sb, DISCARD, discardPolicy.toString());
-        addFieldAsNanos(sb, DUPLICATE_WINDOW, duplicateWindow);
-        if (placement != null && placement.hasData()) {
-            addField(sb, PLACEMENT, placement);
-        }
-        addField(sb, REPUBLISH, republish);
-        addField(sb, SUBJECT_TRANSFORM, subjectTransform);
-        addField(sb, CONSUMER_LIMITS, consumerLimits);
-        addField(sb, MIRROR, mirror);
-        addJsons(sb, SOURCES, sources);
-        addFldWhenTrue(sb, SEALED, sealed);
-        addFldWhenTrue(sb, ALLOW_ROLLUP_HDRS, allowRollup);
-        addFldWhenTrue(sb, ALLOW_DIRECT, allowDirect);
-        addFldWhenTrue(sb, MIRROR_DIRECT, mirrorDirect);
-        addFldWhenTrue(sb, DENY_DELETE, denyDelete);
-        addFldWhenTrue(sb, DENY_PURGE, denyPurge);
-        addFldWhenTrue(sb, DISCARD_NEW_PER_SUBJECT, discardNewPerSubject);
-        addField(sb, METADATA, metadata);
-        addFieldWhenGreaterThan(sb, FIRST_SEQ, firstSequence, 1);
-        addFieldAsNanos(sb, SUBJECT_DELETE_MARKER_TTL, subjectDeleteMarkerTtl);
-        addFldWhenTrue(sb, ALLOW_MSG_TTL, allowMessageTtl);
-        addFldWhenTrue(sb, ALLOW_MSG_SCHEDULES, allowMsgSchedules);
-        addFldWhenTrue(sb, ALLOW_MSG_COUNTER, allowMessageCounter);
-        addFldWhenTrue(sb, ALLOW_ATOMIC, allowAtomicPublish);
-        addFldWhenTrue(sb, ALLOW_BATCHED, allowBatched);
-        if (persistMode != null) {
-            addField(sb, PERSIST_MODE, persistMode.toString());
-        }
-
-        return endJson(sb).toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -240,7 +188,7 @@ public class StreamConfiguration implements JsonSerializable {
      */
     @NonNull
     public String getName() {
-        return name;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -249,7 +197,7 @@ public class StreamConfiguration implements JsonSerializable {
      */
     @Nullable
     public String getDescription() {
-        return description;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -258,7 +206,7 @@ public class StreamConfiguration implements JsonSerializable {
      */
     @NonNull
     public List<String> getSubjects() {
-        return subjects;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -267,7 +215,7 @@ public class StreamConfiguration implements JsonSerializable {
      */
     @Nullable
     public DiscardPolicy getDiscardPolicy() {
-        return discardPolicy;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -276,7 +224,7 @@ public class StreamConfiguration implements JsonSerializable {
      */
     @NonNull
     public RetentionPolicy getRetentionPolicy() {
-        return retentionPolicy;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -285,7 +233,7 @@ public class StreamConfiguration implements JsonSerializable {
      */
     @Nullable
     public CompressionOption getCompressionOption() {
-        return compressionOption;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -293,7 +241,7 @@ public class StreamConfiguration implements JsonSerializable {
      * @return the maximum number of consumers for this stream.
      */
     public long getMaxConsumers() {
-        return maxConsumers;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -301,7 +249,7 @@ public class StreamConfiguration implements JsonSerializable {
      * @return the maximum number of messages for this stream.
      */
     public long getMaxMsgs() {
-        return maxMsgs;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -309,7 +257,7 @@ public class StreamConfiguration implements JsonSerializable {
      * @return the maximum number of messages for this stream.
      */
     public long getMaxMsgsPerSubject() {
-        return maxMsgsPerSubject;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -317,7 +265,7 @@ public class StreamConfiguration implements JsonSerializable {
      * @return the maximum number of bytes for this stream.
      */
     public long getMaxBytes() {
-        return maxBytes;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -326,7 +274,7 @@ public class StreamConfiguration implements JsonSerializable {
      */
     @NonNull
     public Duration getMaxAge() {
-        return maxAge;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -344,7 +292,7 @@ public class StreamConfiguration implements JsonSerializable {
      * @return the maximum message size for this stream.
      */
     public int getMaximumMessageSize() {
-        return maxMsgSize;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -353,15 +301,15 @@ public class StreamConfiguration implements JsonSerializable {
      */
     @NonNull
     public StorageType getStorageType() {
-        return storageType;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Gets the number of replicas for this stream configuration.
      * @return the number of replicas
-     */    
+     */
     public int getReplicas() {
-        return replicas;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -369,7 +317,7 @@ public class StreamConfiguration implements JsonSerializable {
      * @return true if acknowedgments are not required.
      */
     public boolean getNoAck() {
-        return noAck;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -378,7 +326,7 @@ public class StreamConfiguration implements JsonSerializable {
      */
     @Nullable
     public String getTemplateOwner() {
-        return templateOwner;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -388,7 +336,7 @@ public class StreamConfiguration implements JsonSerializable {
      */
     @Nullable
     public Duration getDuplicateWindow() {
-        return duplicateWindow;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -398,7 +346,7 @@ public class StreamConfiguration implements JsonSerializable {
      */
     @Nullable
     public Placement getPlacement() {
-        return placement;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -407,7 +355,7 @@ public class StreamConfiguration implements JsonSerializable {
      */
     @Nullable
     public Republish getRepublish() {
-        return republish;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -416,7 +364,7 @@ public class StreamConfiguration implements JsonSerializable {
      */
     @Nullable
     public SubjectTransform getSubjectTransform() {
-        return subjectTransform;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -425,7 +373,7 @@ public class StreamConfiguration implements JsonSerializable {
      */
     @Nullable
     public ConsumerLimits getConsumerLimits() {
-        return consumerLimits;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -434,7 +382,7 @@ public class StreamConfiguration implements JsonSerializable {
      */
     @Nullable
     public Mirror getMirror() {
-        return mirror;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -443,7 +391,7 @@ public class StreamConfiguration implements JsonSerializable {
      */
     @Nullable
     public List<Source> getSources() {
-        return sources;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -451,7 +399,7 @@ public class StreamConfiguration implements JsonSerializable {
      * @return the sealed flag
      */
     public boolean getSealed() {
-        return sealed;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -459,7 +407,7 @@ public class StreamConfiguration implements JsonSerializable {
      * @return the allows rollup flag
      */
     public boolean getAllowRollup() {
-        return allowRollup;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -467,7 +415,7 @@ public class StreamConfiguration implements JsonSerializable {
      * @return the allows direct flag
      */
     public boolean getAllowDirect() {
-        return allowDirect;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -476,7 +424,7 @@ public class StreamConfiguration implements JsonSerializable {
      * @return the allows direct flag
      */
     public boolean getMirrorDirect() {
-        return mirrorDirect;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -484,7 +432,7 @@ public class StreamConfiguration implements JsonSerializable {
      * @return the deny delete flag
      */
     public boolean getDenyDelete() {
-        return denyDelete;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -492,7 +440,7 @@ public class StreamConfiguration implements JsonSerializable {
      * @return the deny purge flag
      */
     public boolean getDenyPurge() {
-        return denyPurge;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -500,7 +448,7 @@ public class StreamConfiguration implements JsonSerializable {
      * @return the discard new per subject flag
      */
     public boolean isDiscardNewPerSubject() {
-        return discardNewPerSubject;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -509,7 +457,7 @@ public class StreamConfiguration implements JsonSerializable {
      */
     @Nullable
     public Map<String, String> getMetadata() {
-        return metadata;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -517,7 +465,7 @@ public class StreamConfiguration implements JsonSerializable {
      * @return the first sequence
      */
     public long getFirstSequence() {
-        return firstSequence;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -535,7 +483,7 @@ public class StreamConfiguration implements JsonSerializable {
      * @return the flag
      */
     public boolean getAllowMessageTtl() {
-        return allowMessageTtl;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -543,7 +491,7 @@ public class StreamConfiguration implements JsonSerializable {
      * @return the flag
      */
     public boolean getAllowMsgSchedules() {
-        return allowMsgSchedules;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -551,7 +499,7 @@ public class StreamConfiguration implements JsonSerializable {
      * @return the flag
      */
     public boolean getAllowMessageCounter() {
-        return allowMessageCounter;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -559,7 +507,7 @@ public class StreamConfiguration implements JsonSerializable {
      * @return the flag
      */
     public boolean getAllowAtomicPublish() {
-        return allowAtomicPublish;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -567,7 +515,7 @@ public class StreamConfiguration implements JsonSerializable {
      * @return the flag
      */
     public boolean getAllowBatched() {
-        return allowBatched;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -576,7 +524,7 @@ public class StreamConfiguration implements JsonSerializable {
      */
     @Nullable
     public Duration getSubjectDeleteMarkerTtl() {
-        return subjectDeleteMarkerTtl;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -585,12 +533,12 @@ public class StreamConfiguration implements JsonSerializable {
      */
     @Nullable
     public PersistMode getPersistMode() {
-        return persistMode;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return toJson();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -598,7 +546,7 @@ public class StreamConfiguration implements JsonSerializable {
      * @return a stream configuration builder
      */
     public static Builder builder() {
-        return new Builder();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -607,62 +555,100 @@ public class StreamConfiguration implements JsonSerializable {
      * @return a stream configuration builder
      */
     public static Builder builder(StreamConfiguration sc) {
-        return new Builder(sc);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * StreamConfiguration is created using a Builder. The builder supports chaining and will
      * create a default set of options if no methods are calls.
-     * 
+     *
      * <p>{@code new StreamConfiguration.Builder().build()} will create a new StreamConfiguration.
-     * 
      */
     public static class Builder {
 
         private String name = null;
+
         private String description = null;
+
         private final List<String> subjects = new ArrayList<>();
+
         private RetentionPolicy retentionPolicy = RetentionPolicy.Limits;
+
         private CompressionOption compressionOption = CompressionOption.None;
+
         private long maxConsumers = -1;
+
         private long maxMsgs = -1;
+
         private long maxMsgsPerSubject = -1;
+
         private long maxBytes = -1;
+
         private Duration maxAge = Duration.ZERO;
+
         private int maxMsgSize = -1;
+
         private StorageType storageType = StorageType.File;
+
         private int replicas = 1;
+
         private boolean noAck = false;
+
         private String templateOwner = null;
+
         private DiscardPolicy discardPolicy = DiscardPolicy.Old;
+
         private Duration duplicateWindow = Duration.ZERO;
+
         private Placement placement = null;
+
         private Republish republish = null;
+
         private SubjectTransform subjectTransform = null;
+
         private ConsumerLimits consumerLimits = null;
+
         private Mirror mirror = null;
+
         private final List<Source> sources = new ArrayList<>();
+
         private boolean sealed = false;
+
         private boolean allowRollup = false;
+
         private boolean allowDirect = false;
+
         private boolean mirrorDirect = false;
+
         private boolean denyDelete = false;
+
         private boolean denyPurge = false;
+
         private boolean discardNewPerSubject = false;
+
         private Map<String, String> metadata;
+
         private long firstSequence = 1;
+
         private Duration subjectDeleteMarkerTtl;
+
         private boolean allowMessageTtl = false;
+
         private boolean allowMsgSchedules = false;
+
         private boolean allowMessageCounter = false;
+
         private boolean allowAtomicPublish = false;
+
         private boolean allowBatched = false;
+
         private PersistMode persistMode = null;
 
         /**
          * Default Builder
          */
-        public Builder() {}
+        public Builder() {
+        }
 
         /**
          * Update Builder, useful if you need to update a configuration
@@ -720,8 +706,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return the builder
          */
         public Builder name(String name) {
-            this.name =  validateStreamName(name, false);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -730,8 +715,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return the builder
          */
         public Builder description(String description) {
-            this.description = description;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -740,8 +724,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder subjects(String... subjects) {
-            this.subjects.clear();
-            return nullOrEmpty(subjects) ? this : _addSubjects(Arrays.asList(subjects));
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -750,8 +733,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder subjects(Collection<String> subjects) {
-            this.subjects.clear();
-            return nullOrEmpty(subjects) ? this : _addSubjects(subjects);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -760,7 +742,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder addSubjects(String... subjects) {
-            return nullOrEmpty(subjects) ? this : _addSubjects(Arrays.asList(subjects));
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -769,7 +751,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder addSubjects(Collection<String> subjects) {
-            return nullOrEmpty(subjects) ? this : _addSubjects(subjects);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         private Builder _addSubjects(@NonNull Collection<String> subjects) {
@@ -787,8 +769,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder retentionPolicy(RetentionPolicy policy) {
-            this.retentionPolicy = policy == null ? RetentionPolicy.Limits : policy;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -797,18 +778,16 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder compressionOption(CompressionOption compressionOption) {
-            this.compressionOption = compressionOption == null ? CompressionOption.None : compressionOption;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
          * Sets the maximum number of consumers in the StreamConfiguration.
          * @param maxConsumers the maximum number of consumers
          * @return The Builder
-         */        
+         */
         public Builder maxConsumers(long maxConsumers) {
-            this.maxConsumers = validateMaxConsumers(maxConsumers);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -817,8 +796,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder maxMessages(long maxMsgs) {
-            this.maxMsgs = validateMaxMessages(maxMsgs);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -827,8 +805,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder maxMessagesPerSubject(long maxMsgsPerSubject) {
-            this.maxMsgsPerSubject = validateMaxMessagesPerSubject(maxMsgsPerSubject);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -837,8 +814,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder maxBytes(long maxBytes) {
-            this.maxBytes = validateMaxBytes(maxBytes);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -847,8 +823,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder maxAge(Duration maxAge) {
-            this.maxAge = validateDurationNotRequiredGtOrEqZero(maxAge, Duration.ZERO);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -857,8 +832,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder maxAge(long maxAgeMillis) {
-            this.maxAge = validateDurationNotRequiredGtOrEqZero(maxAgeMillis);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -869,7 +843,7 @@ public class StreamConfiguration implements JsonSerializable {
          */
         @Deprecated
         public Builder maxMsgSize(long maxMsgSize) {
-            this.maxMsgSize = (int)validateMaxMessageSize(maxMsgSize);
+            this.maxMsgSize = (int) validateMaxMessageSize(maxMsgSize);
             return this;
         }
 
@@ -879,18 +853,16 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder maximumMessageSize(int maxMsgSize) {
-            this.maxMsgSize = (int)validateMaxMessageSize(maxMsgSize);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
          * Sets the storage type in the StreamConfiguration.
          * @param storageType the storage type
          * @return The Builder
-         */        
+         */
         public Builder storageType(StorageType storageType) {
-            this.storageType = storageType == null ? StorageType.File : storageType;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -900,8 +872,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder replicas(int replicas) {
-            this.replicas = validateNumberOfReplicas(replicas);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -909,10 +880,9 @@ public class StreamConfiguration implements JsonSerializable {
          * set, then acknowledgements are not sent back to the client.  The default is false.
          * @param noAck true to disable acknowledgements.
          * @return The Builder
-         */        
+         */
         public Builder noAck(boolean noAck) {
-            this.noAck = noAck;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -921,8 +891,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return the builder
          */
         public Builder templateOwner(String templateOwner) {
-            this.templateOwner = emptyAsNull(templateOwner);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -931,8 +900,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder discardPolicy(DiscardPolicy policy) {
-            this.discardPolicy = policy == null ? DiscardPolicy.Old : policy;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -942,8 +910,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder duplicateWindow(Duration window) {
-            this.duplicateWindow = validateDurationNotRequiredGtOrEqZero(window, Duration.ZERO);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -953,8 +920,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder duplicateWindow(long windowMillis) {
-            this.duplicateWindow = validateDurationNotRequiredGtOrEqZero(windowMillis);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -963,8 +929,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder placement(Placement placement) {
-            this.placement = placement;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -973,8 +938,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder republish(Republish republish) {
-            this.republish = republish;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -983,8 +947,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder subjectTransform(SubjectTransform subjectTransform) {
-            this.subjectTransform = subjectTransform;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -993,8 +956,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder consumerLimits(ConsumerLimits consumerLimits) {
-            this.consumerLimits = consumerLimits;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1003,8 +965,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder mirror(Mirror mirror) {
-            this.mirror = mirror;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1013,8 +974,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder sources(Source... sources) {
-            this.sources.clear();
-            return addSources(sources);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1023,8 +983,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder sources(Collection<Source> sources) {
-            this.sources.clear();
-            return addSources(sources);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1033,7 +992,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder addSources(Source... sources) {
-            return addSources(Arrays.asList(sources));
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1042,14 +1001,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder addSources(Collection<Source> sources) {
-            if (sources != null) {
-                for (Source source : sources) {
-                    if (source != null && !this.sources.contains(source)) {
-                        this.sources.add(source);
-                    }
-                }
-            }
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1058,10 +1010,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder addSource(Source source) {
-            if (source != null && !this.sources.contains(source)) {
-                this.sources.add(source);
-            }
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1071,8 +1020,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         protected Builder sealed(boolean sealed) {
-            this.sealed = sealed;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1081,8 +1029,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder allowRollup(boolean allowRollup) {
-            this.allowRollup = allowRollup;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1091,8 +1038,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder allowDirect(boolean allowDirect) {
-            this.allowDirect = allowDirect;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1101,8 +1047,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder mirrorDirect(boolean mirrorDirect) {
-            this.mirrorDirect = mirrorDirect;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1111,8 +1056,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder denyDelete(boolean denyDelete) {
-            this.denyDelete = denyDelete;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1121,8 +1065,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder denyPurge(boolean denyPurge) {
-            this.denyPurge = denyPurge;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1131,8 +1074,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder discardNewPerSubject(boolean discardNewPerSubject) {
-            this.discardNewPerSubject = discardNewPerSubject;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1140,8 +1082,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder seal() {
-            this.sealed = true;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1150,8 +1091,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder metadata(Map<String, String> metadata) {
-            this.metadata = metadata;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1160,8 +1100,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder firstSequence(long firstSeq) {
-            this.firstSequence = firstSeq > 1 ? firstSeq : 1;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1171,8 +1110,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder subjectDeleteMarkerTtl(Duration subjectDeleteMarkerTtl) {
-            this.subjectDeleteMarkerTtl = validateDurationNotRequiredGtOrEqSeconds(1, subjectDeleteMarkerTtl, null, "Subject Delete Marker Ttl");
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1182,9 +1120,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder subjectDeleteMarkerTtl(long subjectDeleteMarkerTtlMillis) {
-            this.subjectDeleteMarkerTtl = subjectDeleteMarkerTtlMillis <= 0 ? null
-                : validateDurationGtOrEqSeconds(1, subjectDeleteMarkerTtlMillis, "Subject Delete Marker Ttl");
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1192,8 +1128,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder allowMessageTtl() {
-            this.allowMessageTtl = true;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1202,8 +1137,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder allowMessageTtl(boolean allowMessageTtl) {
-            this.allowMessageTtl = allowMessageTtl;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1211,8 +1145,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder allowMessageSchedules() {
-            this.allowMsgSchedules = true;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1221,8 +1154,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder allowMessageSchedules(boolean allowMessageSchedules) {
-            this.allowMsgSchedules = allowMessageSchedules;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1230,8 +1162,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder allowMessageCounter() {
-            this.allowMessageCounter = true;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1240,8 +1171,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder allowMessageCounter(boolean allowMessageCounter) {
-            this.allowMessageCounter = allowMessageCounter;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1249,8 +1179,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder allowAtomicPublish() {
-            this.allowAtomicPublish = true;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1259,8 +1188,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder allowAtomicPublish(boolean allowAtomicPublish) {
-            this.allowAtomicPublish = allowAtomicPublish;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1268,8 +1196,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder allowBatched() {
-            this.allowBatched = true;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1278,8 +1205,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder allowBatched(boolean allowBatched) {
-            this.allowBatched = allowBatched;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1288,8 +1214,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return The Builder
          */
         public Builder persistMode(PersistMode persistMode) {
-            this.persistMode = persistMode;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1297,11 +1222,7 @@ public class StreamConfiguration implements JsonSerializable {
          * @return a stream configuration.
          */
         public StreamConfiguration build() {
-            if (nullOrEmpty(name)) {
-                throw new IllegalArgumentException("Configuration must have a valid stream name");
-            }
-
-            return new StreamConfiguration(this);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

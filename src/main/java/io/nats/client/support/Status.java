@@ -10,69 +10,119 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.support;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
 
 public class Status {
 
-    public static final String FLOW_CONTROL_TEXT  = "FlowControl Request";
-    public static final String HEARTBEAT_TEXT     = "Idle Heartbeat";
+    public static final String FLOW_CONTROL_TEXT = "FlowControl Request";
+
+    public static final String HEARTBEAT_TEXT = "Idle Heartbeat";
+
     public static final String NO_RESPONDERS_TEXT = "No Responders Available For Request";
-    public static final String EOB_TEXT           = "EOB";
-    public static final byte[] FLOW_CONTROL_TEXT_BYTES  = FLOW_CONTROL_TEXT.getBytes(ISO_8859_1);
-    public static final byte[] HEARTBEAT_TEXT_BYTES     = HEARTBEAT_TEXT.getBytes(ISO_8859_1);
+
+    public static final String EOB_TEXT = "EOB";
+
+    public static final byte[] FLOW_CONTROL_TEXT_BYTES = FLOW_CONTROL_TEXT.getBytes(ISO_8859_1);
+
+    public static final byte[] HEARTBEAT_TEXT_BYTES = HEARTBEAT_TEXT.getBytes(ISO_8859_1);
+
     public static final byte[] NO_RESPONDERS_TEXT_BYTES = NO_RESPONDERS_TEXT.getBytes(ISO_8859_1);
-    public static final byte[] EOB_TEXT_BYTES           = EOB_TEXT.getBytes(ISO_8859_1);
+
+    public static final byte[] EOB_TEXT_BYTES = EOB_TEXT.getBytes(ISO_8859_1);
 
     public static final int FLOW_OR_HEARTBEAT_STATUS_CODE = 100;
+
     public static final int NO_RESPONDERS_CODE = 503;
+
     public static final int BAD_REQUEST_CODE = 400;
+
     public static final int NOT_FOUND_CODE = 404;
+
     public static final int BAD_JS_REQUEST_CODE = 408;
-    public static final int REQUEST_TIMEOUT_CODE = BAD_JS_REQUEST_CODE; // only left in for b/w compat
+
+    // only left in for b/w compat
+    public static final int REQUEST_TIMEOUT_CODE = BAD_JS_REQUEST_CODE;
+
     public static final int CONFLICT_CODE = 409;
+
     public static final int EOB_CODE = 204;
 
     public static final int PIN_ERROR_CODE = 423;
+
     public static final byte[] PIN_ERROR_CODE_BYTES = ("" + PIN_ERROR_CODE).getBytes(ISO_8859_1);
 
-    public static final String BAD_REQUEST                    = "Bad Request"; // 400
-    public static final String NO_MESSAGES                    = "No Messages"; // 404
-    public static final String CONSUMER_DELETED               = "Consumer Deleted"; // 409
-    public static final String CONSUMER_IS_PUSH_BASED         = "Consumer is push based"; // 409
-    public static final byte[] BAD_REQUEST_BYTES              = BAD_REQUEST.getBytes(ISO_8859_1);
-    public static final byte[] NO_MESSAGES_BYTES              = NO_MESSAGES.getBytes(ISO_8859_1);
-    public static final byte[] CONSUMER_DELETED_BYTES         = CONSUMER_DELETED.getBytes(ISO_8859_1);
-    public static final byte[] CONSUMER_IS_PUSH_BASED_BYTES   = CONSUMER_IS_PUSH_BASED.getBytes(ISO_8859_1);
+    // 400
+    public static final String BAD_REQUEST = "Bad Request";
 
-    public static final String MESSAGE_SIZE_EXCEEDS_MAX_BYTES = "Message Size Exceeds MaxBytes"; // 409
-    public static final String EXCEEDED_MAX_PREFIX            = "Exceeded Max";
-    public static final String EXCEEDED_MAX_WAITING           = "Exceeded MaxWaiting"; // 409
-    public static final String EXCEEDED_MAX_REQUEST_BATCH     = "Exceeded MaxRequestBatch"; // 409
-    public static final String EXCEEDED_MAX_REQUEST_EXPIRES   = "Exceeded MaxRequestExpires"; // 409
-    public static final String EXCEEDED_MAX_REQUEST_MAX_BYTES = "Exceeded MaxRequestMaxBytes"; // 409
+    // 404
+    public static final String NO_MESSAGES = "No Messages";
+
+    // 409
+    public static final String CONSUMER_DELETED = "Consumer Deleted";
+
+    // 409
+    public static final String CONSUMER_IS_PUSH_BASED = "Consumer is push based";
+
+    public static final byte[] BAD_REQUEST_BYTES = BAD_REQUEST.getBytes(ISO_8859_1);
+
+    public static final byte[] NO_MESSAGES_BYTES = NO_MESSAGES.getBytes(ISO_8859_1);
+
+    public static final byte[] CONSUMER_DELETED_BYTES = CONSUMER_DELETED.getBytes(ISO_8859_1);
+
+    public static final byte[] CONSUMER_IS_PUSH_BASED_BYTES = CONSUMER_IS_PUSH_BASED.getBytes(ISO_8859_1);
+
+    // 409
+    public static final String MESSAGE_SIZE_EXCEEDS_MAX_BYTES = "Message Size Exceeds MaxBytes";
+
+    public static final String EXCEEDED_MAX_PREFIX = "Exceeded Max";
+
+    // 409
+    public static final String EXCEEDED_MAX_WAITING = "Exceeded MaxWaiting";
+
+    // 409
+    public static final String EXCEEDED_MAX_REQUEST_BATCH = "Exceeded MaxRequestBatch";
+
+    // 409
+    public static final String EXCEEDED_MAX_REQUEST_EXPIRES = "Exceeded MaxRequestExpires";
+
+    // 409
+    public static final String EXCEEDED_MAX_REQUEST_MAX_BYTES = "Exceeded MaxRequestMaxBytes";
+
     public static final byte[] MESSAGE_SIZE_EXCEEDS_MAX_BYTES_BYTES = MESSAGE_SIZE_EXCEEDS_MAX_BYTES.getBytes(ISO_8859_1);
-    public static final byte[] EXCEEDED_MAX_WAITING_BYTES           = EXCEEDED_MAX_WAITING.getBytes(ISO_8859_1);
-    public static final byte[] EXCEEDED_MAX_REQUEST_BATCH_BYTES     = EXCEEDED_MAX_REQUEST_BATCH.getBytes(ISO_8859_1);
-    public static final byte[] EXCEEDED_MAX_REQUEST_EXPIRES_BYTES   = EXCEEDED_MAX_REQUEST_EXPIRES.getBytes(ISO_8859_1);
+
+    public static final byte[] EXCEEDED_MAX_WAITING_BYTES = EXCEEDED_MAX_WAITING.getBytes(ISO_8859_1);
+
+    public static final byte[] EXCEEDED_MAX_REQUEST_BATCH_BYTES = EXCEEDED_MAX_REQUEST_BATCH.getBytes(ISO_8859_1);
+
+    public static final byte[] EXCEEDED_MAX_REQUEST_EXPIRES_BYTES = EXCEEDED_MAX_REQUEST_EXPIRES.getBytes(ISO_8859_1);
+
     public static final byte[] EXCEEDED_MAX_REQUEST_MAX_BYTES_BYTES = EXCEEDED_MAX_REQUEST_MAX_BYTES.getBytes(ISO_8859_1);
 
-    public static final String BATCH_COMPLETED                = "Batch Completed"; // 409 informational
-    public static final String SERVER_SHUTDOWN                = "Server Shutdown"; // 409 informational with headers
-    public static final String LEADERSHIP_CHANGE              = "Leadership Change"; // 409
-    public static final byte[] BATCH_COMPLETED_BYTES          = BATCH_COMPLETED.getBytes(ISO_8859_1);
-    public static final byte[] SERVER_SHUTDOWN_BYTES          = SERVER_SHUTDOWN.getBytes(ISO_8859_1);
-    public static final byte[] LEADERSHIP_CHANGE_BYTES        = LEADERSHIP_CHANGE.getBytes(ISO_8859_1);
+    // 409 informational
+    public static final String BATCH_COMPLETED = "Batch Completed";
+
+    // 409 informational with headers
+    public static final String SERVER_SHUTDOWN = "Server Shutdown";
+
+    // 409
+    public static final String LEADERSHIP_CHANGE = "Leadership Change";
+
+    public static final byte[] BATCH_COMPLETED_BYTES = BATCH_COMPLETED.getBytes(ISO_8859_1);
+
+    public static final byte[] SERVER_SHUTDOWN_BYTES = SERVER_SHUTDOWN.getBytes(ISO_8859_1);
+
+    public static final byte[] LEADERSHIP_CHANGE_BYTES = LEADERSHIP_CHANGE.getBytes(ISO_8859_1);
 
     public static final Status EOB = new Status(EOB_CODE, EOB_TEXT);
+
     public static final Status TIMEOUT_OR_NO_MESSAGES = new Status(NOT_FOUND_CODE, "Timeout or No Messages");
 
     private final int code;
+
     private final String message;
 
     private static final Map<Integer, String> CODE_TO_TEXT;
@@ -84,7 +134,7 @@ public class Status {
 
     public Status(int code, String message) {
         this.code = code;
-        this.message = message == null ? makeMessage(code) : message ;
+        this.message = message == null ? makeMessage(code) : message;
     }
 
     public Status(Token codeToken, Token messageToken) {
@@ -92,15 +142,15 @@ public class Status {
     }
 
     public int getCode() {
-        return code;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public String getMessage() {
-        return message;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public String getMessageWithCode() {
-        return code + " " + message;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private static int extractCode(Token codeToken) {
@@ -110,8 +160,7 @@ public class Status {
                 throw new IllegalArgumentException(NatsConstants.INVALID_HEADER_STATUS_CODE);
             }
             return Integer.parseInt(code);
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             throw new IllegalArgumentException(NatsConstants.INVALID_HEADER_STATUS_CODE);
         }
     }
@@ -123,25 +172,22 @@ public class Status {
 
     @Override
     public String toString() {
-        return "Status{" +
-                "code=" + code +
-                ", message='" + message + '\'' +
-                '}';
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public boolean isFlowControl() {
-        return code == FLOW_OR_HEARTBEAT_STATUS_CODE && message.equals(FLOW_CONTROL_TEXT);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public boolean isHeartbeat() {
-        return code == FLOW_OR_HEARTBEAT_STATUS_CODE && message.equals(HEARTBEAT_TEXT);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public boolean isNoResponders() {
-        return code == NO_RESPONDERS_CODE && message.equals(NO_RESPONDERS_TEXT);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public boolean isEob() {
-        return code == EOB_CODE && message.equals(EOB_TEXT);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

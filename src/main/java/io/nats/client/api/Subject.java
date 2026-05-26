@@ -10,35 +10,25 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.support.JsonValue;
 import org.jspecify.annotations.NonNull;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import static io.nats.client.support.JsonValueUtils.getLong;
 
 /**
  * An object representing a stream's subject and the count of it's messages
  */
 public class Subject implements Comparable<Subject> {
+
     private final String name;
+
     private final long count;
 
     static List<Subject> listOf(JsonValue vSubjects) {
-        List<Subject> list = new ArrayList<>();
-        if (vSubjects != null && vSubjects.map != null) {
-            for (String subject : vSubjects.map.keySet()) {
-                Long count = getLong(vSubjects.map.get(subject));
-                if (count != null) {
-                    list.add(new Subject(subject, count));
-                }
-            }
-        }
-        return list;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -57,7 +47,7 @@ public class Subject implements Comparable<Subject> {
      */
     @NonNull
     public String getName() {
-        return name;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -65,19 +55,16 @@ public class Subject implements Comparable<Subject> {
      * @return the count
      */
     public long getCount() {
-        return count;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return "Subject{" +
-            "name='" + name + '\'' +
-            ", count=" + count +
-            '}';
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int compareTo(Subject o) {
-        return name.compareTo(o.name);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

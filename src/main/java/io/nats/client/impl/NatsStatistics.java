@@ -10,38 +10,54 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import io.nats.client.StatisticsCollector;
-
 import java.text.NumberFormat;
 import java.util.LongSummaryStatistics;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class NatsStatistics implements StatisticsCollector {
+
     private final ReentrantLock readStatsLock;
+
     private final ReentrantLock writeStatsLock;
 
     private final LongSummaryStatistics readStats;
+
     private final LongSummaryStatistics writeStats;
 
     private final AtomicLong flushCounter;
+
     private final AtomicLong outstandingRequests;
+
     private final AtomicLong requestsSent;
+
     private final AtomicLong repliesReceived;
+
     private final AtomicLong duplicateRepliesReceived;
+
     private final AtomicLong orphanRepliesReceived;
+
     private final AtomicLong reconnects;
+
     private final AtomicLong inMsgs;
+
     private final AtomicLong outMsgs;
+
     private final AtomicLong inBytes;
+
     private final AtomicLong outBytes;
+
     private final AtomicLong pingCount;
+
     private final AtomicLong okCount;
+
     private final AtomicLong errCount;
+
     private final AtomicLong exceptionCount;
+
     private final AtomicLong droppedCount;
 
     private boolean trackAdvanced;
@@ -49,10 +65,8 @@ public class NatsStatistics implements StatisticsCollector {
     public NatsStatistics() {
         this.readStatsLock = new ReentrantLock();
         this.writeStatsLock = new ReentrantLock();
-
         this.readStats = new LongSummaryStatistics();
         this.writeStats = new LongSummaryStatistics();
-
         this.flushCounter = new AtomicLong();
         this.outstandingRequests = new AtomicLong();
         this.requestsSent = new AtomicLong();
@@ -73,273 +87,203 @@ public class NatsStatistics implements StatisticsCollector {
 
     @Override
     public void setAdvancedTracking(boolean trackAdvanced) {
-        this.trackAdvanced = trackAdvanced;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void incrementPingCount() {
-        this.pingCount.incrementAndGet();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void incrementDroppedCount() {
-        this.droppedCount.incrementAndGet();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void incrementOkCount() {
-        this.okCount.incrementAndGet();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void incrementErrCount() {
-        this.errCount.incrementAndGet();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void incrementExceptionCount() {
-        this.exceptionCount.incrementAndGet();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void incrementRequestsSent() {
-        this.requestsSent.incrementAndGet();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void incrementRepliesReceived() {
-        this.repliesReceived.incrementAndGet();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void incrementDuplicateRepliesReceived() {
-        this.duplicateRepliesReceived.incrementAndGet();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void incrementOrphanRepliesReceived() {
-        this.orphanRepliesReceived.incrementAndGet();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void incrementReconnects() {
-        this.reconnects.incrementAndGet();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void incrementIn(long bytes) {
-        this.inMsgs.incrementAndGet();
-        this.inBytes.addAndGet(bytes);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void incrementOut(long bytes) {
-        this.outMsgs.incrementAndGet();
-        this.outBytes.addAndGet(bytes);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void incrementInMsgs() {
-        this.inMsgs.incrementAndGet();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void incrementOutMsgs() {
-        this.outMsgs.incrementAndGet();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void incrementInBytes(long bytes) {
-        this.inBytes.addAndGet(bytes);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void incrementOutBytes(long bytes) {
-        this.outBytes.addAndGet(bytes);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void incrementFlushCounter() {
-        this.flushCounter.incrementAndGet();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void incrementOutstandingRequests() {
-        this.outstandingRequests.incrementAndGet();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void decrementOutstandingRequests() {
-        this.outstandingRequests.decrementAndGet();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void registerRead(long bytes) {
-        if (!trackAdvanced) {
-            return;
-        }
-
-        readStatsLock.lock();
-        try {
-            readStats.accept(bytes);
-        } finally {
-            readStatsLock.unlock();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void registerWrite(long bytes) {
-        if (!trackAdvanced) {
-            return;
-        }
-
-        writeStatsLock.lock();
-        try {
-            writeStats.accept(bytes);
-        } finally {
-            writeStatsLock.unlock();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public long getPings() {
-        return this.pingCount.get();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public long getDroppedCount() {
-        return this.droppedCount.get();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public long getOKs() {
-        return this.okCount.get();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public long getErrs() {
-        return this.errCount.get();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public long getExceptions() {
-        return this.exceptionCount.get();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public long getRequestsSent() {
-        return this.requestsSent.get();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public long getReconnects() {
-        return this.reconnects.get();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public long getInMsgs() {
-        return this.inMsgs.get();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public long getOutMsgs() {
-        return this.outMsgs.get();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public long getInBytes() {
-        return this.inBytes.get();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public long getOutBytes() {
-        return this.outBytes.get();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public long getFlushCounter() {
-        return flushCounter.get();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public long getOutstandingRequests() {
-        return outstandingRequests.get();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
-    public long getRepliesReceived() { return repliesReceived.get(); }
+    public long getRepliesReceived() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
     @Override
     public long getDuplicateRepliesReceived() {
-        return duplicateRepliesReceived.get();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
-    public long getOrphanRepliesReceived() { return orphanRepliesReceived.get(); }
+    public long getOrphanRepliesReceived() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
     void appendNumberStat(StringBuilder builder, String name, long value) {
-        builder.append(name);
-        builder.append(NumberFormat.getNumberInstance().format(value));
-        builder.append("\n");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void appendNumberStat(StringBuilder builder, String name, double value) {
-        builder.append(name);
-        builder.append(NumberFormat.getNumberInstance().format(value));
-        builder.append("\n");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-
-        builder.append("### Connection ###\n");
-        appendNumberStat(builder, "Reconnects:                      ", this.reconnects.get());
-        appendNumberStat(builder, "Requests Sent:                   ", this.requestsSent.get());
-        appendNumberStat(builder, "Replies Received:                ", this.repliesReceived.get());
-        if (this.trackAdvanced) {
-            appendNumberStat(builder, "Duplicate Replies Received:      ", this.duplicateRepliesReceived.get());
-            appendNumberStat(builder, "Orphan Replies Received:         ", this.orphanRepliesReceived.get());
-        }
-        appendNumberStat(builder, "Pings Sent:                      ", this.pingCount.get());
-        appendNumberStat(builder, "+OKs Received:                   ", this.okCount.get());
-        appendNumberStat(builder, "-Errs Received:                  ", this.errCount.get());
-        appendNumberStat(builder, "Handled Exceptions:              ", this.exceptionCount.get());
-        appendNumberStat(builder, "Successful Flush Calls:          ", this.flushCounter.get());
-        appendNumberStat(builder, "Outstanding Request Futures:     ", this.outstandingRequests.get());
-        appendNumberStat(builder, "Dropped Messages:                ", this.droppedCount.get());
-        builder.append("\n");
-        builder.append("### Reader ###\n");
-        appendNumberStat(builder, "Messages in:                     ", this.inMsgs.get());
-        appendNumberStat(builder, "Bytes in:                        ", this.inBytes.get());
-        builder.append("\n");
-        if (this.trackAdvanced) {
-            readStatsLock.lock();
-            try {
-                appendNumberStat(builder, "Socket Reads:                    ", readStats.getCount());
-                appendNumberStat(builder, "Average Bytes Per Read:          ", readStats.getAverage());
-                appendNumberStat(builder, "Min Bytes Per Read:              ", readStats.getMin());
-                appendNumberStat(builder, "Max Bytes Per Read:              ", readStats.getMax());
-            } finally {
-                readStatsLock.unlock();
-            }
-        }
-        builder.append("\n");
-        builder.append("### Writer ###\n");
-        appendNumberStat(builder, "Messages out:                    ", this.outMsgs.get());
-        appendNumberStat(builder, "Bytes out:                       ", this.outBytes.get());
-        builder.append("\n");
-        if (this.trackAdvanced) {
-            writeStatsLock.lock();
-            try {
-                appendNumberStat(builder, "Socket Writes:                   ", writeStats.getCount());
-                appendNumberStat(builder, "Average Bytes Per Write:         ", writeStats.getAverage());
-                appendNumberStat(builder, "Min Bytes Per Write:             ", writeStats.getMin());
-                appendNumberStat(builder, "Max Bytes Per Write:             ", writeStats.getMax());
-            } finally {
-                writeStatsLock.unlock();
-            }
-        }
-
-        return builder.toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

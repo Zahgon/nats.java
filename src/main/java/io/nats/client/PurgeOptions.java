@@ -10,13 +10,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client;
 
 import io.nats.client.support.JsonSerializable;
 import io.nats.client.support.JsonUtils;
 import org.jspecify.annotations.NonNull;
-
 import static io.nats.client.support.ApiConstants.*;
 import static io.nats.client.support.JsonUtils.beginJson;
 import static io.nats.client.support.JsonUtils.endJson;
@@ -28,7 +26,9 @@ import static io.nats.client.support.Validator.validateSubjectStrict;
 public class PurgeOptions implements JsonSerializable {
 
     protected final String subject;
+
     protected final long seq;
+
     protected final long keep;
 
     private PurgeOptions(String subject, long seq, long keep) {
@@ -40,11 +40,7 @@ public class PurgeOptions implements JsonSerializable {
     @Override
     @NonNull
     public String toJson() {
-        StringBuilder sb = beginJson();
-        JsonUtils.addField(sb, FILTER, subject);
-        JsonUtils.addField(sb, SEQ, seq);
-        JsonUtils.addField(sb, KEEP, keep);
-        return endJson(sb).toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -52,7 +48,7 @@ public class PurgeOptions implements JsonSerializable {
      * @return the subject
      */
     public String getSubject() {
-        return subject;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -60,7 +56,7 @@ public class PurgeOptions implements JsonSerializable {
      * @return the upper bound sequence
      */
     public long getSequence() {
-        return seq;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -68,7 +64,7 @@ public class PurgeOptions implements JsonSerializable {
      * @return the max number of messages to keep
      */
     public long getKeep() {
-        return keep;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -76,7 +72,7 @@ public class PurgeOptions implements JsonSerializable {
      * @return a purge options builder
      */
     public static PurgeOptions.Builder builder() {
-        return new Builder();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -85,21 +81,25 @@ public class PurgeOptions implements JsonSerializable {
      * @return a purge options for a subject
      */
     public static PurgeOptions subject(String subject) {
-        return new Builder().subject(subject).build();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Builder class for PurgeOptions
      */
     public static class Builder {
+
         private String subject;
+
         private long seq = -1;
+
         private long keep = -1;
 
         /**
          * Construct a builder instance
          */
-        public Builder() {}
+        public Builder() {
+        }
 
         /**
          * Set the subject to filter the purge. Wildcards allowed.
@@ -107,8 +107,7 @@ public class PurgeOptions implements JsonSerializable {
          * @return the builder
          */
         public Builder subject(final String subject) {
-            this.subject = validateSubjectStrict(subject, false);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -117,8 +116,7 @@ public class PurgeOptions implements JsonSerializable {
          * @return the builder
          */
         public Builder sequence(final long seq) {
-            this.seq = seq;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -127,8 +125,7 @@ public class PurgeOptions implements JsonSerializable {
          * @return the builder
          */
         public Builder keep(final long keep) {
-            this.keep = keep;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -136,11 +133,7 @@ public class PurgeOptions implements JsonSerializable {
          * @return the built PurgeOptions
          */
         public PurgeOptions build() {
-            if (seq > 0 && keep > 0) {
-                throw new IllegalArgumentException("seq and keep are mutually exclusive.");
-            }
-
-            return new PurgeOptions(subject, seq, keep);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

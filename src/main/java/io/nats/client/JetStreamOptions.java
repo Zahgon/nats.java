@@ -10,11 +10,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client;
 
 import java.time.Duration;
-
 import static io.nats.client.support.NatsConstants.DOT;
 import static io.nats.client.support.NatsJetStreamConstants.*;
 import static io.nats.client.support.Validator.ensureEndsWithDot;
@@ -39,17 +37,20 @@ public class JetStreamOptions {
     public static final JetStreamOptions DEFAULT_JS_OPTIONS = new Builder().build();
 
     private final String jsPrefix;
+
     private final Duration requestTimeout;
+
     private final boolean publishNoAck;
+
     private final boolean defaultPrefix;
+
     private final boolean optOut290ConsumerCreate;
 
     private JetStreamOptions(Builder b) {
         if (b.jsPrefix == null) {
             defaultPrefix = true;
             this.jsPrefix = DEFAULT_API_PREFIX;
-        }
-        else {
+        } else {
             defaultPrefix = false;
             this.jsPrefix = b.jsPrefix;
         }
@@ -63,7 +64,7 @@ public class JetStreamOptions {
      * @return the name of the stream.
      */
     public Duration getRequestTimeout() {
-        return requestTimeout;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -72,7 +73,7 @@ public class JetStreamOptions {
      * @return the prefix.
      */
     public String getPrefix() {
-        return jsPrefix;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -80,7 +81,7 @@ public class JetStreamOptions {
      * @return the true for default prefix.
      */
     public boolean isDefaultPrefix() {
-        return defaultPrefix;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -88,7 +89,7 @@ public class JetStreamOptions {
      * @return the flag
      */
     public boolean isPublishNoAck() {
-        return publishNoAck;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -96,7 +97,7 @@ public class JetStreamOptions {
      * @return the flag
      */
     public boolean isOptOut290ConsumerCreate() {
-        return optOut290ConsumerCreate;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -104,7 +105,7 @@ public class JetStreamOptions {
      * @return the builder.
      */
     public static Builder builder() {
-        return new Builder();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -113,7 +114,7 @@ public class JetStreamOptions {
      * @return a JetStreamOptions builder
      */
     public static Builder builder(JetStreamOptions jso) {
-        return new Builder(jso);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -121,7 +122,7 @@ public class JetStreamOptions {
      * @return the configuration
      */
     public static JetStreamOptions defaultOptions() {
-        return DEFAULT_JS_OPTIONS;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -131,14 +132,18 @@ public class JetStreamOptions {
     public static class Builder {
 
         private String jsPrefix;
+
         private Duration requestTimeout;
+
         private boolean publishNoAck;
+
         private boolean optOut290ConsumerCreate;
 
         /**
          * Construct a builder
          */
-        public Builder() {}
+        public Builder() {
+        }
 
         /**
          * Construct a builder from an existing JetStreamOptions
@@ -148,8 +153,7 @@ public class JetStreamOptions {
             if (jso != null) {
                 if (jso.isDefaultPrefix()) {
                     this.jsPrefix = null;
-                }
-                else {
+                } else {
                     this.jsPrefix = jso.jsPrefix;
                 }
                 this.requestTimeout = jso.requestTimeout;
@@ -164,8 +168,7 @@ public class JetStreamOptions {
          * @return the builder
          */
         public Builder requestTimeout(Duration requestTimeout) {
-            this.requestTimeout = requestTimeout;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -176,8 +179,7 @@ public class JetStreamOptions {
          * @return the builder.
          */
         public Builder prefix(String prefix) {
-            jsPrefix = ensureEndsWithDot(validatePrefixOrDomain(prefix, "Prefix", false));
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -189,9 +191,7 @@ public class JetStreamOptions {
          * @return the builder.
          */
         public Builder domain(String domain) {
-            String prefix = convertDomainToPrefix(domain);
-            jsPrefix = prefix == null ? null : prefix + DOT;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -200,8 +200,7 @@ public class JetStreamOptions {
          * @return the builder
          */
         public Builder publishNoAck(final boolean publishNoAck) {
-            this.publishNoAck = publishNoAck;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -210,8 +209,7 @@ public class JetStreamOptions {
          * @return the builder
          */
         public Builder optOut290ConsumerCreate(boolean optOut) {
-            this.optOut290ConsumerCreate = optOut;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -219,7 +217,7 @@ public class JetStreamOptions {
          * @return JetStream options
          */
         public JetStreamOptions build() {
-            return new JetStreamOptions(this);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -229,8 +227,6 @@ public class JetStreamOptions {
      * @return the prefix
      */
     public static String convertDomainToPrefix(String domain) {
-        String valid = validatePrefixOrDomain(domain, "Domain", false);
-        return valid == null ? null
-            : PREFIX_DOLLAR_JS_DOT + ensureEndsWithDot(valid) + PREFIX_API;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

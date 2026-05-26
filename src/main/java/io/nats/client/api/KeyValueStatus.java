@@ -15,7 +15,6 @@ package io.nats.client.api;
 import io.nats.client.support.JsonValueUtils;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import java.time.Duration;
 import java.util.Map;
 
@@ -25,6 +24,7 @@ import java.util.Map;
 public class KeyValueStatus {
 
     private final StreamInfo streamInfo;
+
     private final KeyValueConfiguration config;
 
     /**
@@ -42,7 +42,7 @@ public class KeyValueStatus {
      */
     @NonNull
     public String getBucketName() {
-        return config.getBucketName();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -51,7 +51,7 @@ public class KeyValueStatus {
      */
     @Nullable
     public String getDescription() {
-        return config.getDescription();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -60,7 +60,7 @@ public class KeyValueStatus {
      */
     @NonNull
     public StreamInfo getBackingStreamInfo() {
-        return streamInfo;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -69,7 +69,7 @@ public class KeyValueStatus {
      */
     @NonNull
     public KeyValueConfiguration getConfiguration() {
-        return config;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -77,7 +77,7 @@ public class KeyValueStatus {
      * @return the count of entries
      */
     public long getEntryCount() {
-        return streamInfo.getStreamState().getMsgCount();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -85,7 +85,7 @@ public class KeyValueStatus {
      * @return the number of bytes
      */
     public long getByteCount() {
-        return streamInfo.getStreamState().getByteCount();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -93,7 +93,7 @@ public class KeyValueStatus {
      * @return the maximum number of values for any one key.
      */
     public long getMaxHistoryPerKey() {
-        return config.getMaxHistoryPerKey();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -101,7 +101,7 @@ public class KeyValueStatus {
      * @return the maximum number of bytes for this bucket.
      */
     public long getMaxBucketSize() {
-        return config.getMaxBucketSize();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -119,7 +119,7 @@ public class KeyValueStatus {
      * @return the maximum size a value.
      */
     public int getMaximumValueSize() {
-        return config.getMaximumValueSize();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -128,7 +128,7 @@ public class KeyValueStatus {
      */
     @Nullable
     public Duration getTtl() {
-        return config.getTtl();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -137,7 +137,7 @@ public class KeyValueStatus {
      */
     @NonNull
     public StorageType getStorageType() {
-        return config.getStorageType();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -145,7 +145,7 @@ public class KeyValueStatus {
      * @return the number of replicas
      */
     public int getReplicas() {
-        return config.getReplicas();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -154,7 +154,7 @@ public class KeyValueStatus {
      */
     @Nullable
     public Placement getPlacement() {
-        return config.getPlacement();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -163,7 +163,7 @@ public class KeyValueStatus {
      */
     @Nullable
     public Republish getRepublish() {
-        return config.getRepublish();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -171,7 +171,7 @@ public class KeyValueStatus {
      * @return true if compression is used
      */
     public boolean isCompressed() {
-        return config.isCompressed();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -180,7 +180,7 @@ public class KeyValueStatus {
      */
     @Nullable
     public Map<String, String> getMetadata() {
-        return config.getMetadata();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -189,7 +189,7 @@ public class KeyValueStatus {
      */
     @Nullable
     public Duration getLimitMarkerTtl() {
-        return streamInfo.getConfig().getSubjectDeleteMarkerTtl();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -198,15 +198,11 @@ public class KeyValueStatus {
      */
     @NonNull
     public String getBackingStore() {
-        return "JetStream";
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        JsonValueUtils.MapBuilder mb = new JsonValueUtils.MapBuilder();
-        mb.put("entryCount", getEntryCount());
-        mb.put("byteCount", getByteCount());
-        mb.put("config", config);
-        return "KeyValueStatus" + mb.toJsonValue().toJson();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

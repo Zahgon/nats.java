@@ -10,26 +10,24 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import io.nats.client.JetStreamApiException;
 import io.nats.client.Message;
 import io.nats.client.support.JsonValue;
-
 import java.util.List;
-
 import static io.nats.client.support.JsonValueUtils.readArray;
 
 abstract class AbstractListReader {
 
     private final String objectName;
+
     private final String filterFieldName;
+
     protected ListRequestEngine engine;
 
     void process(Message msg) throws JetStreamApiException {
-        engine = new ListRequestEngine(msg);
-        processItems(readArray(engine.getJv(), objectName));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     abstract void processItems(List<JsonValue> items);
@@ -45,17 +43,14 @@ abstract class AbstractListReader {
     }
 
     byte[] nextJson() {
-        return engine.internalNextJson();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     byte[] nextJson(String filter) {
-        if (filterFieldName == null) {
-            throw new IllegalArgumentException("Filter not supported.");
-        }
-        return engine.internalNextJson(filterFieldName, filter);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     boolean hasMore() {
-        return engine.hasMore();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

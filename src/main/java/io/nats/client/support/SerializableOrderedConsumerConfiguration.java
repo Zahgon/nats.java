@@ -10,15 +10,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.support;
 
 import io.nats.client.api.OrderedConsumerConfiguration;
-
 import java.io.IOException;
 import java.io.Serializable;
 
 public class SerializableOrderedConsumerConfiguration implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     private transient OrderedConsumerConfiguration occ;
@@ -32,11 +31,11 @@ public class SerializableOrderedConsumerConfiguration implements Serializable {
     }
 
     public void setOrderedConsumerConfiguration(OrderedConsumerConfiguration occ) {
-        this.occ = occ;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public OrderedConsumerConfiguration getOrderedConsumerConfiguration() {
-        return occ;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private void writeObject(java.io.ObjectOutputStream out) throws IOException {

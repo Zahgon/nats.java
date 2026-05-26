@@ -10,11 +10,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.support.JsonValue;
-
 import static io.nats.client.support.ApiConstants.*;
 import static io.nats.client.support.JsonValueUtils.readBoolean;
 import static io.nats.client.support.JsonValueUtils.readLong;
@@ -25,12 +23,22 @@ import static io.nats.client.support.JsonValueUtils.readLong;
 public class AccountLimits {
 
     private final long maxMemory;
+
     private final long maxStorage;
-    private final long maxStreams;     // should be an int
-    private final long maxConsumers;   // should be an int
-    private final long maxAckPending;  // should be an int
+
+    // should be an int
+    private final long maxStreams;
+
+    // should be an int
+    private final long maxConsumers;
+
+    // should be an int
+    private final long maxAckPending;
+
     private final long memoryMaxStreamBytes;
+
     private final long storageMaxStreamBytes;
+
     private final boolean maxBytesRequired;
 
     AccountLimits(JsonValue vAccountLimits) {
@@ -49,7 +57,7 @@ public class AccountLimits {
      * @return bytes
      */
     public long getMaxMemory() {
-        return maxMemory;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -57,7 +65,7 @@ public class AccountLimits {
      * @return bytes
      */
     public long getMaxStorage() {
-        return maxStorage;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -65,7 +73,7 @@ public class AccountLimits {
      * @return stream maximum count
      */
     public long getMaxStreams() {
-        return maxStreams;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -73,7 +81,7 @@ public class AccountLimits {
      * @return consumer maximum count
      */
     public long getMaxConsumers() {
-        return maxConsumers;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -81,7 +89,7 @@ public class AccountLimits {
      * @return the configuration count
      */
     public long getMaxAckPending() {
-        return maxAckPending;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -89,7 +97,7 @@ public class AccountLimits {
      * @return bytes
      */
     public long getMemoryMaxStreamBytes() {
-        return memoryMaxStreamBytes;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -97,7 +105,7 @@ public class AccountLimits {
      * @return bytes
      */
     public long getStorageMaxStreamBytes() {
-        return storageMaxStreamBytes;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -105,6 +113,6 @@ public class AccountLimits {
      * @return the flag
      */
     public boolean isMaxBytesRequired() {
-        return maxBytesRequired;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

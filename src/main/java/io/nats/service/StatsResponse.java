@@ -10,16 +10,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.service;
 
 import io.nats.client.support.JsonUtils;
 import io.nats.client.support.JsonValue;
-
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Objects;
-
 import static io.nats.client.support.ApiConstants.ENDPOINTS;
 import static io.nats.client.support.ApiConstants.STARTED;
 import static io.nats.client.support.JsonValueUtils.readDate;
@@ -64,12 +61,14 @@ import static io.nats.client.support.JsonValueUtils.readValue;
  * </code>
  */
 public class StatsResponse extends ServiceResponse {
+
     /**
      * The API response type for StatsResponse
      */
     public static final String TYPE = "io.nats.micro.v1.stats_response";
 
     private final ZonedDateTime started;
+
     private final List<EndpointStats> endpointStatsList;
 
     StatsResponse(ServiceResponse template, ZonedDateTime started, List<EndpointStats> endpointStatsList) {
@@ -90,8 +89,7 @@ public class StatsResponse extends ServiceResponse {
 
     @Override
     protected void subToJson(StringBuilder sb) {
-        JsonUtils.addJsons(sb, ENDPOINTS, endpointStatsList, true);
-        JsonUtils.addField(sb, STARTED, started);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -99,7 +97,7 @@ public class StatsResponse extends ServiceResponse {
      * @return the start time
      */
     public ZonedDateTime getStarted() {
-        return started;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -107,26 +105,16 @@ public class StatsResponse extends ServiceResponse {
      * @return the list of endpoint stats
      */
     public List<EndpointStats> getEndpointStatsList() {
-        return endpointStatsList;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-
-        StatsResponse that = (StatsResponse) o;
-
-        if (!Objects.equals(started, that.started)) return false;
-        return Objects.equals(endpointStatsList, that.endpointStatsList);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (started != null ? started.hashCode() : 0);
-        result = 31 * result + (endpointStatsList != null ? endpointStatsList.hashCode() : 0);
-        return result;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -10,11 +10,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import org.jspecify.annotations.Nullable;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,7 +20,8 @@ import java.util.Map;
  * Represents the Ack Policy of a consumer
  */
 public enum AckPolicy {
-	/**
+
+    /**
      * Messages are acknowledged as soon as the server sends them. Clients do not need to ack.
      */
     None("none"),
@@ -47,7 +46,7 @@ public enum AckPolicy {
 
     @Override
     public String toString() {
-        return policy;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private static final Map<String, AckPolicy> strEnumHash = new HashMap<>();
@@ -65,6 +64,6 @@ public enum AckPolicy {
      */
     @Nullable
     public static AckPolicy get(String value) {
-        return strEnumHash.get(value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

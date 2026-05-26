@@ -10,63 +10,58 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.support;
 
 import io.nats.client.impl.Headers;
-
 import static io.nats.client.support.NatsConstants.*;
 
 public class IncomingHeadersProcessor {
 
     private final int serializedLength;
+
     private Headers headers;
+
     private Status inlineStatus;
 
     public IncomingHeadersProcessor(byte[] serialized) {
-
         // basic validation first to help fail fast
         if (serialized == null || serialized.length == 0) {
             throw new IllegalArgumentException(SERIALIZED_HEADER_CANNOT_BE_NULL_OR_EMPTY);
         }
-
         // is this the correct version
         for (int x = 0; x < HEADER_VERSION_BYTES_LEN; x++) {
             if (serialized[x] != HEADER_VERSION_BYTES[x]) {
                 throw new IllegalArgumentException(INVALID_HEADER_VERSION);
             }
         }
-
         // does the header end properly
         serializedLength = serialized.length;
         Token terminus = new Token(serialized, serializedLength, serializedLength - 2, TokenType.CRLF);
         Token token = new Token(serialized, serializedLength, HEADER_VERSION_BYTES_LEN, null);
-
         if (token.isType(TokenType.SPACE)) {
             token = initStatus(serialized, serializedLength, token);
             if (token.samePoint(terminus)) {
-                return; // status only
+                // status only
+                return;
             }
         }
-
         if (token.isType(TokenType.CRLF)) {
             initHeader(serialized, serializedLength, token);
-        }
-        else {
+        } else {
             throw new IllegalArgumentException(INVALID_HEADER_COMPOSITION);
         }
     }
 
     public int getSerializedLength() {
-        return serializedLength;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public Headers getHeaders() {
-        return headers;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public Status getStatus() {
-        return inlineStatus;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private void initHeader(byte[] serialized, int len, Token tCrlf) {
@@ -80,8 +75,7 @@ public class IncomingHeadersProcessor {
             }
             if (tVal.isType(TokenType.TEXT)) {
                 tCrlf = new Token(serialized, len, tVal, TokenType.CRLF);
-            }
-            else {
+            } else {
                 tVal.mustBe(TokenType.CRLF);
                 tCrlf = tVal;
             }
@@ -101,13 +95,11 @@ public class IncomingHeadersProcessor {
         if (tVal.isType(TokenType.SPACE)) {
             tVal = new Token(serialized, len, tVal, TokenType.TEXT);
             crlf = new Token(serialized, len, tVal, TokenType.CRLF);
-        }
-        else {
+        } else {
             tVal.mustBe(TokenType.CRLF);
             crlf = tVal;
         }
         inlineStatus = new Status(tCode, tVal);
         return crlf;
     }
-
 }

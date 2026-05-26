@@ -20,6 +20,7 @@ import org.jspecify.annotations.Nullable;
 public class KeyResult {
 
     private final String key;
+
     private final Exception e;
 
     /**
@@ -54,7 +55,7 @@ public class KeyResult {
      */
     @Nullable
     public String getKey() {
-        return key;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -63,7 +64,7 @@ public class KeyResult {
      */
     @Nullable
     public Exception getException() {
-        return e;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -71,7 +72,7 @@ public class KeyResult {
      * @return true if the result is a key
      */
     public boolean isKey() {
-        return key != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -79,7 +80,7 @@ public class KeyResult {
      * @return true if the result is an exception
      */
     public boolean isException() {
-        return e != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -87,6 +88,6 @@ public class KeyResult {
      * @return true if this result indicates the consume is done.
      */
     public boolean isDone() {
-        return key == null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

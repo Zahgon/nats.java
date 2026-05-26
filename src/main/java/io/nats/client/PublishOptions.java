@@ -10,12 +10,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client;
 
 import java.time.Duration;
 import java.util.Properties;
-
 import static io.nats.client.support.Validator.*;
 
 /**
@@ -23,6 +21,7 @@ import static io.nats.client.support.Validator.*;
  * Options are created using a {@link PublishOptions.Builder Builder}.
  */
 public class PublishOptions {
+
     /**
      * Use this variable for timeout in publish options.
      */
@@ -41,13 +40,21 @@ public class PublishOptions {
     public static final long UNSET_LAST_SEQUENCE = -1;
 
     private final String pubAckStream;
+
     private final Duration streamTimeout;
+
     private final String expectedStream;
+
     private final String expectedLastMsgId;
+
     private final long expectedLastSeq;
+
     private final long expectedLastSubSeq;
+
     private final String expectedLastSubSeqSubject;
+
     private final String msgId;
+
     private final MessageTtl messageTtl;
 
     private PublishOptions(Builder b) {
@@ -64,17 +71,7 @@ public class PublishOptions {
 
     @Override
     public String toString() {
-        return "PublishOptions{" +
-            "pubAckStream='" + pubAckStream + '\'' +
-            ", streamTimeout=" + streamTimeout +
-            ", expectedStream='" + expectedStream + '\'' +
-            ", expectedLastMsgId='" + expectedLastMsgId + '\'' +
-            ", expectedLastSeq=" + expectedLastSeq +
-            ", expectedLastSubSeq=" + expectedLastSubSeq +
-            ", expectedLastSubSeqSub=" + expectedLastSubSeqSubject +
-            ", msgId='" + msgId + '\'' +
-            ", messageTtl=" + getMessageTtl() +
-            '}';
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -102,7 +99,7 @@ public class PublishOptions {
      * @return the publish timeout.
      */
     public Duration getStreamTimeout() {
-        return streamTimeout;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -110,7 +107,7 @@ public class PublishOptions {
      * @return the stream.
      */
     public String getExpectedStream() {
-        return expectedStream;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -118,7 +115,7 @@ public class PublishOptions {
      * @return the message ID.
      */
     public String getExpectedLastMsgId() {
-        return expectedLastMsgId;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -126,7 +123,7 @@ public class PublishOptions {
      * @return sequence number
      */
     public long getExpectedLastSequence() {
-        return expectedLastSeq;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -134,7 +131,7 @@ public class PublishOptions {
      * @return last subject sequence number
      */
     public long getExpectedLastSubjectSequence() {
-        return expectedLastSubSeq;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -142,7 +139,7 @@ public class PublishOptions {
      * @return the last subject sequence number's limit subject
      */
     public String getExpectedLastSubjectSequenceSubject() {
-        return expectedLastSubSeqSubject;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -150,7 +147,7 @@ public class PublishOptions {
      * @return the message id;
      */
     public String getMessageId() {
-        return this.msgId;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -159,7 +156,7 @@ public class PublishOptions {
      * @return the message ttl string
      */
     public String getMessageTtl() {
-        return messageTtl == null ? null : messageTtl.getTtlString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -167,7 +164,7 @@ public class PublishOptions {
      * @return the builder
      */
     public static Builder builder() {
-        return new Builder();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -177,20 +174,30 @@ public class PublishOptions {
      * prefix PROP_ in this class.
      */
     public static class Builder {
+
         String pubAckStream = null;
+
         Duration streamTimeout = DEFAULT_TIMEOUT;
+
         String expectedStream;
+
         String expectedLastMsgId;
+
         long expectedLastSeq = UNSET_LAST_SEQUENCE;
+
         long expectedLastSubSeq = UNSET_LAST_SEQUENCE;
+
         String expectedLastSubSeqSubject;
+
         String msgId;
+
         MessageTtl messageTtl;
 
         /**
          * Constructs a new publish options Builder with the default values.
          */
-        public Builder() {}
+        public Builder() {
+        }
 
         /**
          * Constructs a builder from properties
@@ -201,7 +208,6 @@ public class PublishOptions {
             if (s != null) {
                 streamTimeout = Duration.parse(s);
             }
-
             s = Options.getPropertyValue(properties, PublishOptions.PROP_STREAM_NAME);
             if (s != null) {
                 pubAckStream = s;
@@ -230,8 +236,7 @@ public class PublishOptions {
          * @return The Builder
          */
         public Builder streamTimeout(Duration timeout) {
-            this.streamTimeout = validateDurationNotRequiredGtOrEqZero(timeout, DEFAULT_TIMEOUT);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -241,8 +246,7 @@ public class PublishOptions {
          * @return The Builder
          */
         public Builder expectedStream(String stream) {
-            expectedStream = validateStreamName(stream, false);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -252,8 +256,7 @@ public class PublishOptions {
          * @return The Builder
          */
         public Builder expectedLastMsgId(String lastMsgId) {
-            expectedLastMsgId = emptyAsNull(lastMsgId);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -262,9 +265,7 @@ public class PublishOptions {
          * @return The Builder
          */
         public Builder expectedLastSequence(long sequence) {
-            // 0 has NO meaning to expectedLastSequence but we except 0 b/c the sequence is really a ulong
-            expectedLastSeq = validateGtEqMinus1(sequence, "Last Sequence");
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -273,8 +274,7 @@ public class PublishOptions {
          * @return The Builder
          */
         public Builder expectedLastSubjectSequence(long sequence) {
-            expectedLastSubSeq = validateGtEqMinus1(sequence, "Last Subject Sequence");
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -285,8 +285,7 @@ public class PublishOptions {
          * @return The Builder
          */
         public Builder expectedLastSubjectSequenceSubject(String expectedLastSubSeqSubject) {
-            this.expectedLastSubSeqSubject = expectedLastSubSeqSubject;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -296,8 +295,7 @@ public class PublishOptions {
          * @return The Builder
          */
         public Builder messageId(String msgId) {
-            this.msgId = emptyAsNull(msgId);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -307,8 +305,7 @@ public class PublishOptions {
          * @return The Builder
          */
         public Builder messageTtlSeconds(int msgTtlSeconds) {
-            this.messageTtl = msgTtlSeconds < 1 ? null : MessageTtl.seconds(msgTtlSeconds);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -319,8 +316,7 @@ public class PublishOptions {
          * @return The Builder
          */
         public Builder messageTtlCustom(String msgTtlCustom) {
-            this.messageTtl = nullOrEmpty(msgTtlCustom) ? null : MessageTtl.custom(msgTtlCustom);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -328,8 +324,7 @@ public class PublishOptions {
          * @return The Builder
          */
         public Builder messageTtlNever() {
-            this.messageTtl = MessageTtl.never();
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -338,8 +333,7 @@ public class PublishOptions {
          * @return The Builder
          */
         public Builder messageTtl(MessageTtl messageTtl) {
-            this.messageTtl = messageTtl;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -362,13 +356,7 @@ public class PublishOptions {
          * @return The Builder
          */
         public Builder clearExpected() {
-            expectedLastMsgId = null;
-            expectedLastSeq = UNSET_LAST_SEQUENCE;
-            expectedLastSubSeq = UNSET_LAST_SEQUENCE;
-            expectedLastSubSeqSubject = null;
-            msgId = null;
-
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -376,7 +364,7 @@ public class PublishOptions {
          * @return publish options
          */
         public PublishOptions build() {
-            return new PublishOptions(this);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

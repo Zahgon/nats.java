@@ -10,15 +10,18 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import io.nats.client.support.NatsUri;
 
 public class ServerPoolEntry {
+
     public final NatsUri nuri;
+
     public final boolean isGossiped;
+
     public int failedAttempts;
+
     public long lastAttempt;
 
     public ServerPoolEntry(NatsUri nuri, boolean isGossiped) {
@@ -28,6 +31,6 @@ public class ServerPoolEntry {
 
     @Override
     public String toString() {
-        return nuri + " " + isGossiped + "/" + failedAttempts;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

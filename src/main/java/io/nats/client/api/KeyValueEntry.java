@@ -17,9 +17,7 @@ import io.nats.client.impl.Headers;
 import io.nats.client.support.NatsKeyValueUtil;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import java.time.ZonedDateTime;
-
 import static io.nats.client.support.NatsJetStreamConstants.MSG_SIZE_HDR;
 import static io.nats.client.support.NatsKeyValueUtil.BucketAndKey;
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
@@ -31,11 +29,17 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public class KeyValueEntry {
 
     private final BucketAndKey bucketAndKey;
+
     private final byte[] value;
+
     private final long dataLen;
+
     private final ZonedDateTime created;
+
     private final long revision;
+
     private final long delta;
+
     private final KeyValueOperation op;
 
     /**
@@ -77,7 +81,7 @@ public class KeyValueEntry {
      */
     @NonNull
     public String getBucket() {
-        return bucketAndKey.bucket;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -86,7 +90,7 @@ public class KeyValueEntry {
      */
     @NonNull
     public String getKey() {
-        return bucketAndKey.key;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -94,7 +98,7 @@ public class KeyValueEntry {
      * @return the value
      */
     public byte @Nullable [] getValue() {
-        return value;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -103,7 +107,7 @@ public class KeyValueEntry {
      */
     @Nullable
     public String getValueAsString() {
-        return value == null ? null : new String(value, UTF_8);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -113,7 +117,7 @@ public class KeyValueEntry {
      */
     @Nullable
     public Long getValueAsLong() {
-        return value == null ? null : Long.parseLong(new String(value, ISO_8859_1));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -121,7 +125,7 @@ public class KeyValueEntry {
      * @return the number of bytes
      */
     public long getDataLen() {
-        return dataLen;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -130,7 +134,7 @@ public class KeyValueEntry {
      */
     @NonNull
     public ZonedDateTime getCreated() {
-        return created;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -138,7 +142,7 @@ public class KeyValueEntry {
      * @return the revision
      */
     public long getRevision() {
-        return revision;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -146,7 +150,7 @@ public class KeyValueEntry {
      * @return the delta
      */
     public long getDelta() {
-        return delta;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -155,20 +159,12 @@ public class KeyValueEntry {
      */
     @NonNull
     public KeyValueOperation getOperation() {
-        return op;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return "KvEntry{" +
-            "bucket='" + bucketAndKey.bucket + '\'' +
-            ", key='" + bucketAndKey.key + '\'' +
-            ", operation=" + op +
-            ", revision=" + revision +
-            ", delta=" + delta +
-            ", dataLen=" + dataLen +
-            ", created=" + created +
-            '}';
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private static byte[] extractValue(byte[] data) {
@@ -185,19 +181,11 @@ public class KeyValueEntry {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        KeyValueEntry that = (KeyValueEntry) o;
-
-        return bucketAndKey.equals(that.bucketAndKey)
-            && revision == that.revision;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int hashCode() {
-        int result = bucketAndKey.hashCode();
-        result = 31 * result + Long.hashCode(revision);
-        return result;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

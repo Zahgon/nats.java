@@ -10,20 +10,22 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.support;
 
 import io.nats.client.support.WebsocketFrameHeader.OpCode;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.security.SecureRandom;
 import java.util.Random;
 
 public class WebsocketOutputStream extends OutputStream {
+
     private OutputStream wrap;
+
     private boolean masked;
+
     private byte[] oneByte = new byte[1];
+
     /**
      * Minimize fragmenting, by using a 1440 buffer size. This buffer is used to
      * store the websocket header + payload for the first write.
@@ -42,9 +44,9 @@ public class WebsocketOutputStream extends OutputStream {
      * of TCP/IPv6 datagram header overhead.
      */
     private byte[] headerBuffer = new byte[1440];
-    private WebsocketFrameHeader header = new WebsocketFrameHeader()
-        .withOp(OpCode.BINARY, true)
-        .withNoMask();
+
+    private WebsocketFrameHeader header = new WebsocketFrameHeader().withOp(OpCode.BINARY, true).withNoMask();
+
     private Random random = new SecureRandom();
 
     public WebsocketOutputStream(OutputStream wrap, boolean masked) {
@@ -54,31 +56,22 @@ public class WebsocketOutputStream extends OutputStream {
 
     @Override
     public void close() throws IOException {
-        // NOTE: Per spec, we should technically wait to receive the close frame,
-        // but we are not in control of the InputStream here...
-        WebsocketFrameHeader header = new WebsocketFrameHeader()
-            .withOp(OpCode.CLOSE, true)
-            .withNoMask()
-            .withPayloadLength(0);
-        int length = header.read(headerBuffer, 0, headerBuffer.length);
-        wrap.write(headerBuffer, 0, length);
-        wrap.close();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void flush() throws IOException {
-        wrap.flush();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void write(byte[] buffer) throws IOException {
-        write(buffer, 0, buffer.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void write(int b) throws IOException {
-        oneByte[0] = (byte)(b & 0xFF);
-        write(oneByte, 0, 1);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -88,28 +81,6 @@ public class WebsocketOutputStream extends OutputStream {
      */
     @Override
     public void write(byte[] buffer, int offset, int length) throws IOException {
-        header.withPayloadLength(length);
-        if (masked) {
-            header.withMask(random.nextInt());
-        }
-        int headerBufferOffset = header.read(headerBuffer, 0, headerBuffer.length);
-        int consumed = Math.min(length, headerBuffer.length - headerBufferOffset);
-        System.arraycopy(buffer, offset, headerBuffer, headerBufferOffset, consumed);
-
-        header.filterPayload(headerBuffer, headerBufferOffset, consumed);
-        wrap.write(headerBuffer, 0, headerBufferOffset + consumed);
-        if (consumed < length) {
-            // NOTE: We could perform a "mark" operation before filtering the
-            // payload which saves the payloadLength and maskingKeyOffset, then
-            // perform a "resetMark" operation after writing the masked buffer
-            // and finally re-applying the filter in order to preserve the
-            // original values of the bytes. However, there appears to be no
-            // code which relies on the bytes in the buffer to be preserved,
-            // so we are keeping things efficient by not performing these
-            // operations.
-            header.filterPayload(buffer, offset + consumed, length - consumed);
-            wrap.write(buffer, offset + consumed, length - consumed);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

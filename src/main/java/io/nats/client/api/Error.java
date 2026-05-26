@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.support.JsonSerializable;
@@ -18,13 +17,13 @@ import io.nats.client.support.JsonValue;
 import io.nats.client.support.JsonValueUtils;
 import io.nats.client.support.Status;
 import org.jspecify.annotations.NonNull;
-
 import static io.nats.client.support.ApiConstants.*;
 
 /**
  * Error returned from an api request.
  */
 public class Error implements JsonSerializable {
+
     /**
      * represents an error code that was not set / provided
      */
@@ -33,7 +32,7 @@ public class Error implements JsonSerializable {
     private final JsonValue jv;
 
     static Error optionalInstance(JsonValue vError) {
-        return vError == null ? null : new Error(vError);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     Error(JsonValue jv) {
@@ -45,23 +44,19 @@ public class Error implements JsonSerializable {
     }
 
     Error(int code, int apiErrorCode, String desc) {
-        jv = JsonValueUtils.mapBuilder()
-            .put(CODE, code)
-            .put(ERR_CODE, apiErrorCode)
-            .put(DESCRIPTION, desc)
-            .toJsonValue();
+        jv = JsonValueUtils.mapBuilder().put(CODE, code).put(ERR_CODE, apiErrorCode).put(DESCRIPTION, desc).toJsonValue();
     }
 
     @Override
     @NonNull
     public String toJson() {
-        return jv.toJson();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     @NonNull
     public JsonValue toJsonValue() {
-        return jv;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -69,7 +64,7 @@ public class Error implements JsonSerializable {
      * @return the code
      */
     public int getCode() {
-        return JsonValueUtils.readInteger(jv, CODE, NOT_SET);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -77,7 +72,7 @@ public class Error implements JsonSerializable {
      * @return the code
      */
     public int getApiErrorCode() {
-        return JsonValueUtils.readInteger(jv, ERR_CODE, NOT_SET);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -86,23 +81,12 @@ public class Error implements JsonSerializable {
      */
     @NonNull
     public String getDescription() {
-        return JsonValueUtils.readString(jv, DESCRIPTION, "Unknown JetStream Error");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        int apiErrorCode = getApiErrorCode();
-        int code = getCode();
-        if (apiErrorCode == NOT_SET) {
-            if (code == NOT_SET) {
-                return getDescription();
-            }
-            return getDescription() + " (" + code + ")";
-        }
-        if (code == NOT_SET) {
-            return getDescription();
-        }
-        return getDescription() + " [" + apiErrorCode + "]";
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -112,13 +96,7 @@ public class Error implements JsonSerializable {
      */
     @NonNull
     public static Error convert(Status status) {
-        switch (status.getCode()) {
-            case 404:
-                return JsNoMessageFoundErr;
-            case 408:
-                return JsBadRequestErr;
-        }
-        return new Error(status.getCode(), NOT_SET, status.getMessage());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**

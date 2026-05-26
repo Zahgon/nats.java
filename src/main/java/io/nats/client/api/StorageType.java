@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import org.jspecify.annotations.Nullable;
@@ -19,9 +18,14 @@ import org.jspecify.annotations.Nullable;
  * Stream storage types.
  */
 public enum StorageType {
-    /** File Storage */
+
+    /**
+     * File Storage
+     */
     File("file"),
-    /** Memory Storage */
+    /**
+     * Memory Storage
+     */
     Memory("memory");
 
     private final String policy;
@@ -32,7 +36,7 @@ public enum StorageType {
 
     @Override
     public String toString() {
-        return policy;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -42,8 +46,6 @@ public enum StorageType {
      */
     @Nullable
     public static StorageType get(String value) {
-        if (File.policy.equalsIgnoreCase(value)) { return File; }
-        if (Memory.policy.equalsIgnoreCase(value)) { return Memory; }
-        return null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

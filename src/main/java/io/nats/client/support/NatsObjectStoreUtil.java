@@ -10,11 +10,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.support;
 
 import io.nats.client.impl.Headers;
-
 import static io.nats.client.support.Encoding.base64BasicEncodeToString;
 import static io.nats.client.support.NatsConstants.DOT;
 import static io.nats.client.support.NatsJetStreamConstants.ROLLUP_HDR;
@@ -22,46 +20,54 @@ import static io.nats.client.support.NatsJetStreamConstants.ROLLUP_HDR_SUBJECT;
 
 public abstract class NatsObjectStoreUtil {
 
-    private NatsObjectStoreUtil() {} /* ensures cannot be constructed */
+    private NatsObjectStoreUtil() {
+    }
 
-    public static final int DEFAULT_CHUNK_SIZE = 128 * 1024; // 128k
+    /* ensures cannot be constructed */
+    // 128k
+    public static final int DEFAULT_CHUNK_SIZE = 128 * 1024;
+
     public static final String OBJ_STREAM_PREFIX = "OBJ_";
+
     public static final int OBJ_STREAM_PREFIX_LEN = OBJ_STREAM_PREFIX.length();
+
     public static final String OBJ_SUBJECT_PREFIX = "$O.";
+
     public static final String OBJ_SUBJECT_SUFFIX = ".>";
+
     public static final String OBJ_META_PART = ".M";
+
     public static final String OBJ_CHUNK_PART = ".C";
 
     public static String extractBucketName(String streamName) {
-        return streamName.substring(OBJ_STREAM_PREFIX_LEN);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static String toStreamName(String bucketName) {
-        return OBJ_STREAM_PREFIX + bucketName;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static String toMetaStreamSubject(String bucketName) {
-        return OBJ_SUBJECT_PREFIX + bucketName + OBJ_META_PART + OBJ_SUBJECT_SUFFIX;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static String toChunkStreamSubject(String bucketName) {
-        return OBJ_SUBJECT_PREFIX + bucketName + OBJ_CHUNK_PART + OBJ_SUBJECT_SUFFIX;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static String toMetaPrefix(String bucketName) {
-        return OBJ_SUBJECT_PREFIX + bucketName + OBJ_META_PART + DOT;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static String toChunkPrefix(String bucketName) {
-        return OBJ_SUBJECT_PREFIX + bucketName + OBJ_CHUNK_PART + DOT;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static String encodeForSubject(String name) {
-        return base64BasicEncodeToString(name);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static Headers getMetaHeaders() {
-        return new Headers()
-            .put(ROLLUP_HDR, ROLLUP_HDR_SUBJECT);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

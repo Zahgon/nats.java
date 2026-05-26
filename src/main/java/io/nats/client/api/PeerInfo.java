@@ -10,14 +10,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.support.JsonValue;
 import org.jspecify.annotations.NonNull;
-
 import java.time.Duration;
-
 import static io.nats.client.support.ApiConstants.*;
 import static io.nats.client.support.JsonValueUtils.*;
 
@@ -27,9 +24,13 @@ import static io.nats.client.support.JsonValueUtils.*;
 public class PeerInfo {
 
     private final String name;
+
     private final boolean current;
+
     private final boolean offline;
+
     private final Duration active;
+
     private final long lag;
 
     PeerInfo(JsonValue vPeerInfo) {
@@ -46,7 +47,7 @@ public class PeerInfo {
      */
     @NonNull
     public String getName() {
-        return name;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -54,7 +55,7 @@ public class PeerInfo {
      * @return if is current
      */
     public boolean isCurrent() {
-        return current;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -62,7 +63,7 @@ public class PeerInfo {
      * @return if is offline
      */
     public boolean isOffline() {
-        return offline;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -71,7 +72,7 @@ public class PeerInfo {
      */
     @NonNull
     public Duration getActive() {
-        return active;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -79,6 +80,6 @@ public class PeerInfo {
      * @return the lag
      */
     public long getLag() {
-        return lag;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.support.JsonSerializable;
@@ -18,10 +17,8 @@ import io.nats.client.support.JsonValue;
 import io.nats.client.support.JsonValueUtils;
 import io.nats.client.support.Validator;
 import org.jspecify.annotations.NonNull;
-
 import java.util.List;
 import java.util.Objects;
-
 import static io.nats.client.support.ApiConstants.DEST;
 import static io.nats.client.support.ApiConstants.SRC;
 import static io.nats.client.support.JsonUtils.*;
@@ -31,15 +28,17 @@ import static io.nats.client.support.JsonValueUtils.readString;
  * SubjectTransform
  */
 public class SubjectTransform implements JsonSerializable {
+
     private final String source;
+
     private final String destination;
 
     static SubjectTransform optionalInstance(JsonValue vSubjectTransform) {
-        return vSubjectTransform == null ? null : new SubjectTransform(vSubjectTransform);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     static List<SubjectTransform> optionalListOf(JsonValue vSubjectTransforms) {
-        return JsonValueUtils.optionalListOf(vSubjectTransforms, SubjectTransform::new);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     SubjectTransform(JsonValue vSubjectTransform) {
@@ -63,7 +62,7 @@ public class SubjectTransform implements JsonSerializable {
      */
     @NonNull
     public String getSource() {
-        return source;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -72,16 +71,13 @@ public class SubjectTransform implements JsonSerializable {
      */
     @NonNull
     public String getDestination() {
-        return destination;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     @NonNull
     public String toJson() {
-        StringBuilder sb = beginJson();
-        addField(sb, SRC, source);
-        addField(sb, DEST, destination);
-        return endJson(sb).toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -89,20 +85,23 @@ public class SubjectTransform implements JsonSerializable {
      * @return the builder.
      */
     public static Builder builder() {
-        return new Builder();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Placement can be created using a Builder.
      */
     public static class Builder {
+
         private String source;
+
         private String destination;
 
         /**
          * Construct an instance of the builder
          */
-        public Builder() {}
+        public Builder() {
+        }
 
         /**
          * Set the Published Subject-matching filter
@@ -110,17 +109,16 @@ public class SubjectTransform implements JsonSerializable {
          * @return the builder
          */
         public Builder source(String source) {
-            this.source = source;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
+
         /**
          * Set the SubjectTransform Subject template
          * @param destination the destination
          * @return the builder
          */
         public Builder destination(String destination) {
-            this.destination = destination;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -128,33 +126,22 @@ public class SubjectTransform implements JsonSerializable {
          * @return the Placement
          */
         public SubjectTransform build() {
-            return new SubjectTransform(source, destination);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        SubjectTransform that = (SubjectTransform) o;
-
-        if (!Objects.equals(source, that.source)) return false;
-        return Objects.equals(destination, that.destination);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int hashCode() {
-        int result = source != null ? source.hashCode() : 0;
-        result = 31 * result + (destination != null ? destination.hashCode() : 0);
-        return result;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return "SubjectTransform{" +
-            "source='" + source + '\'' +
-            ", destination='" + destination + '\'' +
-            '}';
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

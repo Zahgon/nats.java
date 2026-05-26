@@ -10,13 +10,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client;
 
 /**
  * Consume Options are provided to customize the consume operation.
  */
 public class ConsumeOptions extends BaseConsumeOptions {
+
     /**
      * An instance of ConsumeOptions representing the default consume options
      */
@@ -31,7 +31,7 @@ public class ConsumeOptions extends BaseConsumeOptions {
      * @return the initial batch size in messages
      */
     public int getBatchSize() {
-        return messages;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -39,7 +39,7 @@ public class ConsumeOptions extends BaseConsumeOptions {
      * @return the initial batch size in bytes
      */
     public long getBatchBytes() {
-        return bytes;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -47,19 +47,23 @@ public class ConsumeOptions extends BaseConsumeOptions {
      * @return a builder
      */
     public static Builder builder() {
-        return new Builder();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * The Consume Options Builder
      */
     public static class Builder extends BaseConsumeOptions.Builder<Builder, ConsumeOptions> {
+
         /**
          * Construct a Consume Options Builder
          */
-        public Builder() {}
+        public Builder() {
+        }
 
-        protected Builder getThis() { return this; }
+        protected Builder getThis() {
+            throw new UnsupportedOperationException("STUB: not implemented");
+        }
 
         /**
          * Set the initial batch size in messages and remove any previously set {@link #batchBytes(long)} constraint.
@@ -69,8 +73,7 @@ public class ConsumeOptions extends BaseConsumeOptions {
          * @return the builder
          */
         public Builder batchSize(int batchSize) {
-            messages(batchSize);
-            return bytes(-1);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -84,8 +87,7 @@ public class ConsumeOptions extends BaseConsumeOptions {
          * @return the builder
          */
         public Builder batchBytes(long batchBytes) {
-            messages(-1);
-            return bytes(batchBytes);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -93,7 +95,7 @@ public class ConsumeOptions extends BaseConsumeOptions {
          * @return a ConsumeOptions instance
          */
         public ConsumeOptions build() {
-            return new ConsumeOptions(this);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

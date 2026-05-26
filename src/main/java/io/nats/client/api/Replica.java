@@ -10,12 +10,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.support.JsonValue;
 import io.nats.client.support.JsonValueUtils;
-
 import java.util.List;
 
 /**
@@ -24,7 +22,7 @@ import java.util.List;
 public class Replica extends PeerInfo {
 
     static List<Replica> optionalListOf(JsonValue vReplicas) {
-        return JsonValueUtils.optionalListOf(vReplicas, Replica::new);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     Replica(JsonValue vReplica) {
@@ -33,12 +31,6 @@ public class Replica extends PeerInfo {
 
     @Override
     public String toString() {
-        return "Replica{" +
-            "name='" + getName() + '\'' +
-            ", current=" + isCurrent() +
-            ", offline=" + isOffline() +
-            ", active=" + getActive() +
-            ", lag=" + getLag() +
-            '}';
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

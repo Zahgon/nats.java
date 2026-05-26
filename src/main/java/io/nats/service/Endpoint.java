@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.service;
 
 import io.nats.client.support.JsonSerializable;
@@ -18,11 +17,9 @@ import io.nats.client.support.JsonUtils;
 import io.nats.client.support.JsonValue;
 import io.nats.client.support.Validator;
 import org.jspecify.annotations.NonNull;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-
 import static io.nats.client.support.ApiConstants.*;
 import static io.nats.client.support.JsonUtils.endJson;
 import static io.nats.client.support.JsonValueUtils.readString;
@@ -38,14 +35,18 @@ import static io.nats.client.support.Validator.validateIsRestrictedTerm;
  * </p>
  */
 public class Endpoint implements JsonSerializable {
+
     /**
      * The name of the default queue group
      */
     public static final String DEFAULT_QGROUP = "q";
 
     private final String name;
+
     private final String subject;
+
     private final String queueGroup;
+
     private final Map<String, String> metadata;
 
     /**
@@ -101,13 +102,11 @@ public class Endpoint implements JsonSerializable {
             this.name = validateIsRestrictedTerm(name, "Endpoint Name", true);
             if (subject == null) {
                 this.subject = this.name;
-            }
-            else {
+            } else {
                 this.subject = Validator.validateSubjectTermStrict(subject, "Endpoint Subject", false);
             }
             this.queueGroup = queueGroup == null ? null : Validator.validateSubjectTermStrict(queueGroup, "Endpoint Queue Group", true);
-        }
-        else {
+        } else {
             this.name = name;
             this.subject = subject;
             this.queueGroup = queueGroup;
@@ -129,17 +128,12 @@ public class Endpoint implements JsonSerializable {
     @Override
     @NonNull
     public String toJson() {
-        StringBuilder sb = JsonUtils.beginJson();
-        JsonUtils.addField(sb, NAME, name);
-        JsonUtils.addField(sb, SUBJECT, subject);
-        JsonUtils.addField(sb, QUEUE_GROUP, queueGroup);
-        JsonUtils.addField(sb, METADATA, metadata);
-        return endJson(sb).toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return JsonUtils.toKey(getClass()) + toJson();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -147,7 +141,7 @@ public class Endpoint implements JsonSerializable {
      * @return the name
      */
     public String getName() {
-        return name;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -155,7 +149,7 @@ public class Endpoint implements JsonSerializable {
      * @return the subject
      */
     public String getSubject() {
-        return subject;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -163,7 +157,7 @@ public class Endpoint implements JsonSerializable {
      * @return the queueGroup
      */
     public String getQueueGroup() {
-        return queueGroup;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -171,7 +165,7 @@ public class Endpoint implements JsonSerializable {
      * @return the copy of metadata
      */
     public Map<String, String> getMetadata() {
-        return metadata == null ? null : new HashMap<>(metadata);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -179,22 +173,27 @@ public class Endpoint implements JsonSerializable {
      * @return the instance
      */
     public static Builder builder() {
-        return new Builder();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Build an Endpoint using a fluent builder.
      */
     public static class Builder {
+
         private String name;
+
         private String subject;
+
         private String queueGroup = DEFAULT_QGROUP;
+
         private Map<String, String> metadata;
 
         /**
          * Construct the builder
          */
-        public Builder() {}
+        public Builder() {
+        }
 
         /**
          * Copy the Endpoint, replacing all existing endpoint information.
@@ -202,15 +201,7 @@ public class Endpoint implements JsonSerializable {
          * @return the Endpoint.Builder
          */
         public Builder endpoint(Endpoint endpoint) {
-            name(endpoint.getName())
-                .subject(endpoint.getSubject())
-                .metadata(endpoint.getMetadata());
-
-            if (endpoint.queueGroup == null) {
-                return noQueueGroup();
-            }
-
-            return queueGroup(endpoint.getQueueGroup());
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -219,8 +210,7 @@ public class Endpoint implements JsonSerializable {
          * @return the Endpoint.Builder
          */
         public Builder name(String name) {
-            this.name = name;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -231,8 +221,7 @@ public class Endpoint implements JsonSerializable {
          * @return the Endpoint.Builder
          */
         public Builder queueGroup(String queueGroup) {
-            this.queueGroup = queueGroup == null ? DEFAULT_QGROUP : queueGroup;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -240,8 +229,7 @@ public class Endpoint implements JsonSerializable {
          * @return the Endpoint.Builder
          */
         public Builder noQueueGroup() {
-            this.queueGroup = null;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -250,8 +238,7 @@ public class Endpoint implements JsonSerializable {
          * @return the Endpoint.Builder
          */
         public Builder subject(String subject) {
-            this.subject = subject;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -260,13 +247,7 @@ public class Endpoint implements JsonSerializable {
          * @return the Endpoint.Builder
          */
         public Builder metadata(Map<String, String> metadata) {
-            if (metadata == null || metadata.isEmpty()) {
-                this.metadata = null;
-            }
-            else {
-                this.metadata = new HashMap<>(metadata);
-            }
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -274,29 +255,17 @@ public class Endpoint implements JsonSerializable {
          * @return the Endpoint instance
          */
         public Endpoint build() {
-            return new Endpoint(this);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Endpoint endpoint = (Endpoint) o;
-
-        if (!Objects.equals(name, endpoint.name)) return false;
-        if (!Objects.equals(subject, endpoint.subject)) return false;
-        if (!Objects.equals(queueGroup, endpoint.queueGroup)) return false;
-        return Objects.equals(metadata, endpoint.metadata);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int hashCode() {
-        int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + (subject != null ? subject.hashCode() : 0);
-        result = 31 * result + (queueGroup != null ? queueGroup.hashCode() : 0);
-        result = 31 * result + (metadata != null ? metadata.hashCode() : 0);
-        return result;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

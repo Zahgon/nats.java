@@ -10,13 +10,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client;
 
 import io.nats.client.support.NatsUri;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import java.util.List;
 
 /**
@@ -72,7 +70,7 @@ public interface ServerPool {
      */
     @Nullable
     default List<String> resolveHostToIps(@NonNull String host, boolean maxOneResult, boolean includeIPV6) {
-        return resolveHostToIps(host);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**

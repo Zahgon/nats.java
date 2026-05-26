@@ -10,17 +10,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.support.JsonValue;
 import io.nats.client.support.JsonValueUtils;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import java.time.ZonedDateTime;
 import java.util.List;
-
 import static io.nats.client.support.ApiConstants.*;
 import static io.nats.client.support.JsonValueUtils.readDate;
 
@@ -28,12 +25,15 @@ import static io.nats.client.support.JsonValueUtils.readDate;
  * Status of a specific consumer priority group
  */
 public class PriorityGroupState {
+
     private final String group;
+
     private final String pinnedClientId;
+
     private final ZonedDateTime pinnedTime;
 
     static List<PriorityGroupState> optionalListOf(JsonValue vpgStates) {
-        return JsonValueUtils.optionalListOf(vpgStates, PriorityGroupState::new);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     PriorityGroupState(JsonValue vpgState) {
@@ -48,7 +48,7 @@ public class PriorityGroupState {
      */
     @NonNull
     public String getGroup() {
-        return group;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -57,7 +57,7 @@ public class PriorityGroupState {
      */
     @Nullable
     public String getPinnedClientId() {
-        return pinnedClientId;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -66,15 +66,11 @@ public class PriorityGroupState {
      */
     @Nullable
     public ZonedDateTime getPinnedTime() {
-        return pinnedTime;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return "PriorityGroupState{" +
-            "group='" + group + '\'' +
-            ", pinnedClientId='" + pinnedClientId + '\'' +
-            ", pinnedTime=" + pinnedTime +
-            '}';
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

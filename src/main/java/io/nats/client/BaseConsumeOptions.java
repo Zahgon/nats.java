@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client;
 
 import io.nats.client.support.JsonParseException;
@@ -18,7 +17,6 @@ import io.nats.client.support.JsonParser;
 import io.nats.client.support.JsonSerializable;
 import io.nats.client.support.JsonValue;
 import org.jspecify.annotations.NonNull;
-
 import static io.nats.client.support.ApiConstants.*;
 import static io.nats.client.support.JsonUtils.*;
 import static io.nats.client.support.JsonValueUtils.*;
@@ -31,30 +29,60 @@ import static io.nats.client.support.JsonValueUtils.readLong;
  * fetch operate. It is the base class for ConsumeOptions and FetchConsumeOptions.
  */
 public class BaseConsumeOptions implements JsonSerializable {
-    /** constant for default message count */
+
+    /**
+     * constant for default message count
+     */
     public static final int DEFAULT_MESSAGE_COUNT = 500;
-    /** constant for default message count when bytes */
+
+    /**
+     * constant for default message count when bytes
+     */
     public static final int DEFAULT_MESSAGE_COUNT_WHEN_BYTES = 1_000_000;
-    /** constant for default threshold percent */
+
+    /**
+     * constant for default threshold percent
+     */
     public static final int DEFAULT_THRESHOLD_PERCENT = 25;
-    /** constant for default expires in millis */
+
+    /**
+     * constant for default expires in millis
+     */
     public static final long DEFAULT_EXPIRES_IN_MILLIS = 30000;
-    /** constant for min expires mills */
+
+    /**
+     * constant for min expires mills
+     */
     public static final long MIN_EXPIRES_MILLS = 1000;
-    /** constant for max heartbeat millis */
+
+    /**
+     * constant for max heartbeat millis
+     */
     public static final long MAX_HEARTBEAT_MILLIS = 30000;
-    /** constant for max idle heartbeat percent */
+
+    /**
+     * constant for max idle heartbeat percent
+     */
     public static final int MAX_IDLE_HEARTBEAT_PERCENT = 50;
 
     protected final int messages;
+
     protected final long bytes;
+
     protected final long expiresIn;
+
     protected final int thresholdPercent;
+
     protected final long idleHeartbeat;
+
     protected final String group;
+
     protected final int priority;
+
     protected final long minPending;
+
     protected final long minAckPending;
+
     protected final boolean raiseStatusWarnings;
 
     protected BaseConsumeOptions(Builder<?, ?> b) {
@@ -62,18 +90,14 @@ public class BaseConsumeOptions implements JsonSerializable {
         bytes = b.bytes;
         if (bytes > 0) {
             messages = b.messages < 0 ? DEFAULT_MESSAGE_COUNT_WHEN_BYTES : b.messages;
-        }
-        else {
+        } else {
             messages = b.messages < 0 ? DEFAULT_MESSAGE_COUNT : b.messages;
         }
-
         // Validation for expiresIn, if any extra, is handled in subclass builder
         expiresIn = b.expiresIn;
         thresholdPercent = b.thresholdPercent;
-
         // 3. idleHeartbeat is part of base and is calculated.
         idleHeartbeat = Math.min(MAX_HEARTBEAT_MILLIS, expiresIn * MAX_IDLE_HEARTBEAT_PERCENT / 100);
-
         this.group = b.group;
         this.priority = b.priority;
         this.minPending = b.minPending;
@@ -84,29 +108,19 @@ public class BaseConsumeOptions implements JsonSerializable {
     @Override
     @NonNull
     public String toJson() {
-        StringBuilder sb = beginJson();
-        addField(sb, MESSAGES, messages);
-        addField(sb, BYTES, bytes);
-        addField(sb, EXPIRES_IN, expiresIn);
-        addField(sb, IDLE_HEARTBEAT, idleHeartbeat);
-        addField(sb, THRESHOLD_PERCENT, thresholdPercent);
-        addField(sb, GROUP, group);
-        addField(sb, PRIORITY, priority);
-        addField(sb, MIN_PENDING, minPending);
-        addField(sb, MIN_ACK_PENDING, minAckPending);
-        addFldWhenTrue(sb, RAISE_STATUS_WARNINGS, raiseStatusWarnings);
-        subclassSpecificToJson(sb);
-        return endJson(sb).toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    protected void subclassSpecificToJson(StringBuilder sb) {}
+    protected void subclassSpecificToJson(StringBuilder sb) {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
     /**
      * Get the expires setting
      * @return the expires, in milliseconds
      */
     public long getExpiresInMillis() {
-        return expiresIn;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -114,7 +128,7 @@ public class BaseConsumeOptions implements JsonSerializable {
      * @return the idle heartbeat in milliseconds
      */
     public long getIdleHeartbeat() {
-        return idleHeartbeat;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -122,7 +136,7 @@ public class BaseConsumeOptions implements JsonSerializable {
      * @return the threshold percent
      */
     public int getThresholdPercent() {
-        return thresholdPercent;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -130,7 +144,7 @@ public class BaseConsumeOptions implements JsonSerializable {
      * @return true if should raise status warnings
      */
     public boolean raiseStatusWarnings() {
-        return raiseStatusWarnings;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -140,7 +154,7 @@ public class BaseConsumeOptions implements JsonSerializable {
      * @return the priority group
      */
     public String getGroup() {
-        return group;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -148,7 +162,7 @@ public class BaseConsumeOptions implements JsonSerializable {
      * @return the priority
      */
     public int getPriority() {
-        return priority;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -157,7 +171,7 @@ public class BaseConsumeOptions implements JsonSerializable {
      * @return the min pending
      */
     public long getMinPending() {
-        return minPending;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -165,18 +179,27 @@ public class BaseConsumeOptions implements JsonSerializable {
      * @return the min ack pending
      */
     public long getMinAckPending() {
-        return minAckPending;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected static abstract class Builder<B, CO> {
+
         protected int messages = -1;
+
         protected long bytes = 0;
+
         protected int thresholdPercent = DEFAULT_THRESHOLD_PERCENT;
+
         protected long expiresIn = DEFAULT_EXPIRES_IN_MILLIS;
+
         protected boolean raiseStatusWarnings = false;
+
         protected String group;
+
         protected int priority;
+
         protected long minPending = -1;
+
         protected long minAckPending = -1;
 
         protected abstract B getThis();
@@ -188,7 +211,7 @@ public class BaseConsumeOptions implements JsonSerializable {
          * @throws JsonParseException if there is a problem parsing the json
          */
         public B json(String json) throws JsonParseException {
-            return jsonValue(JsonParser.parse(json));
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -197,26 +220,15 @@ public class BaseConsumeOptions implements JsonSerializable {
          * @return the builder
          */
         public B jsonValue(JsonValue jsonValue) {
-            messages(readInteger(jsonValue, MESSAGES, -1));
-            bytes(readLong(jsonValue, BYTES, -1));
-            expiresIn(readLong(jsonValue, EXPIRES_IN, DEFAULT_EXPIRES_IN_MILLIS));
-            thresholdPercent(readInteger(jsonValue, THRESHOLD_PERCENT, -1));
-            raiseStatusWarnings(readBoolean(jsonValue, RAISE_STATUS_WARNINGS, false));
-            group(readStringEmptyAsNull(jsonValue, GROUP));
-            priority(readInteger(jsonValue, PRIORITY, 0));
-            minPending(readLong(jsonValue, MIN_PENDING, -1));
-            minAckPending(readLong(jsonValue, MIN_ACK_PENDING, -1));
-            return getThis();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         protected B messages(int messages) {
-            this.messages = messages < 1 ? -1 : messages;
-            return getThis();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         protected B bytes(long bytes) {
-            this.bytes = bytes < 1 ? 0 : bytes;
-            return getThis();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -229,16 +241,7 @@ public class BaseConsumeOptions implements JsonSerializable {
          * @return the builder
          */
         public B expiresIn(long expiresInMillis) {
-            if (expiresInMillis < 1) {
-                expiresIn = DEFAULT_EXPIRES_IN_MILLIS;
-            }
-            else if (expiresInMillis < MIN_EXPIRES_MILLS) {
-                throw new IllegalArgumentException("Expires must be greater than or equal to " + MIN_EXPIRES_MILLS);
-            }
-            else {
-                expiresIn = expiresInMillis;
-            }
-            return getThis();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -255,8 +258,7 @@ public class BaseConsumeOptions implements JsonSerializable {
          * @return the builder
          */
         public B thresholdPercent(int thresholdPercent) {
-            this.thresholdPercent = thresholdPercent < 1 ? DEFAULT_THRESHOLD_PERCENT : Math.min(100, thresholdPercent);
-            return getThis();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -265,8 +267,7 @@ public class BaseConsumeOptions implements JsonSerializable {
          * @return the builder
          */
         public B raiseStatusWarnings() {
-            this.raiseStatusWarnings = true;
-            return getThis();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -276,8 +277,7 @@ public class BaseConsumeOptions implements JsonSerializable {
          * @return the builder
          */
         public B raiseStatusWarnings(boolean raiseStatusWarnings) {
-            this.raiseStatusWarnings = raiseStatusWarnings;
-            return getThis();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -286,8 +286,7 @@ public class BaseConsumeOptions implements JsonSerializable {
          * @return Builder
          */
         public B group(String group) {
-            this.group = group;
-            return getThis();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -296,8 +295,7 @@ public class BaseConsumeOptions implements JsonSerializable {
          * @return Builder
          */
         public B priority(int priority) {
-            this.priority = priority;
-            return getThis();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -306,8 +304,7 @@ public class BaseConsumeOptions implements JsonSerializable {
          * @return the builder
          */
         public B minPending(long minPending) {
-            this.minPending = minPending < 1 ? -1 : minPending;
-            return getThis();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -316,8 +313,7 @@ public class BaseConsumeOptions implements JsonSerializable {
          * @return the builder
          */
         public B minAckPending(long minAckPending) {
-            this.minAckPending = minAckPending < 1 ? -1 : minAckPending;
-            return getThis();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**

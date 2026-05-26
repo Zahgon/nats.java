@@ -10,23 +10,27 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import io.nats.client.JetStreamApiException;
 import io.nats.client.MessageConsumer;
 import io.nats.client.PullRequestOptions;
 import io.nats.client.api.ConsumerInfo;
-
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 abstract class NatsMessageConsumerBase implements MessageConsumer, PullManagerObserver {
+
     protected NatsJetStreamPullSubscription sub;
+
     protected PullMessageManager pmm;
+
     protected final AtomicBoolean stopped;
+
     protected final AtomicBoolean finished;
+
     protected ConsumerInfo cachedConsumerInfo;
+
     protected String consumerName;
 
     NatsMessageConsumerBase(ConsumerInfo cachedConsumerInfo) {
@@ -39,35 +43,29 @@ abstract class NatsMessageConsumerBase implements MessageConsumer, PullManagerOb
     }
 
     void setConsumerName(String consumerName) {
-        this.consumerName = consumerName;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void initSub(NatsJetStreamPullSubscription sub, boolean clearCachedConsumerInfo) {
-        this.sub = sub;
-        this.consumerName = sub.getConsumerName();
-        if (clearCachedConsumerInfo) {
-            cachedConsumerInfo = null;
-        }
-        pmm = (PullMessageManager)sub.manager;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void rePull() {
-        // may or may not be implemented
-        // fetch does not implement
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * {@inheritDoc}
      */
     public boolean isStopped() {
-        return stopped.get();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * {@inheritDoc}
      */
     public boolean isFinished() {
-        return finished.get();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -75,10 +73,7 @@ abstract class NatsMessageConsumerBase implements MessageConsumer, PullManagerOb
      */
     @Override
     public String getConsumerName() {
-        if (consumerName == null && cachedConsumerInfo != null) {
-            consumerName = cachedConsumerInfo.getName();
-        }
-        return consumerName;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -86,11 +81,7 @@ abstract class NatsMessageConsumerBase implements MessageConsumer, PullManagerOb
      */
     @Override
     public ConsumerInfo getConsumerInfo() throws IOException, JetStreamApiException {
-        if (cachedConsumerInfo == null) {
-            cachedConsumerInfo = sub.getConsumerInfo();
-            consumerName = cachedConsumerInfo.getName();
-        }
-        return cachedConsumerInfo;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -98,7 +89,7 @@ abstract class NatsMessageConsumerBase implements MessageConsumer, PullManagerOb
      */
     @Override
     public ConsumerInfo getCachedConsumerInfo() {
-        return cachedConsumerInfo;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -106,46 +97,24 @@ abstract class NatsMessageConsumerBase implements MessageConsumer, PullManagerOb
      */
     @Override
     public void stop() {
-        stopped.set(true);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void close() throws Exception {
-        stopped.set(true);
-        shutdownSub();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void fullClose() {
-        stopped.set(true);
-        finished.set(true);
-        shutdownSub();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void shutdownSub() {
-        try {
-            if (sub.isActive()) {
-                if (sub.getNatsDispatcher() != null) {
-                    sub.getDispatcher().unsubscribe(sub);
-                }
-                else {
-                    sub.unsubscribe();
-                }
-            }
-        }
-        catch (Throwable ignore) {
-            // nothing to do
-        }
-        if (pmm != null) {
-            try {
-                pmm.shutdownHeartbeatTimer();
-            }
-            catch (Throwable ignore) {
-                // nothing to do
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     static class PinnablePullRequestOptions extends PullRequestOptions {
+
         final String pinId;
 
         public PinnablePullRequestOptions(String pinId, Builder b) {
@@ -155,7 +124,7 @@ abstract class NatsMessageConsumerBase implements MessageConsumer, PullManagerOb
 
         @Override
         protected String getPinId() {
-            return pinId;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

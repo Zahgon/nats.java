@@ -10,18 +10,15 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.support.JsonSerializable;
 import io.nats.client.support.JsonValue;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import static io.nats.client.support.ApiConstants.CLUSTER;
 import static io.nats.client.support.ApiConstants.TAGS;
 import static io.nats.client.support.JsonUtils.*;
@@ -33,11 +30,13 @@ import static io.nats.client.support.Validator.nullOrEmpty;
  * Placement directives to consider when placing replicas of a stream
  */
 public class Placement implements JsonSerializable {
+
     private final String cluster;
+
     private final List<String> tags;
 
     static Placement optionalInstance(JsonValue vPlacement) {
-        return vPlacement == null ? null : new Placement(vPlacement);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     Placement(JsonValue vPlacement) {
@@ -60,7 +59,7 @@ public class Placement implements JsonSerializable {
      * @return true if the Placement has data
      */
     public boolean hasData() {
-        return cluster != null || tags != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -69,7 +68,7 @@ public class Placement implements JsonSerializable {
      */
     @Nullable
     public String getCluster() {
-        return cluster;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -78,24 +77,18 @@ public class Placement implements JsonSerializable {
      */
     @Nullable
     public List<String> getTags() {
-        return tags;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return "Placement{" +
-                "cluster='" + cluster + '\'' +
-                ", tags=" + tags +
-                '}';
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     @NonNull
     public String toJson() {
-        StringBuilder sb = beginJson();
-        addField(sb, CLUSTER, cluster);
-        addStrings(sb, TAGS, tags);
-        return endJson(sb).toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -103,20 +96,23 @@ public class Placement implements JsonSerializable {
      * @return the builder.
      */
     public static Builder builder() {
-        return new Builder();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Placement can be created using a Builder.
      */
     public static class Builder {
+
         private String cluster;
+
         private List<String> tags;
 
         /**
          * Construct a builder for Placement
          */
-        public Builder() {}
+        public Builder() {
+        }
 
         /**
          * Set the cluster string.
@@ -124,8 +120,7 @@ public class Placement implements JsonSerializable {
          * @return the builder
          */
         public Builder cluster(String cluster) {
-            this.cluster = cluster;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -134,11 +129,7 @@ public class Placement implements JsonSerializable {
          * @return the builder
          */
         public Builder tags(String... tags) {
-            if (nullOrEmpty(tags)) {
-                this.tags = null;
-                return this;
-            }
-            return _tags(Arrays.asList(tags));
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -147,11 +138,7 @@ public class Placement implements JsonSerializable {
          * @return the builder
          */
         public Builder tags(List<String> tags) {
-            if (nullOrEmpty(tags)) {
-                this.tags = null;
-                return this;
-            }
-            return _tags(tags);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         private Builder _tags(@NonNull List<String> tags) {
@@ -172,7 +159,7 @@ public class Placement implements JsonSerializable {
          * @return the Placement
          */
         public Placement build() {
-            return new Placement(cluster, tags);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

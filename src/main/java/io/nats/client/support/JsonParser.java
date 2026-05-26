@@ -10,12 +10,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.support;
 
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -35,6 +33,7 @@ public class JsonParser {
      * Option for parsing.
      */
     public enum Option {
+
         /**
          * Keep nulls when parsing. Usually ignored
          */
@@ -42,6 +41,7 @@ public class JsonParser {
     }
 
     public static final String INVALID_VALUE = "Invalid value.";
+
     private static final boolean[] IS_DELIMITER = new boolean[128];
 
     static {
@@ -60,7 +60,7 @@ public class JsonParser {
      */
     @NonNull
     public static JsonValue parse(char @Nullable [] json) throws JsonParseException {
-        return new JsonParser(json, 0).parse();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -72,7 +72,7 @@ public class JsonParser {
      */
     @NonNull
     public static JsonValue parse(char @Nullable [] json, int startIndex) throws JsonParseException {
-        return new JsonParser(json, startIndex).parse();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -84,7 +84,7 @@ public class JsonParser {
      */
     @NonNull
     public static JsonValue parse(char @Nullable [] json, @Nullable Option... options) throws JsonParseException {
-        return new JsonParser(json, 0, options).parse();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -97,9 +97,8 @@ public class JsonParser {
      */
     @NonNull
     public static JsonValue parse(char @Nullable [] json, int startIndex, @Nullable Option... options) throws JsonParseException {
-        return new JsonParser(json, startIndex, options).parse();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 
     /**
      * Parse JSON from a String
@@ -109,9 +108,8 @@ public class JsonParser {
      */
     @NonNull
     public static JsonValue parse(String json) throws JsonParseException {
-        return new JsonParser(json.toCharArray(), 0).parse();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 
     /**
      * Parse JSON from a String
@@ -122,7 +120,7 @@ public class JsonParser {
      */
     @NonNull
     public static JsonValue parse(String json, int startIndex) throws JsonParseException {
-        return new JsonParser(json.toCharArray(), startIndex).parse();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -134,7 +132,7 @@ public class JsonParser {
      */
     @NonNull
     public static JsonValue parse(String json, @Nullable Option... options) throws JsonParseException {
-        return new JsonParser(json.toCharArray(), 0, options).parse();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -147,7 +145,7 @@ public class JsonParser {
      */
     @NonNull
     public static JsonValue parse(String json, int startIndex, @Nullable Option... options) throws JsonParseException {
-        return new JsonParser(json.toCharArray(), startIndex, options).parse();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -158,7 +156,7 @@ public class JsonParser {
      */
     @NonNull
     public static JsonValue parse(byte[] json) throws JsonParseException {
-        return new JsonParser(bytesToChars(json), 0).parse();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -170,7 +168,7 @@ public class JsonParser {
      */
     @NonNull
     public static JsonValue parse(byte[] json, int startIndex) throws JsonParseException {
-        return new JsonParser(bytesToChars(json), startIndex).parse();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -182,7 +180,7 @@ public class JsonParser {
      */
     @NonNull
     public static JsonValue parse(byte[] json, @Nullable Option... options) throws JsonParseException {
-        return new JsonParser(bytesToChars(json), 0, options).parse();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -195,7 +193,7 @@ public class JsonParser {
      */
     @NonNull
     public static JsonValue parse(byte[] json, int startIndex, @Nullable Option... options) throws JsonParseException {
-        return new JsonParser(bytesToChars(json), startIndex, options).parse();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -206,8 +204,7 @@ public class JsonParser {
      */
     @NonNull
     public static JsonValue parseUnchecked(char @Nullable [] json) {
-        try { return parse(json); }
-        catch (JsonParseException j) { throw new RuntimeException(j); }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -219,8 +216,7 @@ public class JsonParser {
      */
     @NonNull
     public static JsonValue parseUnchecked(char @Nullable [] json, int startIndex) {
-        try { return parse(json, startIndex); }
-        catch (JsonParseException j) { throw new RuntimeException(j); }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -232,8 +228,7 @@ public class JsonParser {
      */
     @NonNull
     public static JsonValue parseUnchecked(char @Nullable [] json, @Nullable Option... options) {
-        try { return parse(json, options); }
-        catch (JsonParseException j) { throw new RuntimeException(j); }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -246,8 +241,7 @@ public class JsonParser {
      */
     @NonNull
     public static JsonValue parseUnchecked(char @Nullable [] json, int startIndex, @Nullable Option... options) {
-        try { return parse(json, startIndex, options); }
-        catch (JsonParseException j) { throw new RuntimeException(j); }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -258,8 +252,7 @@ public class JsonParser {
      */
     @NonNull
     public static JsonValue parseUnchecked(String json) {
-        try { return parse(json); }
-        catch (JsonParseException j) { throw new RuntimeException(j); }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -271,8 +264,7 @@ public class JsonParser {
      */
     @NonNull
     public static JsonValue parseUnchecked(String json, int startIndex) {
-        try { return parse(json, startIndex); }
-        catch (JsonParseException j) { throw new RuntimeException(j); }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -284,8 +276,7 @@ public class JsonParser {
      */
     @NonNull
     public static JsonValue parseUnchecked(String json, @Nullable Option... options) {
-        try { return parse(json, options); }
-        catch (JsonParseException j) { throw new RuntimeException(j); }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -298,8 +289,7 @@ public class JsonParser {
      */
     @NonNull
     public static JsonValue parseUnchecked(String json, int startIndex, @Nullable Option... options) {
-        try { return parse(json, startIndex, options); }
-        catch (JsonParseException j) { throw new RuntimeException(j); }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -310,8 +300,7 @@ public class JsonParser {
      */
     @NonNull
     public static JsonValue parseUnchecked(byte[] json) {
-        try { return parse(json); }
-        catch (JsonParseException j) { throw new RuntimeException(j); }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -323,8 +312,7 @@ public class JsonParser {
      */
     @NonNull
     public static JsonValue parseUnchecked(byte[] json, int startIndex) {
-        try { return parse(json, startIndex); }
-        catch (JsonParseException j) { throw new RuntimeException(j); }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -336,8 +324,7 @@ public class JsonParser {
      */
     @NonNull
     public static JsonValue parseUnchecked(byte[] json, @Nullable Option... options) {
-        try { return parse(json, options); }
-        catch (JsonParseException j) { throw new RuntimeException(j); }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -350,17 +337,23 @@ public class JsonParser {
      */
     @NonNull
     public static JsonValue parseUnchecked(byte[] json, int startIndex, @Nullable Option... options) {
-        try { return parse(json, startIndex, options); }
-        catch (JsonParseException j) { throw new RuntimeException(j); }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private final char @NonNull [] json;
+
     private final boolean keepNulls;
+
     private final int len;
+
     private int idx;
+
     private int nextIdx;
+
     private char previous;
+
     private char current;
+
     private char next;
 
     /**
@@ -387,17 +380,15 @@ public class JsonParser {
      * @param options options for how to parse
      */
     public JsonParser(char @Nullable [] json, int startIndex, @Nullable Option... options) {
-        keepNulls = options != null && options.length > 0; // KEEP_NULLS is currently the only option
-
+        // KEEP_NULLS is currently the only option
+        keepNulls = options != null && options.length > 0;
         if (json == null) {
             this.json = new char[0];
             len = 0;
-        }
-        else {
+        } else {
             this.json = json;
             len = json.length;
         }
-
         idx = startIndex;
         if (startIndex < 0) {
             throw new IllegalArgumentException("Invalid start index.");
@@ -415,11 +406,7 @@ public class JsonParser {
      */
     @NonNull
     public JsonValue parse() throws JsonParseException {
-        char c = peekToken();
-        if (c == 0) {
-            return JsonValue.NULL;
-        }
-        return nextValue();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private JsonValue nextValue() throws JsonParseException {
@@ -447,14 +434,15 @@ public class JsonParser {
         char p = peekToken();
         while (p != ']') {
             if (p == ',') {
-                nextToken(); // advance past the peek
-            }
-            else {
+                // advance past the peek
+                nextToken();
+            } else {
                 list.add(nextValue());
             }
             p = peekToken();
         }
-        nextToken(); // advance past the peek
+        // advance past the peek
+        nextToken();
         return list;
     }
 
@@ -473,8 +461,7 @@ public class JsonParser {
             if ("null".equals(string)) {
                 return JsonValue.NULL;
             }
-        }
-        else if (string.length() == 5) {
+        } else if (string.length() == 5) {
             if ("false".equals(string)) {
                 return JsonValue.FALSE;
             }
@@ -488,7 +475,7 @@ public class JsonParser {
         String key;
         while (true) {
             char c = nextToken();
-            switch (c) {
+            switch(c) {
                 case 0:
                     throw new JsonParseException("Text must end with '}'");
                 case '}':
@@ -498,25 +485,23 @@ public class JsonParser {
                     if (previous == '{') {
                         throw new JsonParseException("Cannot directly nest another Object or Array.");
                     }
-                    // fall through
+                // fall through
                 default:
                     key = nextString();
             }
-
             c = nextToken();
             if (c != ':') {
                 throw new JsonParseException("Expected a ':' after a key.");
             }
-
             JsonValue value = nextValue();
             if (value != JsonValue.NULL || keepNulls) {
                 map.put(key, value);
             }
-
-            switch (nextToken()) {
+            switch(nextToken()) {
                 case ',':
                     if (peekToken() == '}') {
-                        return map; // dangling comma
+                        // dangling comma
+                        return map;
                     }
                     break;
                 case '}':
@@ -541,8 +526,7 @@ public class JsonParser {
         previous = current;
         if (idx == len) {
             current = 0;
-        }
-        else {
+        } else {
             current = json[idx++];
         }
         next = 0;
@@ -556,7 +540,7 @@ public class JsonParser {
             next = 0;
             while (nextIdx < len) {
                 char c = json[nextIdx++];
-                switch (c) {
+                switch(c) {
                     case ' ':
                     case '\r':
                     case '\n':
@@ -574,14 +558,14 @@ public class JsonParser {
         workBuffer.setLength(0);
         while (true) {
             char c = nextChar();
-            switch (c) {
+            switch(c) {
                 case 0:
                 case '\n':
                 case '\r':
                     throw new JsonParseException("Unterminated string.");
                 case '\\':
                     c = nextChar();
-                    switch (c) {
+                    switch(c) {
                         case 'b':
                             workBuffer.append('\b');
                             break;
@@ -623,14 +607,17 @@ public class JsonParser {
         int code = 0;
         for (int i = 0; i < 4; i++) {
             char c = nextToken();
-            if (c == 0) throw new JsonParseException("Illegal escape.");
-
+            if (c == 0)
+                throw new JsonParseException("Illegal escape.");
             int digit;
-            if (c >= '0' && c <= '9') digit = c - '0';
-            else if (c >= 'A' && c <= 'F') digit = c - 'A' + 10;
-            else if (c >= 'a' && c <= 'f') digit = c - 'a' + 10;
-            else throw new JsonParseException("Illegal escape.");
-
+            if (c >= '0' && c <= '9')
+                digit = c - '0';
+            else if (c >= 'A' && c <= 'F')
+                digit = c - 'A' + 10;
+            else if (c >= 'a' && c <= 'f')
+                digit = c - 'a' + 10;
+            else
+                throw new JsonParseException("Illegal escape.");
             code = (code << 4) | digit;
         }
         return Character.toChars(code);
@@ -639,14 +626,13 @@ public class JsonParser {
     private JsonValue asNumber(String val) throws JsonParseException {
         char initial = val.charAt(0);
         if ((initial >= '0' && initial <= '9') || initial == '-') {
-
             if (isDecimalNotation(val)) {
                 // Use a BigDecimal all the time to keep the original
                 // representation. BigDecimal doesn't support -0.0, ensure we
                 // keep that by forcing a decimal.
                 try {
                     BigDecimal bd = new BigDecimal(val);
-                    if(initial == '-' && BigDecimal.ZERO.compareTo(bd)==0) {
+                    if (initial == '-' && BigDecimal.ZERO.compareTo(bd) == 0) {
                         return new JsonValue(-0.0);
                     }
                     return new JsonValue(bd);
@@ -654,7 +640,7 @@ public class JsonParser {
                     // this is to support "Hex Floats" like this: 0x1.0P-1074
                     try {
                         double d = Double.parseDouble(val);
-                        if(Double.isNaN(d) || Double.isInfinite(d)) {
+                        if (Double.isNaN(d) || Double.isInfinite(d)) {
                             throw new JsonParseException(INVALID_VALUE);
                         }
                         return new JsonValue(d);
@@ -663,11 +649,10 @@ public class JsonParser {
                     }
                 }
             }
-
             // block items like 00 01 etc. Java number parsers treat these as Octal.
             if (initial == '0' && val.length() > 1) {
                 char at1 = val.charAt(1);
-                if(at1 >= '0' && at1 <= '9') {
+                if (at1 >= '0' && at1 <= '9') {
                     throw new JsonParseException(INVALID_VALUE);
                 }
             } else if (initial == '-' && val.length() > 2) {
@@ -677,7 +662,6 @@ public class JsonParser {
                     throw new JsonParseException(INVALID_VALUE);
                 }
             }
-
             // Try parsing as long first
             try {
                 long longVal = Long.parseLong(val);
@@ -699,8 +683,7 @@ public class JsonParser {
     }
 
     static boolean isDecimalNotation(final String val) {
-        return val.indexOf('.') > -1 || val.indexOf('e') > -1
-            || val.indexOf('E') > -1 || "-0".equals(val);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private boolean isNotDelimiter(char c) {
@@ -710,8 +693,7 @@ public class JsonParser {
     private static char[] bytesToChars(byte[] json) throws JsonParseException {
         try {
             return StandardCharsets.UTF_8.newDecoder().decode(ByteBuffer.wrap(json)).array();
-        }
-        catch (CharacterCodingException e) {
+        } catch (CharacterCodingException e) {
             throw new JsonParseException(e);
         }
     }

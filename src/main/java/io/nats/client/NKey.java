@@ -10,26 +10,25 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client;
 
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.bouncycastle.crypto.signers.Ed25519Signer;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.security.*;
 import java.util.Arrays;
-
 import static io.nats.client.support.Encoding.base32Decode;
 import static io.nats.client.support.Encoding.base32Encode;
 import static io.nats.client.support.RandomUtils.SRAND;
 
 class DecodedSeed {
+
     int prefix;
+
     byte[] bytes;
 }
 
@@ -107,17 +106,30 @@ public class NKey {
      * NKey class formalizes these into the enum NKey.Type.
      */
     public enum Type {
-        /** A user NKey. */
+
+        /**
+         * A user NKey.
+         */
         USER(PREFIX_BYTE_USER),
-        /** An account NKey. */
+        /**
+         * An account NKey.
+         */
         ACCOUNT(PREFIX_BYTE_ACCOUNT),
-        /** A server NKey. */
+        /**
+         * A server NKey.
+         */
         SERVER(PREFIX_BYTE_SERVER),
-        /** An operator NKey. */
+        /**
+         * An operator NKey.
+         */
         OPERATOR(PREFIX_BYTE_OPERATOR),
-        /** A cluster NKey. */
+        /**
+         * A cluster NKey.
+         */
         CLUSTER(PREFIX_BYTE_CLUSTER),
-        /** A private NKey. */
+        /**
+         * A private NKey.
+         */
         PRIVATE(PREFIX_BYTE_PRIVATE);
 
         private final int prefix;
@@ -132,83 +144,53 @@ public class NKey {
          * @return the instance or throws IllegalArgumentException if not found
          */
         public static Type fromPrefix(int prefix) {
-            if (prefix == PREFIX_BYTE_ACCOUNT) {
-                return ACCOUNT;
-            } else if (prefix == PREFIX_BYTE_SERVER) {
-                return SERVER;
-            } else if (prefix == PREFIX_BYTE_USER) {
-                return USER;
-            } else if (prefix == PREFIX_BYTE_CLUSTER) {
-                return CLUSTER;
-            } else if (prefix == PREFIX_BYTE_PRIVATE) {
-                return ACCOUNT;
-            } else if (prefix == PREFIX_BYTE_OPERATOR) {
-                return OPERATOR;
-            }
-
-            throw new IllegalArgumentException("Unknown prefix");
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     // PrefixByteSeed is the prefix byte used for encoded NATS Seeds
-    private static final int PREFIX_BYTE_SEED = 18 << 3; // Base32-encodes to 'S...'
+    // Base32-encodes to 'S...'
+    private static final int PREFIX_BYTE_SEED = 18 << 3;
 
     // PrefixBytePrivate is the prefix byte used for encoded NATS Private keys
-    static final int PREFIX_BYTE_PRIVATE = 15 << 3; // Base32-encodes to 'P...'
+    // Base32-encodes to 'P...'
+    static final int PREFIX_BYTE_PRIVATE = 15 << 3;
 
     // PrefixByteServer is the prefix byte used for encoded NATS Servers
-    static final int PREFIX_BYTE_SERVER = 13 << 3; // Base32-encodes to 'N...'
+    // Base32-encodes to 'N...'
+    static final int PREFIX_BYTE_SERVER = 13 << 3;
 
     // PrefixByteCluster is the prefix byte used for encoded NATS Clusters
-    static final int PREFIX_BYTE_CLUSTER = 2 << 3; // Base32-encodes to 'C...'
+    // Base32-encodes to 'C...'
+    static final int PREFIX_BYTE_CLUSTER = 2 << 3;
 
     // PrefixByteAccount is the prefix byte used for encoded NATS Accounts
-    static final int PREFIX_BYTE_ACCOUNT = 0; // Base32-encodes to 'A...'
+    // Base32-encodes to 'A...'
+    static final int PREFIX_BYTE_ACCOUNT = 0;
 
     // PrefixByteUser is the prefix byte used for encoded NATS Users
-    static final int PREFIX_BYTE_USER = 20 << 3; // Base32-encodes to 'U...'
+    // Base32-encodes to 'U...'
+    static final int PREFIX_BYTE_USER = 20 << 3;
 
     // PrefixByteOperator is the prefix byte used for encoded NATS Operators
-    static final int PREFIX_BYTE_OPERATOR = 14 << 3; // Base32-encodes to 'O...'
+    // Base32-encodes to 'O...'
+    static final int PREFIX_BYTE_OPERATOR = 14 << 3;
 
     private static final int ED25519_PUBLIC_KEYSIZE = 32;
+
     private static final int ED25519_PRIVATE_KEYSIZE = 64;
+
     private static final int ED25519_SEED_SIZE = 32;
 
     // XModem CRC based on the go version of NKeys
-    private final static int[] crc16table = { 0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50a5, 0x60c6, 0x70e7, 0x8108,
-        0x9129, 0xa14a, 0xb16b, 0xc18c, 0xd1ad, 0xe1ce, 0xf1ef, 0x1231, 0x0210, 0x3273, 0x2252, 0x52b5, 0x4294,
-        0x72f7, 0x62d6, 0x9339, 0x8318, 0xb37b, 0xa35a, 0xd3bd, 0xc39c, 0xf3ff, 0xe3de, 0x2462, 0x3443, 0x0420,
-        0x1401, 0x64e6, 0x74c7, 0x44a4, 0x5485, 0xa56a, 0xb54b, 0x8528, 0x9509, 0xe5ee, 0xf5cf, 0xc5ac, 0xd58d,
-        0x3653, 0x2672, 0x1611, 0x0630, 0x76d7, 0x66f6, 0x5695, 0x46b4, 0xb75b, 0xa77a, 0x9719, 0x8738, 0xf7df,
-        0xe7fe, 0xd79d, 0xc7bc, 0x48c4, 0x58e5, 0x6886, 0x78a7, 0x0840, 0x1861, 0x2802, 0x3823, 0xc9cc, 0xd9ed,
-        0xe98e, 0xf9af, 0x8948, 0x9969, 0xa90a, 0xb92b, 0x5af5, 0x4ad4, 0x7ab7, 0x6a96, 0x1a71, 0x0a50, 0x3a33,
-        0x2a12, 0xdbfd, 0xcbdc, 0xfbbf, 0xeb9e, 0x9b79, 0x8b58, 0xbb3b, 0xab1a, 0x6ca6, 0x7c87, 0x4ce4, 0x5cc5,
-        0x2c22, 0x3c03, 0x0c60, 0x1c41, 0xedae, 0xfd8f, 0xcdec, 0xddcd, 0xad2a, 0xbd0b, 0x8d68, 0x9d49, 0x7e97,
-        0x6eb6, 0x5ed5, 0x4ef4, 0x3e13, 0x2e32, 0x1e51, 0x0e70, 0xff9f, 0xefbe, 0xdfdd, 0xcffc, 0xbf1b, 0xaf3a,
-        0x9f59, 0x8f78, 0x9188, 0x81a9, 0xb1ca, 0xa1eb, 0xd10c, 0xc12d, 0xf14e, 0xe16f, 0x1080, 0x00a1, 0x30c2,
-        0x20e3, 0x5004, 0x4025, 0x7046, 0x6067, 0x83b9, 0x9398, 0xa3fb, 0xb3da, 0xc33d, 0xd31c, 0xe37f, 0xf35e,
-        0x02b1, 0x1290, 0x22f3, 0x32d2, 0x4235, 0x5214, 0x6277, 0x7256, 0xb5ea, 0xa5cb, 0x95a8, 0x8589, 0xf56e,
-        0xe54f, 0xd52c, 0xc50d, 0x34e2, 0x24c3, 0x14a0, 0x0481, 0x7466, 0x6447, 0x5424, 0x4405, 0xa7db, 0xb7fa,
-        0x8799, 0x97b8, 0xe75f, 0xf77e, 0xc71d, 0xd73c, 0x26d3, 0x36f2, 0x0691, 0x16b0, 0x6657, 0x7676, 0x4615,
-        0x5634, 0xd94c, 0xc96d, 0xf90e, 0xe92f, 0x99c8, 0x89e9, 0xb98a, 0xa9ab, 0x5844, 0x4865, 0x7806, 0x6827,
-        0x18c0, 0x08e1, 0x3882, 0x28a3, 0xcb7d, 0xdb5c, 0xeb3f, 0xfb1e, 0x8bf9, 0x9bd8, 0xabbb, 0xbb9a, 0x4a75,
-        0x5a54, 0x6a37, 0x7a16, 0x0af1, 0x1ad0, 0x2ab3, 0x3a92, 0xfd2e, 0xed0f, 0xdd6c, 0xcd4d, 0xbdaa, 0xad8b,
-        0x9de8, 0x8dc9, 0x7c26, 0x6c07, 0x5c64, 0x4c45, 0x3ca2, 0x2c83, 0x1ce0, 0x0cc1, 0xef1f, 0xff3e, 0xcf5d,
-        0xdf7c, 0xaf9b, 0xbfba, 0x8fd9, 0x9ff8, 0x6e17, 0x7e36, 0x4e55, 0x5e74, 0x2e93, 0x3eb2, 0x0ed1, 0x1ef0 };
+    private final static int[] crc16table = { 0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50a5, 0x60c6, 0x70e7, 0x8108, 0x9129, 0xa14a, 0xb16b, 0xc18c, 0xd1ad, 0xe1ce, 0xf1ef, 0x1231, 0x0210, 0x3273, 0x2252, 0x52b5, 0x4294, 0x72f7, 0x62d6, 0x9339, 0x8318, 0xb37b, 0xa35a, 0xd3bd, 0xc39c, 0xf3ff, 0xe3de, 0x2462, 0x3443, 0x0420, 0x1401, 0x64e6, 0x74c7, 0x44a4, 0x5485, 0xa56a, 0xb54b, 0x8528, 0x9509, 0xe5ee, 0xf5cf, 0xc5ac, 0xd58d, 0x3653, 0x2672, 0x1611, 0x0630, 0x76d7, 0x66f6, 0x5695, 0x46b4, 0xb75b, 0xa77a, 0x9719, 0x8738, 0xf7df, 0xe7fe, 0xd79d, 0xc7bc, 0x48c4, 0x58e5, 0x6886, 0x78a7, 0x0840, 0x1861, 0x2802, 0x3823, 0xc9cc, 0xd9ed, 0xe98e, 0xf9af, 0x8948, 0x9969, 0xa90a, 0xb92b, 0x5af5, 0x4ad4, 0x7ab7, 0x6a96, 0x1a71, 0x0a50, 0x3a33, 0x2a12, 0xdbfd, 0xcbdc, 0xfbbf, 0xeb9e, 0x9b79, 0x8b58, 0xbb3b, 0xab1a, 0x6ca6, 0x7c87, 0x4ce4, 0x5cc5, 0x2c22, 0x3c03, 0x0c60, 0x1c41, 0xedae, 0xfd8f, 0xcdec, 0xddcd, 0xad2a, 0xbd0b, 0x8d68, 0x9d49, 0x7e97, 0x6eb6, 0x5ed5, 0x4ef4, 0x3e13, 0x2e32, 0x1e51, 0x0e70, 0xff9f, 0xefbe, 0xdfdd, 0xcffc, 0xbf1b, 0xaf3a, 0x9f59, 0x8f78, 0x9188, 0x81a9, 0xb1ca, 0xa1eb, 0xd10c, 0xc12d, 0xf14e, 0xe16f, 0x1080, 0x00a1, 0x30c2, 0x20e3, 0x5004, 0x4025, 0x7046, 0x6067, 0x83b9, 0x9398, 0xa3fb, 0xb3da, 0xc33d, 0xd31c, 0xe37f, 0xf35e, 0x02b1, 0x1290, 0x22f3, 0x32d2, 0x4235, 0x5214, 0x6277, 0x7256, 0xb5ea, 0xa5cb, 0x95a8, 0x8589, 0xf56e, 0xe54f, 0xd52c, 0xc50d, 0x34e2, 0x24c3, 0x14a0, 0x0481, 0x7466, 0x6447, 0x5424, 0x4405, 0xa7db, 0xb7fa, 0x8799, 0x97b8, 0xe75f, 0xf77e, 0xc71d, 0xd73c, 0x26d3, 0x36f2, 0x0691, 0x16b0, 0x6657, 0x7676, 0x4615, 0x5634, 0xd94c, 0xc96d, 0xf90e, 0xe92f, 0x99c8, 0x89e9, 0xb98a, 0xa9ab, 0x5844, 0x4865, 0x7806, 0x6827, 0x18c0, 0x08e1, 0x3882, 0x28a3, 0xcb7d, 0xdb5c, 0xeb3f, 0xfb1e, 0x8bf9, 0x9bd8, 0xabbb, 0xbb9a, 0x4a75, 0x5a54, 0x6a37, 0x7a16, 0x0af1, 0x1ad0, 0x2ab3, 0x3a92, 0xfd2e, 0xed0f, 0xdd6c, 0xcd4d, 0xbdaa, 0xad8b, 0x9de8, 0x8dc9, 0x7c26, 0x6c07, 0x5c64, 0x4c45, 0x3ca2, 0x2c83, 0x1ce0, 0x0cc1, 0xef1f, 0xff3e, 0xcf5d, 0xdf7c, 0xaf9b, 0xbfba, 0x8fd9, 0x9ff8, 0x6e17, 0x7e36, 0x4e55, 0x5e74, 0x2e93, 0x3eb2, 0x0ed1, 0x1ef0 };
 
     static int crc16(byte[] bytes) {
-        int crc = 0;
-
-        for (byte b : bytes) {
-            crc = ((crc << 8) & 0xffff) ^ crc16table[((crc >> 8) ^ (b & 0xFF)) & 0x00FF];
-        }
-
-        return crc;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private static boolean notValidPublicPrefixByte(int prefix) {
-        switch (prefix) {
+        switch(prefix) {
             case PREFIX_BYTE_SERVER:
             case PREFIX_BYTE_CLUSTER:
             case PREFIX_BYTE_OPERATOR:
@@ -220,125 +202,34 @@ public class NKey {
     }
 
     static char[] removePaddingAndClear(char[] withPad) {
-        int i;
-
-        for (i=withPad.length-1;i>=0;i--) {
-            if (withPad[i] != '=') {
-                break;
-            }
-        }
-        char[] withoutPad = new char[i+1];
-        System.arraycopy(withPad, 0, withoutPad, 0, withoutPad.length);
-
-        for (int j=0; j<withPad.length;j++) {
-            withPad[j] = '\0';
-        }
-
-        return withoutPad;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     static char[] encode(Type type, byte[] src) throws IOException {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-
-        bytes.write(type.prefix);
-        bytes.write(src);
-
-        int crc = crc16(bytes.toByteArray());
-        byte[] littleEndian = ByteBuffer.allocate(2).order(ByteOrder.LITTLE_ENDIAN).putShort((short) crc).array();
-
-        bytes.write(littleEndian);
-
-        char[] withPad = base32Encode(bytes.toByteArray());
-        return removePaddingAndClear(withPad);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     static char[] encodeSeed(Type type, byte[] src) throws IOException {
-        if (src.length != ED25519_PRIVATE_KEYSIZE && src.length != ED25519_SEED_SIZE) {
-            throw new IllegalArgumentException("Source is not the correct size for an ED25519 seed");
-        }
-
-        // In order to make this human printable for both bytes, we need to do a little
-        // bit manipulation to setup for base32 encoding which takes 5 bits at a time.
-        int b1 = PREFIX_BYTE_SEED | (type.prefix >> 5);
-        int b2 = (type.prefix & 31) << 3; // 31 = 00011111
-
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-
-        bytes.write(b1);
-        bytes.write(b2);
-        bytes.write(src);
-
-        int crc = crc16(bytes.toByteArray());
-        byte[] littleEndian = ByteBuffer.allocate(2).order(ByteOrder.LITTLE_ENDIAN).putShort((short) crc).array();
-
-        bytes.write(littleEndian);
-
-        char[] withPad = base32Encode(bytes.toByteArray());
-        return removePaddingAndClear(withPad);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     static byte[] decode(char[] src) {
-        byte[] raw = base32Decode(src);
-        if (raw.length < 4) {
-            throw new IllegalArgumentException("Invalid encoding for source string");
-        }
-
-        byte[] crcBytes = Arrays.copyOfRange(raw, raw.length - 2, raw.length);
-        byte[] dataBytes = Arrays.copyOfRange(raw, 0, raw.length - 2);
-
-        int crc = ByteBuffer.wrap(crcBytes).order(ByteOrder.LITTLE_ENDIAN).getShort() & 0xFFFF;
-        int actual = crc16(dataBytes);
-
-        if (actual != crc) {
-            throw new IllegalArgumentException("CRC is invalid");
-        }
-
-        return dataBytes;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     static byte[] decode(Type expectedType, char[] src, boolean safe) {
-        byte[] raw = decode(src);
-        byte[] dataBytes = Arrays.copyOfRange(raw, 1, raw.length);
-        Type type = NKey.Type.fromPrefix(raw[0] & 0xFF);
-
-        if (type != expectedType) {
-            if (safe) {
-                return null;
-            }
-            throw new IllegalArgumentException("Unexpected type");
-        }
-
-        return dataBytes;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     static DecodedSeed decodeSeed(char[] seed) {
-        byte[] raw = decode(seed);
-
-        // Need to do the reverse here to get back to internal representation.
-        int b1 = raw[0] & 248; // 248 = 11111000
-        int b2 = (raw[0] & 7) << 5 | ((raw[1] & 248) >> 3); // 7 = 00000111
-
-        if (b1 != PREFIX_BYTE_SEED) {
-            throw new IllegalArgumentException("Invalid encoding");
-        }
-
-        if (notValidPublicPrefixByte(b2)) {
-            throw new IllegalArgumentException("Invalid encoded prefix byte");
-        }
-
-        byte[] dataBytes = Arrays.copyOfRange(raw, 2, raw.length);
-        DecodedSeed retVal = new DecodedSeed();
-        retVal.prefix = b2;
-        retVal.bytes = dataBytes;
-        return retVal;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private static NKey createPair(Type type, SecureRandom random) throws IOException {
         byte[] seed = new byte[ED25519_SEED_SIZE];
         if (random == null) {
             SRAND.nextBytes(seed);
-        }
-        else {
+        } else {
             random.nextBytes(seed);
         }
         return createPair(type, seed);
@@ -347,13 +238,10 @@ public class NKey {
     private static NKey createPair(Type type, byte[] seed) throws IOException {
         Ed25519PrivateKeyParameters privateKey = new Ed25519PrivateKeyParameters(seed);
         Ed25519PublicKeyParameters publicKey = privateKey.generatePublicKey();
-
         byte[] pubBytes = publicKey.getEncoded();
-
         byte[] bytes = new byte[pubBytes.length + seed.length];
         System.arraycopy(seed, 0, bytes, 0, seed.length);
         System.arraycopy(pubBytes, 0, bytes, seed.length, pubBytes.length);
-
         char[] encoded = encodeSeed(type, bytes);
         return new NKey(type, null, encoded);
     }
@@ -368,9 +256,8 @@ public class NKey {
      * @throws NoSuchProviderException if the default secure random cannot be created
      * @throws NoSuchAlgorithmException if the default secure random cannot be created
      */
-    public static NKey createAccount(SecureRandom random)
-        throws IOException, NoSuchProviderException, NoSuchAlgorithmException {
-        return createPair(Type.ACCOUNT, random);
+    public static NKey createAccount(SecureRandom random) throws IOException, NoSuchProviderException, NoSuchAlgorithmException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -383,9 +270,8 @@ public class NKey {
      * @throws NoSuchProviderException if the default secure random cannot be created
      * @throws NoSuchAlgorithmException if the default secure random cannot be created
      */
-    public static NKey createCluster(SecureRandom random)
-        throws IOException, NoSuchProviderException, NoSuchAlgorithmException {
-        return createPair(Type.CLUSTER, random);
+    public static NKey createCluster(SecureRandom random) throws IOException, NoSuchProviderException, NoSuchAlgorithmException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -398,9 +284,8 @@ public class NKey {
      * @throws NoSuchProviderException if the default secure random cannot be created
      * @throws NoSuchAlgorithmException if the default secure random cannot be created
      */
-    public static NKey createOperator(SecureRandom random)
-        throws IOException, NoSuchProviderException, NoSuchAlgorithmException {
-        return createPair(Type.OPERATOR, random);
+    public static NKey createOperator(SecureRandom random) throws IOException, NoSuchProviderException, NoSuchAlgorithmException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -413,9 +298,8 @@ public class NKey {
      * @throws NoSuchProviderException if the default secure random cannot be created
      * @throws NoSuchAlgorithmException if the default secure random cannot be created
      */
-    public static NKey createServer(SecureRandom random)
-        throws IOException, NoSuchProviderException, NoSuchAlgorithmException {
-        return createPair(Type.SERVER, random);
+    public static NKey createServer(SecureRandom random) throws IOException, NoSuchProviderException, NoSuchAlgorithmException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -429,9 +313,8 @@ public class NKey {
      * @throws NoSuchProviderException if the default secure random cannot be created
      * @throws NoSuchAlgorithmException if the default secure random cannot be created
      */
-    public static NKey createUser(SecureRandom random)
-        throws IOException, NoSuchProviderException, NoSuchAlgorithmException {
-        return createPair(Type.USER, random);
+    public static NKey createUser(SecureRandom random) throws IOException, NoSuchProviderException, NoSuchAlgorithmException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -440,15 +323,7 @@ public class NKey {
      * @return the new Nkey
      */
     public static NKey fromPublicKey(char[] publicKey) {
-        byte[] raw = decode(publicKey);
-        int prefix = raw[0] & 0xFF;
-
-        if (notValidPublicPrefixByte(prefix)) {
-            throw new IllegalArgumentException("Not a valid public NKey");
-        }
-
-        Type type = NKey.Type.fromPrefix(prefix);
-        return new NKey(type, publicKey, null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -457,17 +332,7 @@ public class NKey {
      * @return the Nkey
      */
     public static NKey fromSeed(char[] seed) {
-        DecodedSeed decoded = decodeSeed(seed); // Should throw on bad seed
-
-        if (decoded.bytes.length == ED25519_PRIVATE_KEYSIZE) {
-            return new NKey(Type.fromPrefix(decoded.prefix), null, seed);
-        } else {
-            try {
-                return createPair(Type.fromPrefix(decoded.prefix), decoded.bytes);
-            } catch (Exception e) {
-                throw new IllegalArgumentException("Bad seed value", e);
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -476,7 +341,7 @@ public class NKey {
      * @return true if the public key is an account public key
      */
     public static boolean isValidPublicAccountKey(char[] src) {
-        return decode(Type.ACCOUNT, src, true) != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -485,7 +350,7 @@ public class NKey {
      * @return true if the public key is a cluster public key
      */
     public static boolean isValidPublicClusterKey(char[] src) {
-        return decode(Type.CLUSTER, src, true) != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -494,7 +359,7 @@ public class NKey {
      * @return true if the public key is an operator public key
      */
     public static boolean isValidPublicOperatorKey(char[] src) {
-        return decode(Type.OPERATOR, src, true) != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -503,7 +368,7 @@ public class NKey {
      * @return true if the public key is a server public key
      */
     public static boolean isValidPublicServerKey(char[] src) {
-        return decode(Type.SERVER, src, true) != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -512,7 +377,7 @@ public class NKey {
      * @return true if the public key is a user public key
      */
     public static boolean isValidPublicUserKey(char[] src) {
-        return decode(Type.USER, src, true) != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -538,16 +403,7 @@ public class NKey {
      * The nkey is unusable after this operation.
      */
     public void clear() {
-        if (privateKeyAsSeed != null) {
-            for (int i=0; i< privateKeyAsSeed.length ; i++) {
-                privateKeyAsSeed[i] = 0;
-            }
-        }
-        if (publicKey != null) {
-            for (int i=0; i< publicKey.length ; i++) {
-                publicKey[i] = 0;
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -555,17 +411,7 @@ public class NKey {
      * @return the string encoded seed for this NKey
      */
     public char[] getSeed() {
-        if (privateKeyAsSeed == null) {
-            throw new IllegalStateException("Public-only NKey");
-        }
-        DecodedSeed decoded = decodeSeed(privateKeyAsSeed);
-        byte[] seedBytes = new byte[ED25519_SEED_SIZE];
-        System.arraycopy(decoded.bytes, 0, seedBytes, 0, seedBytes.length);
-        try {
-            return encodeSeed(Type.fromPrefix(decoded.prefix), seedBytes);
-        } catch (Exception e) {
-            throw new IllegalStateException("Unable to create seed.", e);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -577,10 +423,7 @@ public class NKey {
      *                                  key
      */
     public char[] getPublicKey() throws GeneralSecurityException, IOException {
-        if (publicKey != null) {
-            return publicKey;
-        }
-        return encode(this.type, getKeyPair().getPublic().getEncoded());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -591,12 +434,7 @@ public class NKey {
      * @throws IOException              if there is a problem encoding the key
      */
     public char[] getPrivateKey() throws GeneralSecurityException, IOException {
-        if (privateKeyAsSeed == null) {
-            throw new IllegalStateException("Public-only NKey");
-        }
-
-        DecodedSeed decoded = decodeSeed(privateKeyAsSeed);
-        return encode(Type.PRIVATE, decoded.bytes);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -607,21 +445,7 @@ public class NKey {
      * @throws IOException              if there is a problem encoding or decoding
      */
     public KeyPair getKeyPair() throws GeneralSecurityException, IOException {
-        if (privateKeyAsSeed == null) {
-            throw new IllegalStateException("Public-only NKey");
-        }
-
-        DecodedSeed decoded = decodeSeed(privateKeyAsSeed);
-        byte[] seedBytes = new byte[ED25519_SEED_SIZE];
-        byte[] pubBytes = new byte[ED25519_PUBLIC_KEYSIZE];
-
-        System.arraycopy(decoded.bytes, 0, seedBytes, 0, seedBytes.length);
-        System.arraycopy(decoded.bytes, seedBytes.length, pubBytes, 0, pubBytes.length);
-
-        Ed25519PrivateKeyParameters privateKey = new Ed25519PrivateKeyParameters(seedBytes);
-        Ed25519PublicKeyParameters publicKey = new Ed25519PublicKeyParameters(pubBytes);
-
-        return new KeyPair(new PublicKeyWrapper(publicKey), new PrivateKeyWrapper(privateKey));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -629,7 +453,7 @@ public class NKey {
      * @return the Type of this NKey
      */
     public Type getType() {
-        return type;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -642,11 +466,7 @@ public class NKey {
      * @throws IOException              if there is a problem reading the data
      */
     public byte[] sign(byte[] input) throws GeneralSecurityException, IOException {
-        Ed25519PrivateKeyParameters privateKey = new Ed25519PrivateKeyParameters(getKeyPair().getPrivate().getEncoded());
-        Ed25519Signer signer = new Ed25519Signer();
-        signer.init(true, privateKey);
-        signer.update(input, 0, input.length);
-        return signer.generateSignature();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -660,70 +480,35 @@ public class NKey {
      * @throws IOException              if there is a problem reading the data
      */
     public boolean verify(byte[] input, byte[] signature) throws GeneralSecurityException, IOException {
-        Ed25519PublicKeyParameters publicKey;
-        if (privateKeyAsSeed != null) {
-            publicKey = new Ed25519PublicKeyParameters(getKeyPair().getPublic().getEncoded());
-        } else {
-            char[] encodedPublicKey = getPublicKey();
-            byte[] decodedPublicKey = decode(this.type, encodedPublicKey, false);
-            //noinspection DataFlowIssue // decode will throw instead of return null
-            publicKey = new Ed25519PublicKeyParameters(decodedPublicKey);
-        }
-
-        Ed25519Signer signer = new Ed25519Signer();
-        signer.init(false, publicKey);
-        signer.update(input, 0, input.length);
-        return signer.verifySignature(signature);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof NKey)) {
-            return false;
-        }
-
-        NKey otherNKey = (NKey) o;
-
-        if (this.type != otherNKey.type) {
-            return false;
-        }
-
-        if (this.privateKeyAsSeed == null) {
-            return Arrays.equals(this.publicKey, otherNKey.publicKey);
-        }
-
-        return Arrays.equals(this.privateKeyAsSeed, otherNKey.privateKeyAsSeed);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int hashCode() {
-        int result = 17;
-        result = 31 * result + this.type.prefix;
-
-        if (this.privateKeyAsSeed == null) {
-            result = 31 * result + Arrays.hashCode(this.publicKey);
-        } else {
-            result = 31 * result + Arrays.hashCode(this.privateKeyAsSeed);
-        }
-        return result;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }
 
 abstract class KeyWrapper implements Key {
+
     @Override
     public String getAlgorithm() {
-        return "EdDSA";
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String getFormat() {
-        return "PKCS#8";
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }
 
 class PublicKeyWrapper extends KeyWrapper implements PublicKey {
+
     final Ed25519PublicKeyParameters publicKey;
 
     public PublicKeyWrapper(Ed25519PublicKeyParameters publicKey) {
@@ -732,11 +517,12 @@ class PublicKeyWrapper extends KeyWrapper implements PublicKey {
 
     @Override
     public byte[] getEncoded() {
-        return publicKey.getEncoded();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }
 
 class PrivateKeyWrapper extends KeyWrapper implements PrivateKey {
+
     final Ed25519PrivateKeyParameters privateKey;
 
     public PrivateKeyWrapper(Ed25519PrivateKeyParameters privateKey) {
@@ -745,6 +531,6 @@ class PrivateKeyWrapper extends KeyWrapper implements PrivateKey {
 
     @Override
     public byte[] getEncoded() {
-        return privateKey.getEncoded();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

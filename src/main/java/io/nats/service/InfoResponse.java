@@ -10,18 +10,15 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.service;
 
 import io.nats.client.support.JsonUtils;
 import io.nats.client.support.JsonValue;
 import org.jspecify.annotations.NonNull;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
 import static io.nats.client.support.ApiConstants.DESCRIPTION;
 import static io.nats.client.support.ApiConstants.ENDPOINTS;
 import static io.nats.client.support.JsonUtils.listEquals;
@@ -32,12 +29,14 @@ import static io.nats.client.support.JsonValueUtils.*;
  * <code>{"id":"JlkwZvmHAXCQGwwxiPwaBJ","name":"MyService","version":"0.0.1","endpoints":[{"name":"MyEndpoint","subject":"myend"}],"type":"io.nats.micro.v1.info_response"}</code>
  */
 public class InfoResponse extends ServiceResponse {
+
     /**
      * The API response type for InfoResponse
      */
     public static final String TYPE = "io.nats.micro.v1.info_response";
 
     private final String description;
+
     private final List<Endpoint> endpoints;
 
     InfoResponse(String id, String name, String version, Map<String, String> metadata, String description) {
@@ -47,13 +46,7 @@ public class InfoResponse extends ServiceResponse {
     }
 
     void addServiceEndpoint(@NonNull ServiceEndpoint se) {
-        endpoints.add(new Endpoint(
-            se.getName(),
-            se.getSubject(),
-            se.getQueueGroup(),
-            se.getMetadata()
-        ));
-        serialized.set(null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     InfoResponse(byte[] jsonBytes) {
@@ -64,13 +57,11 @@ public class InfoResponse extends ServiceResponse {
         super(TYPE, jv);
         description = readString(jv, DESCRIPTION);
         endpoints = read(jv, ENDPOINTS, v -> listOf(v, Endpoint::new));
-
     }
 
     @Override
     protected void subToJson(StringBuilder sb) {
-        JsonUtils.addField(sb, DESCRIPTION, description);
-        JsonUtils.addJsons(sb, ENDPOINTS, endpoints, true);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -78,7 +69,7 @@ public class InfoResponse extends ServiceResponse {
      * @return the description
      */
     public String getDescription() {
-        return description;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -86,26 +77,16 @@ public class InfoResponse extends ServiceResponse {
      * @return the endpoints
      */
     public List<Endpoint> getEndpoints() {
-        return endpoints;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-
-        InfoResponse that = (InfoResponse) o;
-
-        if (!Objects.equals(description, that.description)) return false;
-        return listEquals(endpoints, that.endpoints);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (endpoints != null ? endpoints.hashCode() : 0);
-        return result;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

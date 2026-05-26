@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client;
 
 /**
@@ -28,7 +27,7 @@ public class KeyValueOptions extends FeatureOptions {
      * @return the builder.
      */
     public static Builder builder() {
-        return new Builder();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -37,7 +36,7 @@ public class KeyValueOptions extends FeatureOptions {
      * @return a KeyValueOptions builder
      */
     public static Builder builder(KeyValueOptions kvo) {
-        return new Builder(kvo);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -46,7 +45,7 @@ public class KeyValueOptions extends FeatureOptions {
      * @return a KeyValueOptions builder
      */
     public static Builder builder(JetStreamOptions jso) {
-        return new Builder().jetStreamOptions(jso);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -57,7 +56,7 @@ public class KeyValueOptions extends FeatureOptions {
 
         @Override
         protected Builder getThis() {
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -80,7 +79,7 @@ public class KeyValueOptions extends FeatureOptions {
          * @return KeyValue Options
          */
         public KeyValueOptions build() {
-            return new KeyValueOptions(this);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.support.JsonSerializable;
@@ -18,9 +17,7 @@ import io.nats.client.support.JsonUtils;
 import io.nats.client.support.JsonValue;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import java.time.Duration;
-
 import static io.nats.client.api.ConsumerConfiguration.*;
 import static io.nats.client.support.ApiConstants.INACTIVE_THRESHOLD;
 import static io.nats.client.support.ApiConstants.MAX_ACK_PENDING;
@@ -33,11 +30,13 @@ import static io.nats.client.support.JsonValueUtils.readNanos;
  * ConsumerLimits
  */
 public class ConsumerLimits implements JsonSerializable {
+
     private final Duration inactiveThreshold;
+
     private final Integer maxAckPending;
 
     static ConsumerLimits optionalInstance(JsonValue vConsumerLimits) {
-        return vConsumerLimits == null ? null : new ConsumerLimits(vConsumerLimits);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     ConsumerLimits(JsonValue vConsumerLimits) {
@@ -56,7 +55,7 @@ public class ConsumerLimits implements JsonSerializable {
      */
     @Nullable
     public Duration getInactiveThreshold() {
-        return inactiveThreshold;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -64,16 +63,13 @@ public class ConsumerLimits implements JsonSerializable {
      * @return maximum ack pending limit
      */
     public long getMaxAckPending() {
-        return getOrUnset(maxAckPending);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     @NonNull
     public String toJson() {
-        StringBuilder sb = beginJson();
-        JsonUtils.addFieldAsNanos(sb, INACTIVE_THRESHOLD, inactiveThreshold);
-        JsonUtils.addField(sb, MAX_ACK_PENDING, maxAckPending);
-        return endJson(sb).toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -81,20 +77,23 @@ public class ConsumerLimits implements JsonSerializable {
      * @return the builder.
      */
     public static Builder builder() {
-        return new Builder();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * ConsumerLimits can be created using a Builder.
      */
     public static class Builder {
+
         private Duration inactiveThreshold;
+
         private Integer maxAckPending;
 
         /**
          * Construct an instance of the builder
          */
-        public Builder() {}
+        public Builder() {
+        }
 
         /**
          * sets the amount of time before the consumer is deemed inactive.
@@ -102,8 +101,7 @@ public class ConsumerLimits implements JsonSerializable {
          * @return Builder
          */
         public Builder inactiveThreshold(Duration inactiveThreshold) {
-            this.inactiveThreshold = normalize(inactiveThreshold);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -112,8 +110,7 @@ public class ConsumerLimits implements JsonSerializable {
          * @return Builder
          */
         public Builder inactiveThreshold(long inactiveThreshold) {
-            this.inactiveThreshold = normalizeDuration(inactiveThreshold);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -122,8 +119,7 @@ public class ConsumerLimits implements JsonSerializable {
          * @return Builder
          */
         public Builder maxAckPending(Long maxAckPending) {
-            this.maxAckPending = normalize(maxAckPending, STANDARD_MIN);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -132,8 +128,7 @@ public class ConsumerLimits implements JsonSerializable {
          * @return Builder
          */
         public Builder maxAckPending(long maxAckPending) {
-            this.maxAckPending = normalize(maxAckPending, STANDARD_MIN);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -141,7 +136,7 @@ public class ConsumerLimits implements JsonSerializable {
          * @return the ConsumerLimits
          */
         public ConsumerLimits build() {
-            return new ConsumerLimits(this);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

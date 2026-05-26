@@ -10,16 +10,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.Message;
 import io.nats.client.impl.Headers;
 import io.nats.client.support.*;
 import org.jspecify.annotations.Nullable;
-
 import java.time.ZonedDateTime;
-
 import static io.nats.client.support.ApiConstants.*;
 import static io.nats.client.support.JsonUtils.addRawJson;
 import static io.nats.client.support.JsonValueUtils.*;
@@ -31,13 +28,21 @@ import static io.nats.client.support.NatsJetStreamConstants.*;
 public class MessageInfo extends ApiResponse<MessageInfo> {
 
     private final String subject;
+
     private final long seq;
+
     private final byte[] data;
+
     private final ZonedDateTime time;
+
     private final Headers headers;
+
     private final String stream;
+
     private final long lastSeq;
+
     private final long numPending;
+
     private final Status status;
 
     /**
@@ -71,7 +76,6 @@ public class MessageInfo extends ApiResponse<MessageInfo> {
 
     private MessageInfo(Message msg, Status status, String streamName, boolean parseDirect) {
         super(parseDirect ? null : msg);
-
         // working vars because the object vars are final
         String _subject = null;
         long _seq = -1;
@@ -82,17 +86,14 @@ public class MessageInfo extends ApiResponse<MessageInfo> {
         long _lastSeq = -1;
         long _numPending = -1;
         Status _status = null;
-
         if (status != null) {
             _status = status;
-        }
-        else if (parseDirect) {
+        } else if (parseDirect) {
             _data = msg.getData();
             Headers msgHeaders = msg.getHeaders();
             if (msgHeaders == null) {
                 _headers = new Headers(null, true);
-            }
-            else {
+            } else {
                 _subject = msgHeaders.getLast(NATS_SUBJECT);
                 _stream = msgHeaders.getLast(NATS_STREAM);
                 String temp = msgHeaders.getLast(NATS_SEQUENCE);
@@ -111,12 +112,10 @@ public class MessageInfo extends ApiResponse<MessageInfo> {
                 if (temp != null) {
                     _time = DateTimeUtils.parseDateTime(temp);
                 }
-
                 // these are control headers, not real headers so don't give them to the user. Must be done last
                 _headers = new Headers(msgHeaders, true, MESSAGE_INFO_HEADERS);
             }
-        }
-        else if (!hasError()){
+        } else if (!hasError()) {
             JsonValue mjv = readValue(jv, MESSAGE);
             _subject = readString(mjv, SUBJECT);
             _data = readBase64(mjv, DATA);
@@ -125,7 +124,6 @@ public class MessageInfo extends ApiResponse<MessageInfo> {
             byte[] hdrBytes = readBase64(mjv, HDRS);
             _headers = hdrBytes == null ? null : new IncomingHeadersProcessor(hdrBytes).getHeaders();
         }
-
         this.subject = _subject;
         this.data = _data;
         this.seq = _seq;
@@ -143,7 +141,7 @@ public class MessageInfo extends ApiResponse<MessageInfo> {
      */
     @Nullable
     public String getSubject() {
-        return subject;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -151,7 +149,7 @@ public class MessageInfo extends ApiResponse<MessageInfo> {
      * @return the sequence number
      */
     public long getSeq() {
-        return seq;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -159,7 +157,7 @@ public class MessageInfo extends ApiResponse<MessageInfo> {
      * @return the data bytes
      */
     public byte @Nullable [] getData() {
-        return data;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -168,7 +166,7 @@ public class MessageInfo extends ApiResponse<MessageInfo> {
      */
     @Nullable
     public ZonedDateTime getTime() {
-        return time;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -177,7 +175,7 @@ public class MessageInfo extends ApiResponse<MessageInfo> {
      */
     @Nullable
     public Headers getHeaders() {
-        return headers;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -186,7 +184,7 @@ public class MessageInfo extends ApiResponse<MessageInfo> {
      */
     @Nullable
     public String getStream() {
-        return stream;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -194,7 +192,7 @@ public class MessageInfo extends ApiResponse<MessageInfo> {
      * @return the last sequence or -1 if the value is not known.
      */
     public long getLastSeq() {
-        return lastSeq;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -202,7 +200,7 @@ public class MessageInfo extends ApiResponse<MessageInfo> {
      * @return number of pending messages
      */
     public long getNumPending() {
-        return numPending;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -211,7 +209,7 @@ public class MessageInfo extends ApiResponse<MessageInfo> {
      */
     @Nullable
     public Status getStatus() {
-        return status;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -219,7 +217,7 @@ public class MessageInfo extends ApiResponse<MessageInfo> {
      * @return true if the MessageInfo is a regular message
      */
     public boolean isMessage() {
-        return status == null && !hasError();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -227,7 +225,7 @@ public class MessageInfo extends ApiResponse<MessageInfo> {
      * @return true if this MessageInfo is a status message
      */
     public boolean isStatus() {
-        return status != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -235,7 +233,7 @@ public class MessageInfo extends ApiResponse<MessageInfo> {
      * @return true if this MessageInfo is a status message and is a direct EOB status
      */
     public boolean isEobStatus() {
-        return status != null && status.isEob();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -243,34 +241,11 @@ public class MessageInfo extends ApiResponse<MessageInfo> {
      * @return true if this MessageInfo is a status message and is an error status
      */
     public boolean isErrorStatus() {
-        return status != null && !status.isEob();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = JsonUtils.beginJsonPrefixed("\"MessageInfo\":");
-        if (status != null) {
-            JsonUtils.addField(sb, "status_code", status.getCode());
-            JsonUtils.addField(sb, "status_message", status.getMessage());
-        }
-        else if (hasError()) {
-            JsonUtils.addField(sb, ERROR, getError());
-        }
-        else {
-            JsonUtils.addField(sb, SEQ, seq);
-            JsonUtils.addField(sb, LAST_SEQ, lastSeq);
-            JsonUtils.addFieldWhenGteMinusOne(sb, NUM_PENDING, numPending);
-            JsonUtils.addField(sb, STREAM, stream);
-            JsonUtils.addField(sb, SUBJECT, subject);
-            JsonUtils.addField(sb, TIME, time);
-            if (data == null) {
-                addRawJson(sb, DATA, "null");
-            }
-            else {
-                JsonUtils.addField(sb, "data_length", data.length);
-            }
-            JsonUtils.addField(sb, HDRS, headers);
-        }
-        return JsonUtils.endJson(sb).toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

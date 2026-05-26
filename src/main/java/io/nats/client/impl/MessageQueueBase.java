@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import java.time.Duration;
@@ -18,18 +17,24 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-
 import static io.nats.client.impl.MarkerMessage.POISON_PILL;
 
 abstract class MessageQueueBase {
+
     protected static final int PAUSED = 0;
+
     protected static final int RUNNING = 1;
+
     protected static final int DRAINING = 2;
 
     protected final int queueCapacity;
+
     protected final LinkedBlockingQueue<NatsMessage> queue;
+
     protected final AtomicLong length;
+
     protected final AtomicLong sizeInBytes;
+
     protected final AtomicInteger running;
 
     MessageQueueBase() {
@@ -45,75 +50,49 @@ abstract class MessageQueueBase {
     }
 
     boolean isRunning() {
-        return running.get() != PAUSED;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     boolean isPaused() {
-        return running.get() == PAUSED;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     boolean isDraining() {
-        return running.get() == DRAINING;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     boolean isDrained() {
-        return running.get() == DRAINING && length.get() == 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void pause() {
-        if (running.compareAndSet(RUNNING, PAUSED)) {
-            queue.offer(POISON_PILL);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void drain() {
-        if (running.compareAndSet(RUNNING, DRAINING)) {
-            queue.offer(POISON_PILL);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void resume() {
-        running.set(RUNNING);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     long queueSize() {
-        return queue.size();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     long length() {
-        return length.get();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     long sizeInBytes() {
-        return sizeInBytes.get();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     // this is just a helper method to poll a message from
     // the queue handling various forms of timeouts
     // if the polled message was a POISON_PILL, return null
     NatsMessage _poll(Duration timeout) throws InterruptedException {
-        NatsMessage msg = null;
-
-        if (timeout == null || this.isDraining()) { // try immediately
-            msg = queue.poll(); // may get null
-        }
-        else {
-            long nanos = timeout.toNanos();
-            if (nanos < 1) {
-                // A value < 1 means poll forever until a message
-                // Calling pause will put a POISON_PILL so will break this loop
-                while (isRunning()) {
-                    msg = queue.poll(3650, TimeUnit.DAYS);
-                    if (msg != null) {
-                        break;
-                    }
-                }
-            }
-            else {
-                msg = queue.poll(nanos, TimeUnit.NANOSECONDS); // may get null
-            }
-        }
-
-        return msg == null || msg == POISON_PILL ? null : msg;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

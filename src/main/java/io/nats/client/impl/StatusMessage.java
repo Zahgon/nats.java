@@ -10,12 +10,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import io.nats.client.support.Status;
 
 public class StatusMessage extends IncomingMessage {
+
     private final Status status;
 
     StatusMessage(Status status) {
@@ -24,19 +24,16 @@ public class StatusMessage extends IncomingMessage {
 
     @Override
     public boolean isStatusMessage() {
-        return true;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Status getStatus() {
-        return status;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return "StatusMessage{" +
-            "code=" + status.getCode() +
-            ", message='" + status.getMessage() + '\'' +
-            '}';
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

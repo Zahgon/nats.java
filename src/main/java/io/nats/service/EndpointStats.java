@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.service;
 
 import io.nats.client.support.JsonSerializable;
@@ -18,11 +17,9 @@ import io.nats.client.support.JsonUtils;
 import io.nats.client.support.JsonValue;
 import io.nats.client.support.JsonValueUtils;
 import org.jspecify.annotations.NonNull;
-
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Objects;
-
 import static io.nats.client.support.ApiConstants.*;
 import static io.nats.client.support.JsonUtils.beginJson;
 import static io.nats.client.support.JsonUtils.endJson;
@@ -71,19 +68,29 @@ import static io.nats.client.support.JsonValueUtils.*;
  * </code>
  */
 public class EndpointStats implements JsonSerializable {
+
     private final String name;
+
     private final String subject;
+
     private final String queueGroup;
+
     private final long numRequests;
+
     private final long numErrors;
+
     private final long processingTime;
+
     private final long averageProcessingTime;
+
     private final String lastError;
+
     private final JsonValue data;
+
     private final ZonedDateTime started;
 
     static List<EndpointStats> listOf(JsonValue vEndpointStats) {
-        return JsonValueUtils.listOf(vEndpointStats, EndpointStats::new);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     EndpointStats(String name, String subject, String queueGroup, long numRequests, long numErrors, long processingTime, String lastError, JsonValue data, ZonedDateTime started) {
@@ -115,18 +122,7 @@ public class EndpointStats implements JsonSerializable {
     @Override
     @NonNull
     public String toJson() {
-        StringBuilder sb = beginJson();
-        JsonUtils.addField(sb, NAME, name);
-        JsonUtils.addField(sb, SUBJECT, subject);
-        JsonUtils.addField(sb, QUEUE_GROUP, queueGroup);
-        JsonUtils.addFieldWhenGtZero(sb, NUM_REQUESTS, numRequests);
-        JsonUtils.addFieldWhenGtZero(sb, NUM_ERRORS, numErrors);
-        JsonUtils.addFieldWhenGtZero(sb, PROCESSING_TIME, processingTime);
-        JsonUtils.addFieldWhenGtZero(sb, AVERAGE_PROCESSING_TIME, averageProcessingTime);
-        JsonUtils.addField(sb, LAST_ERROR, lastError);
-        JsonUtils.addField(sb, DATA, data);
-        JsonUtils.addField(sb, STARTED, started);
-        return endJson(sb).toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -134,7 +130,7 @@ public class EndpointStats implements JsonSerializable {
      * @return the name
      */
     public String getName() {
-        return name;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -142,7 +138,7 @@ public class EndpointStats implements JsonSerializable {
      * @return the subject
      */
     public String getSubject() {
-        return subject;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -150,7 +146,7 @@ public class EndpointStats implements JsonSerializable {
      * @return the queueGroup
      */
     public String getQueueGroup() {
-        return queueGroup;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -158,7 +154,7 @@ public class EndpointStats implements JsonSerializable {
      * @return the number of requests
      */
     public long getNumRequests() {
-        return numRequests;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -166,7 +162,7 @@ public class EndpointStats implements JsonSerializable {
      * @return the number of errors
      */
     public long getNumErrors() {
-        return numErrors;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -174,7 +170,7 @@ public class EndpointStats implements JsonSerializable {
      * @return the total processing time
      */
     public long getProcessingTime() {
-        return processingTime;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -182,7 +178,7 @@ public class EndpointStats implements JsonSerializable {
      * @return the average processing time
      */
     public long getAverageProcessingTime() {
-        return averageProcessingTime;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -190,7 +186,7 @@ public class EndpointStats implements JsonSerializable {
      * @return the last error or null
      */
     public String getLastError() {
-        return lastError;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -198,7 +194,7 @@ public class EndpointStats implements JsonSerializable {
      * @return the JsonValue object representing the data
      */
     public JsonValue getData() {
-        return data;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -206,7 +202,7 @@ public class EndpointStats implements JsonSerializable {
      * @return the json
      */
     public String getDataAsJson() {
-        return data == null ? null : data.toJson();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -214,46 +210,21 @@ public class EndpointStats implements JsonSerializable {
      * @return the start time
      */
     public ZonedDateTime getStarted() {
-        return started;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return JsonUtils.toKey(getClass()) + toJson();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean equals(Object o) {
-
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        EndpointStats that = (EndpointStats) o;
-
-        if (numRequests != that.numRequests) return false;
-        if (numErrors != that.numErrors) return false;
-        if (processingTime != that.processingTime) return false;
-        if (averageProcessingTime != that.averageProcessingTime) return false;
-        if (!Objects.equals(name, that.name)) return false;
-        if (!Objects.equals(subject, that.subject)) return false;
-        if (!Objects.equals(queueGroup, that.queueGroup)) return false;
-        if (!Objects.equals(lastError, that.lastError)) return false;
-        if (!Objects.equals(data, that.data)) return false;
-        return Objects.equals(started, that.started);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int hashCode() {
-        int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + (subject != null ? subject.hashCode() : 0);
-        result = 31 * result + (queueGroup != null ? queueGroup.hashCode() : 0);
-        result = 31 * result + Long.hashCode(numRequests);
-        result = 31 * result + Long.hashCode(numErrors);
-        result = 31 * result + Long.hashCode(processingTime);
-        result = 31 * result + Long.hashCode(averageProcessingTime);
-        result = 31 * result + (lastError != null ? lastError.hashCode() : 0);
-        result = 31 * result + (data != null ? data.hashCode() : 0);
-        result = 31 * result + (started != null ? started.hashCode() : 0);
-        return result;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.support.JsonSerializable;
@@ -18,7 +17,6 @@ import io.nats.client.support.JsonValue;
 import io.nats.client.support.JsonValueUtils;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import static io.nats.client.support.ApiConstants.API;
 import static io.nats.client.support.ApiConstants.DELIVER;
 import static io.nats.client.support.JsonUtils.*;
@@ -27,11 +25,13 @@ import static io.nats.client.support.JsonUtils.*;
  * External configuration referencing a stream source in another account
  */
 public class External implements JsonSerializable {
+
     private final String api;
+
     private final String deliver;
 
     static External optionalInstance(JsonValue vExternal) {
-        return vExternal == null ? null : new External(vExternal);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     External(JsonValue vExternal) {
@@ -57,6 +57,7 @@ public class External implements JsonSerializable {
         this.api = external.api;
         this.deliver = external.deliver;
     }
+
     /**
      * Returns a JSON representation of this mirror
      *
@@ -65,10 +66,7 @@ public class External implements JsonSerializable {
     @Override
     @NonNull
     public String toJson() {
-        StringBuilder sb = beginJson();
-        addField(sb, API, api);
-        addField(sb, DELIVER, deliver);
-        return endJson(sb).toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -77,7 +75,7 @@ public class External implements JsonSerializable {
      */
     @Nullable
     public String getApi() {
-        return api;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -86,33 +84,22 @@ public class External implements JsonSerializable {
      */
     @Nullable
     public String getDeliver() {
-        return deliver;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return "External{" +
-                "api='" + api + '\'' +
-                ", deliver='" + deliver + '\'' +
-                '}';
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        External external = (External) o;
-
-        if (api != null ? !api.equals(external.api) : external.api != null) return false;
-        return deliver != null ? deliver.equals(external.deliver) : external.deliver == null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int hashCode() {
-        int result = api != null ? api.hashCode() : 0;
-        result = 31 * result + (deliver != null ? deliver.hashCode() : 0);
-        return result;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -120,20 +107,23 @@ public class External implements JsonSerializable {
      * @return the builder.
      */
     public static Builder builder() {
-        return new Builder();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * External can be created using a Builder.
      */
     public static class Builder {
+
         private String api;
+
         private String deliver;
 
         /**
          * Construct a builder for an External object
          */
-        public Builder() {}
+        public Builder() {
+        }
 
         /**
          * Set the api string.
@@ -141,8 +131,7 @@ public class External implements JsonSerializable {
          * @return the builder
          */
         public Builder api(String api) {
-            this.api = api;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -151,8 +140,7 @@ public class External implements JsonSerializable {
          * @return the builder
          */
         public Builder deliver(String deliver) {
-            this.deliver = deliver;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -160,7 +148,7 @@ public class External implements JsonSerializable {
          * @return the External object
          */
         public External build() {
-            return new External(api, deliver);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

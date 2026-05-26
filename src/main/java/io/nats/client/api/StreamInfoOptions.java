@@ -10,13 +10,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.support.JsonSerializable;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import static io.nats.client.support.ApiConstants.DELETED_DETAILS;
 import static io.nats.client.support.ApiConstants.SUBJECTS_FILTER;
 import static io.nats.client.support.JsonUtils.*;
@@ -27,7 +25,9 @@ import static io.nats.client.support.Validator.emptyAsNull;
  * Object used to make a request for special stream info requests
  */
 public class StreamInfoOptions implements JsonSerializable {
+
     private final String subjectsFilter;
+
     private final boolean deletedDetails;
 
     private StreamInfoOptions(String subjectsFilter, boolean deletedDetails) {
@@ -41,7 +41,7 @@ public class StreamInfoOptions implements JsonSerializable {
      */
     @Nullable
     public String getSubjectsFilter() {
-        return subjectsFilter;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -49,7 +49,7 @@ public class StreamInfoOptions implements JsonSerializable {
      * @return true if configured for deleted details
      */
     public boolean isDeletedDetails() {
-        return deletedDetails;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -58,7 +58,7 @@ public class StreamInfoOptions implements JsonSerializable {
      * @return the StreamInfoOptions object
      */
     public static StreamInfoOptions filterSubjects(String subjectsFilter) {
-        return new Builder().filterSubjects(subjectsFilter).build();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -66,7 +66,7 @@ public class StreamInfoOptions implements JsonSerializable {
      * @return the StreamInfoOptions object
      */
     public static StreamInfoOptions allSubjects() {
-        return new Builder().allSubjects().build();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -74,7 +74,7 @@ public class StreamInfoOptions implements JsonSerializable {
      * @return the StreamInfoOptions object
      */
     public static StreamInfoOptions deletedDetails() {
-        return new Builder().deletedDetails().build();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -82,16 +82,13 @@ public class StreamInfoOptions implements JsonSerializable {
      * @return the builder
      */
     public static Builder builder() {
-        return new Builder();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     @NonNull
     public String toJson() {
-        StringBuilder sb = beginJson();
-        addField(sb, SUBJECTS_FILTER, subjectsFilter);
-        addFldWhenTrue(sb, DELETED_DETAILS, deletedDetails);
-        return endJson(sb).toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -99,16 +96,18 @@ public class StreamInfoOptions implements JsonSerializable {
      * create a default set of options if no methods are calls.
      *
      * <p>{@code new StreamInfoOptions.Builder().build()} will create a new StreamInfoOptions.
-     *
      */
     public static class Builder {
+
         private String subjectsFilter;
+
         private boolean deletedDetails;
 
         /**
          * Construct an instance of the builder
          */
-        public Builder() {}
+        public Builder() {
+        }
 
         /**
          * Set the subjects filter, which turns on getting subject info.
@@ -118,8 +117,7 @@ public class StreamInfoOptions implements JsonSerializable {
          * @return the builder
          */
         public Builder filterSubjects(String subjectsFilter) {
-            this.subjectsFilter = emptyAsNull(subjectsFilter);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -127,8 +125,7 @@ public class StreamInfoOptions implements JsonSerializable {
          * @return the builder
          */
         public Builder allSubjects() {
-            this.subjectsFilter = GREATER_THAN;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -136,8 +133,7 @@ public class StreamInfoOptions implements JsonSerializable {
          * @return the builder
          */
         public Builder deletedDetails() {
-            this.deletedDetails = true;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -145,7 +141,7 @@ public class StreamInfoOptions implements JsonSerializable {
          * @return the StreamInfoOptions object
          */
         public StreamInfoOptions build() {
-            return new StreamInfoOptions(subjectsFilter, deletedDetails);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

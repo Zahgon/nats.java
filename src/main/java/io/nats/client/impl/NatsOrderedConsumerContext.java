@@ -10,14 +10,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import io.nats.client.*;
 import io.nats.client.api.OrderedConsumerConfiguration;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import java.io.IOException;
 import java.time.Duration;
 
@@ -25,10 +23,10 @@ import java.time.Duration;
  * Implementation of Ordered Consumer Context
  */
 public class NatsOrderedConsumerContext implements OrderedConsumerContext {
+
     private final NatsConsumerContext impl;
 
-    NatsOrderedConsumerContext(@NonNull NatsStreamContext streamContext,
-                               @NonNull OrderedConsumerConfiguration config) {
+    NatsOrderedConsumerContext(@NonNull NatsStreamContext streamContext, @NonNull OrderedConsumerConfiguration config) {
         impl = new NatsConsumerContext(streamContext, null, config);
     }
 
@@ -49,7 +47,7 @@ public class NatsOrderedConsumerContext implements OrderedConsumerContext {
      */
     @Override
     public String getConsumerName() {
-        return impl.getConsumerName();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -58,7 +56,7 @@ public class NatsOrderedConsumerContext implements OrderedConsumerContext {
     @Override
     @Nullable
     public Message next() throws IOException, InterruptedException, JetStreamStatusCheckedException, JetStreamApiException {
-        return impl.next();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -67,7 +65,7 @@ public class NatsOrderedConsumerContext implements OrderedConsumerContext {
     @Override
     @Nullable
     public Message next(@Nullable Duration maxWait) throws IOException, InterruptedException, JetStreamStatusCheckedException, JetStreamApiException {
-        return impl.next(maxWait);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -76,7 +74,7 @@ public class NatsOrderedConsumerContext implements OrderedConsumerContext {
     @Override
     @Nullable
     public Message next(long maxWaitMillis) throws IOException, InterruptedException, JetStreamStatusCheckedException, JetStreamApiException {
-        return impl.next(maxWaitMillis);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -85,7 +83,7 @@ public class NatsOrderedConsumerContext implements OrderedConsumerContext {
     @Override
     @NonNull
     public FetchConsumer fetchMessages(int maxMessages) throws IOException, JetStreamApiException {
-        return impl.fetchMessages(maxMessages);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -94,7 +92,7 @@ public class NatsOrderedConsumerContext implements OrderedConsumerContext {
     @Override
     @NonNull
     public FetchConsumer fetchBytes(int maxBytes) throws IOException, JetStreamApiException {
-        return impl.fetchBytes(maxBytes);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -103,7 +101,7 @@ public class NatsOrderedConsumerContext implements OrderedConsumerContext {
     @Override
     @NonNull
     public FetchConsumer fetch(@NonNull FetchConsumeOptions fetchConsumeOptions) throws IOException, JetStreamApiException {
-        return impl.fetch(fetchConsumeOptions);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -112,7 +110,7 @@ public class NatsOrderedConsumerContext implements OrderedConsumerContext {
     @Override
     @NonNull
     public IterableConsumer iterate() throws IOException, JetStreamApiException {
-        return impl.iterate();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -121,7 +119,7 @@ public class NatsOrderedConsumerContext implements OrderedConsumerContext {
     @Override
     @NonNull
     public IterableConsumer iterate(@NonNull ConsumeOptions consumeOptions) throws IOException, JetStreamApiException {
-        return impl.iterate(consumeOptions);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -130,7 +128,7 @@ public class NatsOrderedConsumerContext implements OrderedConsumerContext {
     @Override
     @NonNull
     public MessageConsumer consume(@NonNull MessageHandler handler) throws IOException, JetStreamApiException {
-        return impl.consume(handler);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -139,7 +137,7 @@ public class NatsOrderedConsumerContext implements OrderedConsumerContext {
     @Override
     @NonNull
     public MessageConsumer consume(@Nullable Dispatcher dispatcher, @NonNull MessageHandler handler) throws IOException, JetStreamApiException {
-        return impl.consume(dispatcher, handler);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -148,7 +146,7 @@ public class NatsOrderedConsumerContext implements OrderedConsumerContext {
     @Override
     @NonNull
     public MessageConsumer consume(@NonNull ConsumeOptions consumeOptions, @NonNull MessageHandler handler) throws IOException, JetStreamApiException {
-        return impl.consume(consumeOptions, handler);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -157,11 +155,11 @@ public class NatsOrderedConsumerContext implements OrderedConsumerContext {
     @Override
     @NonNull
     public MessageConsumer consume(@NonNull ConsumeOptions consumeOptions, @Nullable Dispatcher dispatcher, @NonNull MessageHandler handler) throws IOException, JetStreamApiException {
-        return impl.consume(consumeOptions, dispatcher, handler);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean unpin(String group) throws IOException, JetStreamApiException {
-        return impl.unpin(group);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -10,11 +10,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import io.nats.client.support.DateTimeUtils;
-
 import java.time.ZonedDateTime;
 
 /**
@@ -23,32 +21,31 @@ import java.time.ZonedDateTime;
 public class NatsJetStreamMetaData {
 
     private final String prefix;
+
     private final String metaType;
+
     private final String domain;
+
     private final String accountHash;
+
     private final String stream;
+
     private final String consumer;
+
     private final long delivered;
+
     private final long streamSeq;
+
     private final long consumerSeq;
+
     private final ZonedDateTime timestamp;
+
     private final long pending;
+
     @Override
     public String toString() {
-        return "NatsJetStreamMetaData{" +
-            "prefix='" + prefix + '\'' +
-            ", metaType='" + metaType + '\'' +
-            ", domain='" + domain + '\'' +
-            ", stream='" + stream + '\'' +
-            ", consumer='" + consumer + '\'' +
-            ", delivered=" + delivered +
-            ", streamSeq=" + streamSeq +
-            ", consumerSeq=" + consumerSeq +
-            ", timestamp=" + timestamp +
-            ", pending=" + pending +
-            '}';
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 
     /*
     v0 <prefix>.ACK.<stream name>.<consumer name>.<num delivered>.<stream sequence>.<consumer sequence>.<timestamp>
@@ -56,22 +53,18 @@ public class NatsJetStreamMetaData {
     v2 <prefix>.ACK.<domain>.<account hash>.<stream name>.<consumer name>.<num delivered>.<stream sequence>.<consumer sequence>.<timestamp>.<num pending>
     v2 <prefix>.FC.<domain>.<account hash>.<stream name>.<consumer name>.<num delivered>.<stream sequence>.<consumer sequence>.<timestamp>.<num pending>
      */
-
     public NatsJetStreamMetaData(NatsMessage natsMessage) {
         if (!natsMessage.isJetStream()) {
             throw new IllegalArgumentException(notAJetStreamMessage(natsMessage.getReplyTo()));
         }
-
         String[] parts = natsMessage.getReplyTo().split("\\.");
         if (parts.length < 8) {
             throw new IllegalArgumentException(notAJetStreamMessage(natsMessage.getReplyTo()));
         }
-
         metaType = "ACK".equals(parts[1]) || "FC".equals(parts[1]) ? parts[1] : null;
         if (metaType == null) {
             throw new IllegalArgumentException(notAJetStreamMessage(natsMessage.getReplyTo()));
         }
-
         int streamIndex;
         boolean hasPending;
         boolean hasDomainAndHash;
@@ -79,21 +72,17 @@ public class NatsJetStreamMetaData {
             streamIndex = 2;
             hasPending = false;
             hasDomainAndHash = false;
-        }
-        else if (parts.length == 9) {
+        } else if (parts.length == 9) {
             streamIndex = 2;
             hasPending = true;
             hasDomainAndHash = false;
-        }
-        else if (parts.length >= 11) {
+        } else if (parts.length >= 11) {
             streamIndex = 4;
             hasPending = true;
             hasDomainAndHash = true;
-        }
-        else {
+        } else {
             throw new IllegalArgumentException(notAJetStreamMessage(natsMessage.getReplyTo()));
         }
-
         try {
             prefix = parts[0];
             // metaType = parts[1], checked and set above
@@ -106,8 +95,7 @@ public class NatsJetStreamMetaData {
             consumerSeq = Long.parseLong(parts[streamIndex + 4]);
             timestamp = DateTimeUtils.parseDateTimeNanos(parts[streamIndex + 5]);
             pending = hasPending ? Long.parseLong(parts[streamIndex + 6]) : -1L;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new IllegalArgumentException(notAJetStreamMessage(natsMessage.getReplyTo()));
         }
     }
@@ -117,7 +105,7 @@ public class NatsJetStreamMetaData {
      * @return the meta type, either ACK or FC
      */
     public String getMetaType() {
-        return metaType;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -125,7 +113,7 @@ public class NatsJetStreamMetaData {
      * @return the domain
      */
     public String getDomain() {
-        return domain;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -134,7 +122,7 @@ public class NatsJetStreamMetaData {
      * @return the stream.
      */
     public String getStream() {
-        return stream;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -143,7 +131,7 @@ public class NatsJetStreamMetaData {
      * @return the consumer.
      */
     public String getConsumer() {
-        return consumer;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -152,7 +140,7 @@ public class NatsJetStreamMetaData {
      * @return delivered count.
      */
     public long deliveredCount() {
-        return delivered;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -161,7 +149,7 @@ public class NatsJetStreamMetaData {
      * @return sequence number
      */
     public long streamSequence() {
-        return streamSeq;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -170,7 +158,7 @@ public class NatsJetStreamMetaData {
      * @return sequence number
      */
     public long consumerSequence() {
-        return consumerSeq;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -179,7 +167,7 @@ public class NatsJetStreamMetaData {
      * @return pending count
      */
     public long pendingCount() {
-        return pending;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -188,11 +176,11 @@ public class NatsJetStreamMetaData {
      * @return the timestamp
      */
     public ZonedDateTime timestamp() {
-        return timestamp;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     String getAccountHash() {
-        return accountHash;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private String notAJetStreamMessage(String reply) {

@@ -10,17 +10,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.Message;
 import io.nats.client.support.JsonValue;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import java.util.HashMap;
 import java.util.Map;
-
 import static io.nats.client.support.ApiConstants.*;
 import static io.nats.client.support.JsonValueUtils.readObject;
 import static io.nats.client.support.JsonValueUtils.readString;
@@ -31,8 +28,11 @@ import static io.nats.client.support.JsonValueUtils.readString;
 public class AccountStatistics extends ApiResponse<AccountStatistics> {
 
     private final AccountTier rollupTier;
+
     private final String domain;
+
     private final ApiStats api;
+
     private final Map<String, AccountTier> tiers;
 
     /**
@@ -59,7 +59,7 @@ public class AccountStatistics extends ApiResponse<AccountStatistics> {
      * @return bytes
      */
     public long getMemory() {
-        return rollupTier.getMemoryBytes();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -68,7 +68,7 @@ public class AccountStatistics extends ApiResponse<AccountStatistics> {
      * @return bytes
      */
     public long getStorage() {
-        return rollupTier.getStorageBytes();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -76,7 +76,7 @@ public class AccountStatistics extends ApiResponse<AccountStatistics> {
      * @return the memory usage in bytes
      */
     public long getReservedMemory() {
-        return rollupTier.getReservedMemoryBytes();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -84,7 +84,7 @@ public class AccountStatistics extends ApiResponse<AccountStatistics> {
      * @return the disk usage in bytes
      */
     public long getReservedStorage() {
-        return rollupTier.getReservedStorageBytes();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -93,7 +93,7 @@ public class AccountStatistics extends ApiResponse<AccountStatistics> {
      * @return stream maximum count
      */
     public long getStreams() {
-        return rollupTier.getStreams();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -102,7 +102,7 @@ public class AccountStatistics extends ApiResponse<AccountStatistics> {
      * @return consumer maximum count
      */
     public long getConsumers() {
-        return rollupTier.getConsumers();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -113,7 +113,7 @@ public class AccountStatistics extends ApiResponse<AccountStatistics> {
      */
     @NonNull
     public AccountLimits getLimits() {
-        return rollupTier.getLimits();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -122,7 +122,7 @@ public class AccountStatistics extends ApiResponse<AccountStatistics> {
      */
     @Nullable
     public String getDomain() {
-        return domain;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -131,7 +131,7 @@ public class AccountStatistics extends ApiResponse<AccountStatistics> {
      */
     @NonNull
     public ApiStats getApi() {
-        return api;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -140,6 +140,6 @@ public class AccountStatistics extends ApiResponse<AccountStatistics> {
      */
     @NonNull
     public Map<String, AccountTier> getTiers() {
-        return tiers;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

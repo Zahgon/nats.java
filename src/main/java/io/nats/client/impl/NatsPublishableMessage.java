@@ -10,10 +10,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 class NatsPublishableMessage extends NatsMessage {
+
     final boolean hasHeaders;
 
     public NatsPublishableMessage(boolean hasHeaders) {
@@ -28,8 +28,7 @@ class NatsPublishableMessage extends NatsMessage {
         this.replyTo = replyTo;
         if (headers == null || headers.isEmpty()) {
             hasHeaders = false;
-        }
-        else {
+        } else {
             hasHeaders = true;
             this.headers = headers.isReadOnly() ? headers : new Headers(headers, true, null);
         }
@@ -38,6 +37,6 @@ class NatsPublishableMessage extends NatsMessage {
 
     @Override
     protected void calculate() {
-        // it's already done in the constructor
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

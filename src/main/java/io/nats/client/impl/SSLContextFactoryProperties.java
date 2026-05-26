@@ -10,14 +10,18 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 public class SSLContextFactoryProperties {
+
     public final String keystorePath;
+
     public final char[] keystorePassword;
+
     public final String truststorePath;
+
     public final char[] truststorePassword;
+
     public final String tlsAlgorithm;
 
     private SSLContextFactoryProperties(Builder b) {
@@ -29,59 +33,59 @@ public class SSLContextFactoryProperties {
     }
 
     public String getKeystorePath() {
-        return keystorePath;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public char[] getKeystorePassword() {
-        return keystorePassword;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public String getTruststorePath() {
-        return truststorePath;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public char[] getTruststorePassword() {
-        return truststorePassword;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public String getTlsAlgorithm() {
-        return tlsAlgorithm;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static class Builder {
+
         String keystore;
+
         char[] keystorePassword;
+
         String truststore;
+
         char[] truststorePassword;
+
         String tlsAlgorithm;
 
         public Builder keystore(String keystore) {
-            this.keystore = keystore;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         public Builder keystorePassword(char[] keystorePassword) {
-            this.keystorePassword = keystorePassword;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         public Builder truststore(String truststore) {
-            this.truststore = truststore;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         public Builder truststorePassword(char[] truststorePassword) {
-            this.truststorePassword = truststorePassword;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         public Builder tlsAlgorithm(String tlsAlgorithm) {
-            this.tlsAlgorithm = tlsAlgorithm;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         public SSLContextFactoryProperties build() {
-            return new SSLContextFactoryProperties(this);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

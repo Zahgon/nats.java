@@ -19,12 +19,10 @@ import io.nats.client.support.JsonValue;
 import io.nats.client.support.Validator;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-
 import static io.nats.client.support.ApiConstants.*;
 import static io.nats.client.support.JsonUtils.beginJson;
 import static io.nats.client.support.JsonUtils.endJson;
@@ -36,9 +34,13 @@ import static io.nats.client.support.JsonValueUtils.*;
 public class ObjectMeta implements JsonSerializable {
 
     private final String objectName;
+
     private final String description;
+
     private final Headers headers;
+
     private final Map<String, String> metadata;
+
     private final ObjectMetaOptions objectMetaOptions;
 
     private ObjectMeta(Builder b) {
@@ -66,22 +68,11 @@ public class ObjectMeta implements JsonSerializable {
     @Override
     @NonNull
     public String toJson() {
-        StringBuilder sb = beginJson();
-        embedJson(sb);
-        return endJson(sb).toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void embedJson(StringBuilder sb) {
-        JsonUtils.addField(sb, NAME, objectName);
-        JsonUtils.addField(sb, DESCRIPTION, description);
-        JsonUtils.addField(sb, HEADERS, headers);
-        JsonUtils.addField(sb, METADATA, metadata);
-
-        // avoid adding an empty child to the json because JsonUtils.addField
-        // only checks versus the object being null, which it is never
-        if (objectMetaOptions.hasData()) {
-            JsonUtils.addField(sb, OPTIONS, objectMetaOptions);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -90,7 +81,7 @@ public class ObjectMeta implements JsonSerializable {
      */
     @NonNull
     public String getObjectName() {
-        return objectName;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -99,7 +90,7 @@ public class ObjectMeta implements JsonSerializable {
      */
     @Nullable
     public String getDescription() {
-        return description;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -108,7 +99,7 @@ public class ObjectMeta implements JsonSerializable {
      */
     @NonNull
     public Headers getHeaders() {
-        return headers;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -117,7 +108,7 @@ public class ObjectMeta implements JsonSerializable {
      */
     @NonNull
     public Map<String, String> getMetadata() {
-        return metadata;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -126,7 +117,7 @@ public class ObjectMeta implements JsonSerializable {
      */
     @Nullable
     public ObjectMetaOptions getObjectMetaOptions() {
-        return objectMetaOptions;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -135,7 +126,7 @@ public class ObjectMeta implements JsonSerializable {
      * @return the builder
      */
     public static Builder builder(String objectName) {
-        return new Builder(objectName);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -144,7 +135,7 @@ public class ObjectMeta implements JsonSerializable {
      * @return the builder
      */
     public static Builder builder(ObjectMeta om) {
-        return new Builder(om);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -153,17 +144,22 @@ public class ObjectMeta implements JsonSerializable {
      * @return the ObjectMeta
      */
     public static ObjectMeta objectName(String objectName) {
-        return new Builder(objectName).build();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * The builder for ObjectMeta
      */
     public static class Builder {
+
         String objectName;
+
         String description;
+
         Headers headers;
+
         Map<String, String> metadata;
+
         ObjectMetaOptions.Builder metaOptionsBuilder;
 
         /**
@@ -195,8 +191,7 @@ public class ObjectMeta implements JsonSerializable {
          * @return the builder
          */
         public Builder objectName(String name) {
-            this.objectName = Validator.validateNotNull(name, "Object Name");
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -205,8 +200,7 @@ public class ObjectMeta implements JsonSerializable {
          * @return the builder
          */
         public Builder description(String description) {
-            this.description = description;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -215,13 +209,7 @@ public class ObjectMeta implements JsonSerializable {
          * @return the builder
          */
         public Builder headers(Headers headers) {
-            if (headers == null) {
-                this.headers.clear();
-            }
-            else {
-                this.headers = new Headers(headers);
-            }
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -230,13 +218,7 @@ public class ObjectMeta implements JsonSerializable {
          * @return the builder
          */
         public Builder metadata(Map<String, String> metadata) {
-            if (metadata == null) {
-                this.metadata.clear();
-            }
-            else {
-                this.metadata = metadata;
-            }
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -245,8 +227,7 @@ public class ObjectMeta implements JsonSerializable {
          * @return the builder
          */
         public Builder options(ObjectMetaOptions objectMetaOptions) {
-            metaOptionsBuilder = ObjectMetaOptions.builder(objectMetaOptions);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -255,8 +236,7 @@ public class ObjectMeta implements JsonSerializable {
          * @return the builder
          */
         public Builder chunkSize(int chunkSize) {
-            metaOptionsBuilder.chunkSize(chunkSize);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -265,8 +245,7 @@ public class ObjectMeta implements JsonSerializable {
          * @return the builder
          */
         public Builder link(ObjectLink link) {
-            metaOptionsBuilder.link(link);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -274,42 +253,22 @@ public class ObjectMeta implements JsonSerializable {
          * @return the ObjectMeta instance
          */
         public ObjectMeta build() {
-            return new ObjectMeta(this);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ObjectMeta that = (ObjectMeta) o;
-
-        if (!objectName.equals(that.objectName)) return false;
-        if (description != null ? !description.equals(that.description) : that.description != null) return false;
-        if (!Objects.equals(headers, that.headers)) return false;
-        if (!Objects.equals(metadata, that.metadata)) return false;
-        return objectMetaOptions.equals(that.objectMetaOptions);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int hashCode() {
-        int result = objectName.hashCode();
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + headers.hashCode();
-        result = 31 * result + metadata.hashCode();
-        result = 31 * result + objectMetaOptions.hashCode();
-        return result;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return "ObjectMeta{" +
-            "objectName='" + objectName + '\'' +
-            ", description='" + description + '\'' +
-            ", headers?" + headers.size() +
-            ", metadata?" + metadata.size() +
-            ", objectMetaOptions=" + objectMetaOptions +
-            '}';
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

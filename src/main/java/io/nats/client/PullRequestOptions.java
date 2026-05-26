@@ -10,15 +10,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client;
 
 import io.nats.client.support.JsonSerializable;
 import io.nats.client.support.JsonUtils;
 import org.jspecify.annotations.NonNull;
-
 import java.time.Duration;
-
 import static io.nats.client.support.ApiConstants.*;
 import static io.nats.client.support.Validator.validateGtZero;
 
@@ -28,13 +25,21 @@ import static io.nats.client.support.Validator.validateGtZero;
 public class PullRequestOptions implements JsonSerializable {
 
     private final int batchSize;
+
     private final long maxBytes;
+
     private final boolean noWait;
+
     private final Duration expiresIn;
+
     private final Duration idleHeartbeat;
+
     private final String group;
+
     private final int priority;
+
     private final long minPending;
+
     private final long minAckPending;
 
     /**
@@ -56,22 +61,11 @@ public class PullRequestOptions implements JsonSerializable {
     @Override
     @NonNull
     public String toJson() {
-        StringBuilder sb = JsonUtils.beginJson();
-        JsonUtils.addField(sb, BATCH, batchSize);
-        JsonUtils.addField(sb, MAX_BYTES, maxBytes);
-        JsonUtils.addFldWhenTrue(sb, NO_WAIT, noWait);
-        JsonUtils.addFieldAsNanos(sb, EXPIRES, expiresIn);
-        JsonUtils.addFieldAsNanos(sb, IDLE_HEARTBEAT, idleHeartbeat);
-        JsonUtils.addField(sb, GROUP, group);
-        JsonUtils.addFieldWhenGtZero(sb, PRIORITY, priority);
-        JsonUtils.addField(sb, ID, getPinId());
-        JsonUtils.addField(sb, MIN_PENDING, minPending);
-        JsonUtils.addField(sb, MIN_ACK_PENDING, minAckPending);
-        return JsonUtils.endJson(sb).toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected String getPinId() {
-        return null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -79,7 +73,7 @@ public class PullRequestOptions implements JsonSerializable {
      * @return the batch size
      */
     public int getBatchSize() {
-        return batchSize;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -87,7 +81,7 @@ public class PullRequestOptions implements JsonSerializable {
      * @return the max bytes size
      */
     public long getMaxBytes() {
-        return maxBytes;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -95,7 +89,7 @@ public class PullRequestOptions implements JsonSerializable {
      * @return the flag
      */
     public boolean isNoWait() {
-        return noWait;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -103,7 +97,7 @@ public class PullRequestOptions implements JsonSerializable {
      * @return the expires in duration
      */
     public Duration getExpiresIn() {
-        return expiresIn;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -111,7 +105,7 @@ public class PullRequestOptions implements JsonSerializable {
      * @return the idle heartbeat duration
      */
     public Duration getIdleHeartbeat() {
-        return idleHeartbeat;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -119,21 +113,23 @@ public class PullRequestOptions implements JsonSerializable {
      * @return the group
      */
     public String getGroup() {
-        return group;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Get the priority
      * @return the priority
      */
-    public int getPriority() { return priority; }
+    public int getPriority() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
     /**
      * Get the min pending setting
      * @return the min pending
      */
     public long getMinPending() {
-        return minPending;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -141,7 +137,7 @@ public class PullRequestOptions implements JsonSerializable {
      * @return the min ack setting
      */
     public long getMinAckPending() {
-        return minAckPending;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -150,7 +146,7 @@ public class PullRequestOptions implements JsonSerializable {
      * @return a pull options builder
      */
     public static Builder builder(int batchSize) {
-        return new Builder().batchSize(batchSize);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -159,27 +155,37 @@ public class PullRequestOptions implements JsonSerializable {
      * @return a pull options builder
      */
     public static Builder noWait(int batchSize) {
-        return new Builder().batchSize(batchSize).noWait();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * The builder for PullRequestOptions
      */
     public static class Builder {
+
         private int batchSize;
+
         private long maxBytes;
+
         private boolean noWait;
+
         private Duration expiresIn;
+
         private Duration idleHeartbeat;
+
         private String group;
+
         private int priority;
+
         private long minPending = -1;
+
         private long minAckPending = -1;
 
         /**
          * Construct an instance of the builder
          */
-        public Builder() {}
+        public Builder() {
+        }
 
         /**
          * Set the batch size for the pull
@@ -187,8 +193,7 @@ public class PullRequestOptions implements JsonSerializable {
          * @return the builder
          */
         public Builder batchSize(int batchSize) {
-            this.batchSize = batchSize;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -197,8 +202,7 @@ public class PullRequestOptions implements JsonSerializable {
          * @return the builder
          */
         public Builder maxBytes(long maxBytes) {
-            this.maxBytes = maxBytes;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -206,8 +210,7 @@ public class PullRequestOptions implements JsonSerializable {
          * @return the builder
          */
         public Builder noWait() {
-            this.noWait = true;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -216,8 +219,7 @@ public class PullRequestOptions implements JsonSerializable {
          * @return the builder
          */
         public Builder noWait(boolean noWait) {
-            this.noWait = noWait;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -226,8 +228,7 @@ public class PullRequestOptions implements JsonSerializable {
          * @return the builder
          */
         public Builder expiresIn(long expiresInMillis) {
-            this.expiresIn = Duration.ofMillis(expiresInMillis);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -236,8 +237,7 @@ public class PullRequestOptions implements JsonSerializable {
          * @return the builder
          */
         public Builder expiresIn(Duration expiresIn) {
-            this.expiresIn = expiresIn;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -246,8 +246,7 @@ public class PullRequestOptions implements JsonSerializable {
          * @return the builder
          */
         public Builder idleHeartbeat(long idleHeartbeatMillis) {
-            this.idleHeartbeat = Duration.ofMillis(idleHeartbeatMillis);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -256,8 +255,7 @@ public class PullRequestOptions implements JsonSerializable {
          * @return the builder
          */
         public Builder idleHeartbeat(Duration idleHeartbeat) {
-            this.idleHeartbeat = idleHeartbeat;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -267,8 +265,7 @@ public class PullRequestOptions implements JsonSerializable {
          * @return Builder
          */
         public Builder group(String group) {
-            this.group = group;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -277,8 +274,7 @@ public class PullRequestOptions implements JsonSerializable {
          * @return Builder
          */
         public Builder priority(int priority) {
-            this.priority = priority;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -287,8 +283,7 @@ public class PullRequestOptions implements JsonSerializable {
          * @return the builder
          */
         public Builder minPending(long minPending) {
-            this.minPending = minPending < 1 ? -1 : minPending;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -297,8 +292,7 @@ public class PullRequestOptions implements JsonSerializable {
          * @return the builder
          */
         public Builder minAckPending(long minAckPending) {
-            this.minAckPending = minAckPending < 1 ? -1 : minAckPending;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -308,23 +302,7 @@ public class PullRequestOptions implements JsonSerializable {
          * @return the built PullRequestOptions
          */
         public PullRequestOptions build() {
-            validateGtZero(batchSize, "Pull batch size");
-            if (priority < 0 || priority > 9) {
-                throw new IllegalArgumentException("Priority must be between 0 and 9 inclusive.");
-            }
-            if (idleHeartbeat != null) {
-                long idleNanosTemp = idleHeartbeat.toNanos() * 2;
-                if (idleNanosTemp > 0) {
-                    if (expiresIn == null) {
-                        throw new IllegalArgumentException("Idle Heartbeat not allowed without expiration.");
-                    }
-                    long expiresNanos = expiresIn.toNanos();
-                    if (idleNanosTemp > expiresNanos) {
-                        throw new IllegalArgumentException("Idle Heartbeat cannot be more than half the expiration.");
-                    }
-                }
-            }
-            return new PullRequestOptions(this);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

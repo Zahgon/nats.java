@@ -10,14 +10,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import io.nats.client.Connection;
-
 import java.time.Duration;
 import java.util.concurrent.TimeoutException;
-
 import static io.nats.client.impl.AckType.*;
 import static io.nats.client.support.NatsConstants.NANOS_PER_MILLI;
 import static io.nats.client.support.Validator.validateDurationRequired;
@@ -35,7 +32,7 @@ class NatsJetStreamMessage extends IncomingMessage {
      */
     @Override
     public void ack() {
-        ackReply(AckAck, -1);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -43,14 +40,7 @@ class NatsJetStreamMessage extends IncomingMessage {
      */
     @Override
     public void ackSync(Duration d) throws InterruptedException, TimeoutException {
-        if (ackHasntBeenTermed()) {
-            validateDurationRequired(d);
-            Connection nc = getJetStreamValidatedConnection();
-            if (nc.request(replyTo, AckAck.bytes, d) == null) {
-                throw new TimeoutException("Ack response timed out.");
-            }
-            lastAck = AckAck;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -58,7 +48,7 @@ class NatsJetStreamMessage extends IncomingMessage {
      */
     @Override
     public void nak() {
-        ackReply(AckNak, -1);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -66,7 +56,7 @@ class NatsJetStreamMessage extends IncomingMessage {
      */
     @Override
     public void nakWithDelay(Duration nakDelay) {
-        ackReply(AckNak, nakDelay.toNanos());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -74,7 +64,7 @@ class NatsJetStreamMessage extends IncomingMessage {
      */
     @Override
     public void nakWithDelay(long nakDelayMillis) {
-        ackReply(AckNak, nakDelayMillis * NANOS_PER_MILLI);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -82,7 +72,7 @@ class NatsJetStreamMessage extends IncomingMessage {
      */
     @Override
     public void inProgress() {
-        ackReply(AckProgress, -1);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -90,7 +80,7 @@ class NatsJetStreamMessage extends IncomingMessage {
      */
     @Override
     public void term() {
-        ackReply(AckTerm, -1);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -98,10 +88,7 @@ class NatsJetStreamMessage extends IncomingMessage {
      */
     @Override
     public NatsJetStreamMetaData metaData() {
-        if (this.jsMetaData == null) {
-            this.jsMetaData = new NatsJetStreamMetaData(this);
-        }
-        return this.jsMetaData;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -109,7 +96,7 @@ class NatsJetStreamMessage extends IncomingMessage {
      */
     @Override
     public boolean isJetStream() {
-        return true; // NatsJetStreamMessage will never be created unless it's actually a JetStream Message
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private void ackReply(AckType ackType, long delayNanos) {
@@ -125,14 +112,6 @@ class NatsJetStreamMessage extends IncomingMessage {
     }
 
     Connection getJetStreamValidatedConnection() {
-        if (getSubscription() == null) {
-            throw new IllegalStateException("Message is not bound to a subscription.");
-        }
-
-        Connection c = getConnection();
-        if (c == null) {
-            throw new IllegalStateException("Message is not bound to a connection");
-        }
-        return c;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -10,15 +10,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.Message;
 import org.jspecify.annotations.Nullable;
-
 import java.time.Duration;
 import java.time.ZonedDateTime;
-
 import static io.nats.client.support.ApiConstants.*;
 import static io.nats.client.support.JsonValueUtils.*;
 
@@ -28,7 +25,9 @@ import static io.nats.client.support.JsonValueUtils.*;
 public class ConsumerPauseResponse extends ApiResponse<ConsumerPauseResponse> {
 
     private final boolean paused;
+
     private final ZonedDateTime pauseUntil;
+
     private final Duration pauseRemaining;
 
     /**
@@ -47,7 +46,7 @@ public class ConsumerPauseResponse extends ApiResponse<ConsumerPauseResponse> {
      * @return whether the consumer is paused
      */
     public boolean isPaused() {
-        return paused;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -56,7 +55,7 @@ public class ConsumerPauseResponse extends ApiResponse<ConsumerPauseResponse> {
      */
     @Nullable
     public ZonedDateTime getPauseUntil() {
-        return pauseUntil;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -65,6 +64,6 @@ public class ConsumerPauseResponse extends ApiResponse<ConsumerPauseResponse> {
      */
     @Nullable
     public Duration getPauseRemaining() {
-        return pauseRemaining;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

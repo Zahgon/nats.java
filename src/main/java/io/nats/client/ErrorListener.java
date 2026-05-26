@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client;
 
 import io.nats.client.support.Status;
@@ -31,6 +30,7 @@ import io.nats.client.support.Status;
  * listener is configured in the {@link Options Options} at creation time.
  */
 public interface ErrorListener {
+
     /**
      * NATs related errors that occur asynchronously in the client library are sent
      * to an ErrorListener via errorOccurred. The ErrorListener can use the error text to decide what to do about the problem.
@@ -40,7 +40,9 @@ public interface ErrorListener {
      * @param conn The connection associated with the error
      * @param error The text of error that has occurred, directly from the server
      */
-    default void errorOccurred(Connection conn, String error) {};
+    default void errorOccurred(Connection conn, String error) {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
     /**
      * Exceptions that occur in the "normal" course of operations are sent to the
@@ -52,7 +54,9 @@ public interface ErrorListener {
      * @param conn The connection associated with the error
      * @param exp The exception that has occurred, and was handled by the library
      */
-    default void exceptionOccurred(Connection conn, Exception exp) {};
+    default void exceptionOccurred(Connection conn, Exception exp) {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
     /**
      * Called by the connection when a &quot;slow&quot; consumer is detected. This call is only made once
@@ -68,7 +72,9 @@ public interface ErrorListener {
      * @param conn The connection associated with the error
      * @param consumer The consumer that is being marked slow
      */
-    default void slowConsumerDetected(Connection conn, Consumer consumer) {};
+    default void slowConsumerDetected(Connection conn, Consumer consumer) {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
     /**
      * Called by the connection when a message is discarded.
@@ -76,7 +82,9 @@ public interface ErrorListener {
      * @param conn The connection that discarded the message
      * @param msg The message that is discarded
      */
-    default void messageDiscarded(Connection conn, Message msg) {}
+    default void messageDiscarded(Connection conn, Message msg) {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
     /**
      * Called when subscription heartbeats are missed according to the configured period and threshold.
@@ -87,8 +95,9 @@ public interface ErrorListener {
      * @param lastStreamSequence the last received stream sequence
      * @param lastConsumerSequence the last received consumer sequence
      */
-    default void heartbeatAlarm(Connection conn, JetStreamSubscription sub,
-                                long lastStreamSequence, long lastConsumerSequence) {}
+    default void heartbeatAlarm(Connection conn, JetStreamSubscription sub, long lastStreamSequence, long lastConsumerSequence) {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
     /**
      * Called when an unhandled status is received in a push subscription.
@@ -96,7 +105,9 @@ public interface ErrorListener {
      * @param sub the JetStreamSubscription that this occurred on
      * @param status the status
      */
-    default void unhandledStatus(Connection conn, JetStreamSubscription sub, Status status) {}
+    default void unhandledStatus(Connection conn, JetStreamSubscription sub, Status status) {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
     /**
      * Called when a pull subscription receives a status message that indicates either
@@ -106,7 +117,9 @@ public interface ErrorListener {
      * @param sub    the JetStreamSubscription that this occurred on
      * @param status the status
      */
-    default void pullStatusWarning(Connection conn, JetStreamSubscription sub, Status status) {}
+    default void pullStatusWarning(Connection conn, JetStreamSubscription sub, Status status) {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
     /**
      * Called when a pull subscription receives a status message that indicates either
@@ -116,17 +129,19 @@ public interface ErrorListener {
      * @param sub    the JetStreamSubscription that this occurred on
      * @param status the status
      */
-    default void pullStatusError(Connection conn, JetStreamSubscription sub, Status status) {}
+    default void pullStatusError(Connection conn, JetStreamSubscription sub, Status status) {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
     /**
      * Enum for the flow control source
      */
     enum FlowControlSource {
+
         /**
          * a flow control message
          */
         FLOW_CONTROL,
-
         /**
          * a heartbeat message
          */
@@ -141,14 +156,18 @@ public interface ErrorListener {
      * @param subject the flow control subject that was handled
      * @param source enum indicating flow control handling in response to which type of message
      */
-    default void flowControlProcessed(Connection conn, JetStreamSubscription sub, String subject, FlowControlSource source) {}
+    default void flowControlProcessed(Connection conn, JetStreamSubscription sub, String subject, FlowControlSource source) {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
     /**
      * Called by the connection when a low level socket write timeout occurs.
      *
      * @param conn The connection that had the issue
      */
-    default void socketWriteTimeout(Connection conn) {}
+    default void socketWriteTimeout(Connection conn) {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
     /**
      * General message producing function which understands the possible parameters to listener calls.
@@ -161,26 +180,6 @@ public interface ErrorListener {
      * @return the message
      */
     default String supplyMessage(String label, Connection conn, Consumer consumer, Subscription sub, Object... pairs) {
-        StringBuilder sb = new StringBuilder(label == null ? "" : label);
-        if (conn != null) {
-            sb.append(", Connection: ").append(conn.getServerInfo().getClientId());
-        }
-        if (consumer != null) {
-            sb.append(", Consumer: ").append(consumer.hashCode());
-        }
-        if (sub != null) {
-            sb.append(", Subscription: ").append(sub.hashCode());
-            if (sub instanceof JetStreamSubscription) {
-                JetStreamSubscription jssub = (JetStreamSubscription)sub;
-                sb.append(", Consumer Name: ").append(jssub.getConsumerName());
-            }
-        }
-        if (pairs != null && pairs.length % 2 == 0) {
-            for (int x = 0; x < pairs.length; x++) {
-                sb.append(", ").append(pairs[x]).append(pairs[++x]);
-            }
-        }
-        return sb.toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

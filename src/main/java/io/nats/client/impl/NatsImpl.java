@@ -10,28 +10,25 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import io.nats.client.AuthHandler;
 import io.nats.client.Connection;
 import io.nats.client.Options;
 import io.nats.client.Statistics;
-
 import java.io.IOException;
 
 /**
  * Adapter to impl package to minimize access leakage.
  */
 public class NatsImpl {
+
     public static Connection createConnection(Options options, boolean reconnectOnConnect) throws IOException, InterruptedException {
-        NatsConnection conn = new NatsConnection(options);
-        conn.connect(reconnectOnConnect);
-        return conn;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static Statistics createEmptyStats() {
-        return new NatsStatistics();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -40,7 +37,7 @@ public class NatsImpl {
      * @return an AuthHandler implementation
      */
     public static AuthHandler credentials(String credsFile) {
-        return new FileAuthHandler(credsFile);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -50,7 +47,7 @@ public class NatsImpl {
      * @return an AuthHandler implementation
      */
     public static AuthHandler credentials(String jwtFile, String nkeyFile) {
-        return new FileAuthHandler(jwtFile, nkeyFile);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -59,7 +56,7 @@ public class NatsImpl {
      * @return an AuthHandler implementation
      */
     public static AuthHandler staticCredentials(byte[] credsBytes) {
-        return new MemoryAuthHandler(credsBytes);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -69,7 +66,6 @@ public class NatsImpl {
      * @return an AuthHandler implementation
      */
     public static AuthHandler staticCredentials(char[] jwt, char[] nkey) {
-        return new StringAuthHandler(jwt, nkey);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

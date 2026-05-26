@@ -10,45 +10,71 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.support;
 
 import org.jspecify.annotations.NonNull;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
-
 import static io.nats.client.support.JsonUtils.*;
 
 public class JsonValue implements JsonSerializable {
 
     public enum Type {
-        STRING, BOOL, INTEGER, LONG, DOUBLE, FLOAT, BIG_DECIMAL, BIG_INTEGER, MAP, ARRAY, NULL;
+
+        STRING,
+        BOOL,
+        INTEGER,
+        LONG,
+        DOUBLE,
+        FLOAT,
+        BIG_DECIMAL,
+        BIG_INTEGER,
+        MAP,
+        ARRAY,
+        NULL
     }
 
     private static final char QUOTE = '"';
+
     private static final char COMMA = ',';
+
     private static final String NULL_STR = "null";
 
     public static final JsonValue NULL = new JsonValue();
+
     public static final JsonValue TRUE = new JsonValue(true);
+
     public static final JsonValue FALSE = new JsonValue(false);
+
     public static final JsonValue EMPTY_MAP = new JsonValue(Collections.unmodifiableMap(new HashMap<>()));
+
     public static final JsonValue EMPTY_ARRAY = new JsonValue(Collections.unmodifiableList(new ArrayList<>()));
 
     public final String string;
+
     public final Boolean bool;
+
     public final Integer i;
+
     public final Long l;
+
     public final Double d;
+
     public final Float f;
+
     public final BigDecimal bd;
+
     public final BigInteger bi;
+
     public final Map<String, JsonValue> map;
+
     public final List<JsonValue> array;
+
     public final Type type;
+
     public final Object object;
+
     public final Number number;
 
     public final List<String> mapOrder;
@@ -121,51 +147,41 @@ public class JsonValue implements JsonSerializable {
             this.type = Type.INTEGER;
             number = i;
             object = number;
-        }
-        else if (l != null) {
+        } else if (l != null) {
             this.type = Type.LONG;
             number = l;
             object = number;
-        }
-        else if (d != null) {
+        } else if (d != null) {
             this.type = Type.DOUBLE;
             number = this.d;
             object = number;
-        }
-        else if (f != null) {
+        } else if (f != null) {
             this.type = Type.FLOAT;
             number = this.f;
             object = number;
-        }
-        else if (bd != null) {
+        } else if (bd != null) {
             this.type = Type.BIG_DECIMAL;
             number = this.bd;
             object = number;
-        }
-        else if (bi != null) {
+        } else if (bi != null) {
             this.type = Type.BIG_INTEGER;
             number = this.bi;
             object = number;
-        }
-        else {
+        } else {
             number = null;
             if (map != null) {
                 this.type = Type.MAP;
                 object = map;
-            }
-            else if (string != null) {
+            } else if (string != null) {
                 this.type = Type.STRING;
                 object = string;
-            }
-            else if (bool != null) {
+            } else if (bool != null) {
                 this.type = Type.BOOL;
                 object = bool;
-            }
-            else if (array != null) {
+            } else if (array != null) {
                 this.type = Type.ARRAY;
                 object = array;
-            }
-            else {
+            } else {
                 this.type = Type.NULL;
                 object = null;
             }
@@ -173,40 +189,28 @@ public class JsonValue implements JsonSerializable {
     }
 
     public String toString(Class<?> c) {
-        return toString(c.getSimpleName());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public String toString(String key) {
-        return QUOTE + key + QUOTE + ":" + toJson();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return toJson();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     @NonNull
     public JsonValue toJsonValue() {
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     @NonNull
     public String toJson() {
-        switch (type) {
-            case STRING:      return valueString(string);
-            case BOOL:        return valueString(bool);
-            case MAP:         return valueString(map);
-            case ARRAY:       return valueString(array);
-            case INTEGER:     return i.toString();
-            case LONG:        return l.toString();
-            case DOUBLE:      return d.toString();
-            case FLOAT:       return f.toString();
-            case BIG_DECIMAL: return bd.toString();
-            case BIG_INTEGER: return bi.toString();
-            default:          return NULL_STR;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private String valueString(String s) {
@@ -223,8 +227,7 @@ public class JsonValue implements JsonSerializable {
             for (String key : mapOrder) {
                 addField(sbo, key, map.get(key));
             }
-        }
-        else {
+        } else {
             for (String key : map.keySet()) {
                 addField(sbo, key, map.get(key));
             }
@@ -243,46 +246,11 @@ public class JsonValue implements JsonSerializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        JsonValue jsonValue = (JsonValue) o;
-
-        if (type != jsonValue.type) return false;
-
-        switch (type) {
-            case STRING: return Objects.equals(string, jsonValue.string);
-            case BOOL: return Objects.equals(bool, jsonValue.bool);
-            case INTEGER: return Objects.equals(i, jsonValue.i);
-            case LONG: return Objects.equals(l, jsonValue.l);
-            case DOUBLE: return Objects.equals(d, jsonValue.d);
-            case FLOAT: return Objects.equals(f, jsonValue.f);
-            case BIG_DECIMAL: return Objects.equals(bd, jsonValue.bd);
-            case BIG_INTEGER: return Objects.equals(bi, jsonValue.bi);
-            case MAP: return Objects.equals(map, jsonValue.map);
-            case ARRAY: return Objects.equals(array, jsonValue.array);
-            case NULL: return true; // null has null value, type was already checked.
-        }
-
-        return false;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int hashCode() {
-        int hc = 0;
-        switch (type) {
-            case STRING: hc = string.hashCode(); break;
-            case BOOL: hc = bool.hashCode(); break;
-            case INTEGER: hc = i.hashCode(); break;
-            case LONG: hc = l.hashCode(); break;
-            case DOUBLE: hc = d.hashCode(); break;
-            case FLOAT: hc = f.hashCode(); break;
-            case BIG_DECIMAL: hc = bd.hashCode(); break;
-            case BIG_INTEGER: hc = bi.hashCode(); break;
-            case MAP: hc = map.hashCode(); break;
-            case ARRAY: hc = array.hashCode(); break;
-        }
-
-        return 31 * type.hashCode() + hc;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

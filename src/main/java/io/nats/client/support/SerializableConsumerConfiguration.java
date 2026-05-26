@@ -10,15 +10,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.support;
 
 import io.nats.client.api.ConsumerConfiguration;
-
 import java.io.IOException;
 import java.io.Serializable;
 
 public class SerializableConsumerConfiguration implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     private transient ConsumerConfiguration cc;
@@ -36,11 +35,11 @@ public class SerializableConsumerConfiguration implements Serializable {
     }
 
     public void setConsumerConfiguration(ConsumerConfiguration cc) {
-        this.cc = cc;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public ConsumerConfiguration getConsumerConfiguration() {
-        return cc;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private void writeObject(java.io.ObjectOutputStream out) throws IOException {

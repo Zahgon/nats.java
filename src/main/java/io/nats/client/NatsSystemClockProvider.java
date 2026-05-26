@@ -10,22 +10,26 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client;
 
 /**
  * Interface to implement to provide a custom clock implementation
  */
 public interface NatsSystemClockProvider {
+
     /**
      * Returns the current time in milliseconds
      * @return the current time in milliseconds
      */
-    default long currentTimeMillis() { return System.currentTimeMillis(); }
+    default long currentTimeMillis() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
     /**
      * A nano time suitable for calculating elapsed time
      * @return the nano time
      */
-    default long nanoTime() { return System.nanoTime(); }
+    default long nanoTime() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 }

@@ -10,13 +10,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import io.nats.client.Options;
 import io.nats.client.support.NatsUri;
 import org.jspecify.annotations.NonNull;
-
 import java.io.IOException;
 
 /**
@@ -25,6 +23,7 @@ import java.io.IOException;
  * the core communication code.
  */
 public interface DataPort {
+
     @Deprecated
     void connect(@NonNull String serverURI, @NonNull NatsConnection conn, long timeoutNanos) throws IOException;
 
@@ -36,10 +35,12 @@ public interface DataPort {
      * @throws IOException if the data port is unable to connect.
      */
     default void connect(@NonNull NatsConnection conn, @NonNull NatsUri uri, long timeoutNanos) throws IOException {
-        connect(uri.toString(), conn, timeoutNanos);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    default void afterConstruct(@NonNull Options options) {}
+    default void afterConstruct(@NonNull Options options) {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
     /**
      * Upgrade the port to SSL. If it is already secured, this is a no-op.
@@ -54,7 +55,7 @@ public interface DataPort {
     /**
      * NOTE: the buffer will be modified if communicating over websockets and
      * the toWrite is greater than 1432.
-     * 
+     *
      * @param src output byte[]
      * @param toWrite number of bytes to write
      * @throws IOException any IO error on the underlaying connection
@@ -66,7 +67,7 @@ public interface DataPort {
     void close() throws IOException;
 
     default void forceClose() throws IOException {
-        close();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void flush() throws IOException;

@@ -10,21 +10,21 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.support;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
-
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
 
 /**
  * A class that wraps a byte array that can automatically grow
  */
 public class ByteArrayPrimitiveBuilder extends BuilderBase {
+
     private byte[] buffer;
+
     private int position;
 
     /**
@@ -112,7 +112,7 @@ public class ByteArrayPrimitiveBuilder extends BuilderBase {
      */
     @Override
     public int length() {
-        return position;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -121,7 +121,7 @@ public class ByteArrayPrimitiveBuilder extends BuilderBase {
      */
     @Override
     public int capacity() {
-        return buffer.length;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -131,15 +131,7 @@ public class ByteArrayPrimitiveBuilder extends BuilderBase {
      */
     @Override
     public boolean equals(byte[] bytes) {
-        if (bytes == null || position != bytes.length) {
-            return false;
-        }
-        for (int x = 0; x < bytes.length; x++) {
-            if (buffer[x] != bytes[x]) {
-                return false;
-            }
-        }
-        return true;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -151,8 +143,7 @@ public class ByteArrayPrimitiveBuilder extends BuilderBase {
      * @return the number of bytes copied
      */
     public int copyTo(byte[] dest, int destPos) {
-        System.arraycopy(buffer, 0, dest, destPos, position);
-        return position;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -161,7 +152,7 @@ public class ByteArrayPrimitiveBuilder extends BuilderBase {
      * @throws IOException if an I/O error occurs
      */
     public void copyTo(OutputStream out) throws IOException {
-        out.write(buffer, 0, position);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -170,9 +161,7 @@ public class ByteArrayPrimitiveBuilder extends BuilderBase {
      */
     @Override
     public byte[] toByteArray() {
-        byte[] bytes = new byte[position];
-        System.arraycopy(buffer, 0, bytes, 0, position);
-        return bytes;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -182,7 +171,7 @@ public class ByteArrayPrimitiveBuilder extends BuilderBase {
      */
     @Override
     public byte[] internalArray() {
-        return buffer;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -192,12 +181,7 @@ public class ByteArrayPrimitiveBuilder extends BuilderBase {
      * @param bytesNeeded the number of bytes needed
      */
     public void ensureCapacity(int bytesNeeded) {
-        int bytesAvailable = buffer.length - position;
-        if (bytesAvailable < bytesNeeded) {
-            byte[] newBuffer = new byte[bufferAllocSize(position + bytesNeeded, allocationSize)];
-            System.arraycopy(buffer, 0, newBuffer, 0, position);
-            buffer = newBuffer;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -205,8 +189,7 @@ public class ByteArrayPrimitiveBuilder extends BuilderBase {
      * @return this (fluent)
      */
     public ByteArrayPrimitiveBuilder clear() {
-        position = 0;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -214,7 +197,7 @@ public class ByteArrayPrimitiveBuilder extends BuilderBase {
      * @param allocationSizeSuggestion the new allocation size suggestion
      */
     public void setAllocationSize(int allocationSizeSuggestion) {
-        _setAllocationSize(allocationSizeSuggestion);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -223,8 +206,7 @@ public class ByteArrayPrimitiveBuilder extends BuilderBase {
      * @return this (fluent)
      */
     public ByteArrayPrimitiveBuilder append(int i) {
-        append(Integer.toString(i).getBytes(ISO_8859_1)); // a number is always ascii (ISO_8859_1 is faster)
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -234,7 +216,7 @@ public class ByteArrayPrimitiveBuilder extends BuilderBase {
      * @return this (fluent)
      */
     public ByteArrayPrimitiveBuilder append(String src) {
-        return append(src, defaultCharset);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -245,7 +227,7 @@ public class ByteArrayPrimitiveBuilder extends BuilderBase {
      * @return this (fluent)
      */
     public ByteArrayPrimitiveBuilder append(String src, Charset charset) {
-        return src == null ? append(NULL, 0, 4) : append(src.getBytes(charset));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -255,7 +237,7 @@ public class ByteArrayPrimitiveBuilder extends BuilderBase {
      * @return this (fluent)
      */
     public ByteArrayPrimitiveBuilder append(CharBuffer src) {
-        return append(src, defaultCharset);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -266,13 +248,7 @@ public class ByteArrayPrimitiveBuilder extends BuilderBase {
      * @return this (fluent)
      */
     public ByteArrayPrimitiveBuilder append(CharBuffer src, Charset charset) {
-        if (src == null) {
-            append(NULL, 0, 4);
-        }
-        else {
-            append(src.toString().getBytes(charset));
-        }
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -281,9 +257,7 @@ public class ByteArrayPrimitiveBuilder extends BuilderBase {
      * @return this (fluent)
      */
     public ByteArrayPrimitiveBuilder append(byte b) {
-        ensureCapacity(1);
-        buffer[position++] = b;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -292,7 +266,7 @@ public class ByteArrayPrimitiveBuilder extends BuilderBase {
      * @return this (fluent)
      */
     public ByteArrayPrimitiveBuilder append(byte[] src) {
-        return append(src, 0, src.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -302,12 +276,7 @@ public class ByteArrayPrimitiveBuilder extends BuilderBase {
      * @return this (fluent)
      */
     public ByteArrayPrimitiveBuilder append(byte[] src, int len) {
-        if (len > 0) {
-            ensureCapacity(len);
-            System.arraycopy(src, 0, buffer, position, len);
-            position += len;
-        }
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -318,12 +287,7 @@ public class ByteArrayPrimitiveBuilder extends BuilderBase {
      * @return this (fluent)
      */
     public ByteArrayPrimitiveBuilder append(byte[] src, int index, int len) {
-        if (len > 0) {
-            ensureCapacity(len);
-            System.arraycopy(src, index, buffer, position, len);
-            position += len;
-        }
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -332,10 +296,7 @@ public class ByteArrayPrimitiveBuilder extends BuilderBase {
      * @return this (fluent)
      */
     public ByteArrayPrimitiveBuilder append(ByteArrayPrimitiveBuilder bab) {
-        if (bab != null) {
-            append(bab.buffer, bab.length());
-        }
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -343,8 +304,7 @@ public class ByteArrayPrimitiveBuilder extends BuilderBase {
      */
     @Override
     public int appendUnchecked(byte b) {
-        buffer[position++] = b;
-        return 1;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -352,7 +312,7 @@ public class ByteArrayPrimitiveBuilder extends BuilderBase {
      */
     @Override
     public int appendUnchecked(byte[] src) {
-        return appendUnchecked(src, 0, src.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -360,13 +320,11 @@ public class ByteArrayPrimitiveBuilder extends BuilderBase {
      */
     @Override
     public int appendUnchecked(byte[] src, int srcPos, int len) {
-        System.arraycopy(src, srcPos, buffer, position, len);
-        position += len;
-        return len;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return new String(buffer, 0, position, defaultCharset);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import java.time.Duration;
@@ -22,25 +21,10 @@ class ConsumerMessageQueue extends MessageQueueBase {
     }
 
     void push(NatsMessage msg) {
-        if (queue.offer(msg)) {
-            length.incrementAndGet();
-            sizeInBytes.addAndGet(msg.getSizeInBytes());
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     NatsMessage pop(Duration timeout) throws InterruptedException {
-        if (!isRunning()) {
-            return null;
-        }
-
-        NatsMessage msg = _poll(timeout);
-
-        if (msg == null) {
-            return null;
-        }
-
-        length.decrementAndGet();
-        sizeInBytes.addAndGet(-msg.getSizeInBytes());
-        return msg;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

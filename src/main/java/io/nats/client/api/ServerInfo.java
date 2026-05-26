@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.support.JsonParseException;
@@ -19,10 +18,8 @@ import io.nats.client.support.JsonValue;
 import io.nats.client.support.ServerVersion;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import java.util.Arrays;
 import java.util.List;
-
 import static io.nats.client.support.ApiConstants.*;
 import static io.nats.client.support.JsonValueUtils.*;
 import static io.nats.client.support.NatsConstants.UNDEFINED;
@@ -39,23 +36,41 @@ public class ServerInfo {
     public static final ServerInfo EMPTY_INFO = new ServerInfo("INFO {}");
 
     private final String serverId;
+
     private final String serverName;
+
     private final String version;
+
     private final String go;
+
     private final String host;
+
     private final int port;
+
     private final boolean headersSupported;
+
     private final boolean authRequired;
+
     private final boolean tlsRequired;
+
     private final boolean tlsAvailable;
+
     private final long maxPayload;
+
     private final List<String> connectURLs;
+
     private final int protocolVersion;
+
     private final byte[] nonce;
+
     private final boolean lameDuckMode;
+
     private final boolean jetStream;
+
     private final int clientId;
+
     private final String clientIp;
+
     private final String cluster;
 
     /**
@@ -67,15 +82,12 @@ public class ServerInfo {
         if (json == null || json.length() < 6 || ('{' != json.charAt(0) && '{' != json.charAt(5))) {
             throw new IllegalArgumentException("Invalid Server Info");
         }
-
         JsonValue jv;
         try {
             jv = JsonParser.parse(json, json.indexOf("{"));
-        }
-        catch (JsonParseException e) {
+        } catch (JsonParseException e) {
             throw new IllegalArgumentException("Invalid Server Info Json");
         }
-
         serverId = readString(jv, SERVER_ID, UNDEFINED);
         serverName = readString(jv, SERVER_NAME, UNDEFINED);
         version = readString(jv, VERSION, "0.0.0");
@@ -102,7 +114,7 @@ public class ServerInfo {
      * @return true if server is in lame duck mode
      */
     public boolean isLameDuckMode() {
-        return lameDuckMode;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -111,7 +123,7 @@ public class ServerInfo {
      */
     @NonNull
     public String getServerId() {
-        return this.serverId;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -120,7 +132,7 @@ public class ServerInfo {
      */
     @NonNull
     public String getServerName() {
-        return serverName;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -129,7 +141,7 @@ public class ServerInfo {
      */
     @NonNull
     public String getVersion() {
-        return this.version;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -138,7 +150,7 @@ public class ServerInfo {
      */
     @NonNull
     public String getGoVersion() {
-        return this.go;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -147,7 +159,7 @@ public class ServerInfo {
      */
     @NonNull
     public String getHost() {
-        return this.host;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -155,7 +167,7 @@ public class ServerInfo {
      * @return the server port
      */
     public int getPort() {
-        return this.port;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -163,21 +175,23 @@ public class ServerInfo {
      * @return the server protocol version
      */
     public int getProtocolVersion() {
-        return this.protocolVersion;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * true if headers are supported by the server
      * @return true if headers are supported by the server
      */
-    public boolean isHeadersSupported() { return this.headersSupported; }
+    public boolean isHeadersSupported() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
     /**
      * true if authorization is required by the server
      * @return true if authorization is required by the server
      */
     public boolean isAuthRequired() {
-        return this.authRequired;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -185,7 +199,7 @@ public class ServerInfo {
      * @return true if TLS is required by the server
      */
     public boolean isTLSRequired() {
-        return this.tlsRequired;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -193,7 +207,7 @@ public class ServerInfo {
      * @return true if TLS is available on the server
      */
     public boolean isTLSAvailable() {
-        return tlsAvailable;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -201,7 +215,7 @@ public class ServerInfo {
      * @return the max payload
      */
     public long getMaxPayload() {
-        return this.maxPayload;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -210,7 +224,7 @@ public class ServerInfo {
      */
     @NonNull
     public List<String> getConnectURLs() {
-        return this.connectURLs;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -218,7 +232,7 @@ public class ServerInfo {
      * @return the nonce
      */
     public byte @Nullable [] getNonce() {
-        return this.nonce;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -226,7 +240,7 @@ public class ServerInfo {
      * @return true if the server supports JetStream
      */
     public boolean isJetStreamAvailable() {
-        return this.jetStream;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -234,7 +248,7 @@ public class ServerInfo {
      * @return the client id
      */
     public int getClientId() {
-        return clientId;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -243,7 +257,7 @@ public class ServerInfo {
      */
     @NonNull
     public String getClientIp() {
-        return clientIp;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -252,7 +266,7 @@ public class ServerInfo {
      */
     @Nullable
     public String getCluster() {
-        return cluster;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -261,7 +275,7 @@ public class ServerInfo {
      * @return true if the server version is newer than the input
      */
     public boolean isNewerVersionThan(String vTarget) {
-        return ServerVersion.isNewer(version, vTarget);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -270,7 +284,7 @@ public class ServerInfo {
      * @return true if the server version is same as the input
      */
     public boolean isSameVersion(String vTarget) {
-        return ServerVersion.isSame(version, vTarget);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -279,7 +293,7 @@ public class ServerInfo {
      * @return true if the server version is older than the input
      */
     public boolean isOlderThanVersion(String vTarget) {
-        return ServerVersion.isOlder(version, vTarget);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -288,7 +302,7 @@ public class ServerInfo {
      * @return true if the server version is the same or older than the input
      */
     public boolean isSameOrOlderThanVersion(String vTarget) {
-        return ServerVersion.isSameOrOlder(version, vTarget);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -297,32 +311,11 @@ public class ServerInfo {
      * @return true if the server version is same or newer than the input
      */
     public boolean isSameOrNewerThanVersion(String vTarget) {
-        return ServerVersion.isSameOrNewer(version, vTarget);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return "ServerInfo{" +
-            "serverId='" + serverId + '\'' +
-            ", serverName='" + serverName + '\'' +
-            ", version='" + version + '\'' +
-            ", go='" + go + '\'' +
-            ", host='" + host + '\'' +
-            ", port=" + port +
-            ", headersSupported=" + headersSupported +
-            ", authRequired=" + authRequired +
-            ", tlsRequired=" + tlsRequired +
-            ", tlsAvailable=" + tlsAvailable +
-            ", maxPayload=" + maxPayload +
-            ", connectURLs=" + connectURLs +
-            ", protocolVersion=" + protocolVersion +
-            ", nonce=" + Arrays.toString(nonce) +
-            ", lameDuckMode=" + lameDuckMode +
-            ", jetStream=" + jetStream +
-            ", clientId=" + clientId +
-            ", clientIp='" + clientIp + '\'' +
-            ", cluster='" + cluster + '\'' +
-            '}';
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }
-

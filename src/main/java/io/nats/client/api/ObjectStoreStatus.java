@@ -15,7 +15,6 @@ package io.nats.client.api;
 import io.nats.client.support.JsonValueUtils;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import java.time.Duration;
 import java.util.Map;
 
@@ -25,6 +24,7 @@ import java.util.Map;
 public class ObjectStoreStatus {
 
     private final StreamInfo streamInfo;
+
     private final ObjectStoreConfiguration config;
 
     /**
@@ -42,7 +42,7 @@ public class ObjectStoreStatus {
      */
     @NonNull
     public String getBucketName() {
-        return config.getBucketName();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -51,7 +51,7 @@ public class ObjectStoreStatus {
      */
     @Nullable
     public String getDescription() {
-        return config.getDescription();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -60,7 +60,7 @@ public class ObjectStoreStatus {
      */
     @NonNull
     public StreamInfo getBackingStreamInfo() {
-        return streamInfo;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -69,7 +69,7 @@ public class ObjectStoreStatus {
      */
     @NonNull
     public ObjectStoreConfiguration getConfiguration() {
-        return config;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -77,7 +77,7 @@ public class ObjectStoreStatus {
      * @return the size
      */
     public long getSize() {
-        return streamInfo.getStreamState().getByteCount();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -85,7 +85,7 @@ public class ObjectStoreStatus {
      * @return the maximum number of bytes for this bucket.
      */
     public long getMaxBucketSize() {
-        return config.getMaxBucketSize();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -93,7 +93,7 @@ public class ObjectStoreStatus {
      * @return the sealed setting
      */
     public boolean isSealed() {
-        return config.isSealed();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -102,7 +102,7 @@ public class ObjectStoreStatus {
      */
     @Nullable
     public Duration getTtl() {
-        return config.getTtl();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -111,9 +111,7 @@ public class ObjectStoreStatus {
      */
     @NonNull
     public StorageType getStorageType() {
-        // Storage type will never be null because this is a read from the server
-        //noinspection DataFlowIssue
-        return config.getStorageType();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -121,7 +119,7 @@ public class ObjectStoreStatus {
      * @return the number of replicas
      */
     public int getReplicas() {
-        return config.getReplicas();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -130,7 +128,7 @@ public class ObjectStoreStatus {
      */
     @Nullable
     public Placement getPlacement() {
-        return config.getPlacement();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -138,7 +136,7 @@ public class ObjectStoreStatus {
      * @return true if compression is used
      */
     public boolean isCompressed() {
-        return config.isCompressed();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -147,7 +145,7 @@ public class ObjectStoreStatus {
      */
     @Nullable
     public Map<String, String> getMetadata() {
-        return config.getMetadata();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -156,15 +154,11 @@ public class ObjectStoreStatus {
      */
     @NonNull
     public String getBackingStore() {
-        return "JetStream";
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        JsonValueUtils.MapBuilder mb = new JsonValueUtils.MapBuilder();
-        mb.put("size", getSize());
-        mb.put("isSealed", isSealed());
-        mb.put("config", config);
-        return "ObjectStoreStatus" + mb.toJsonValue().toJson();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import java.time.Duration;
@@ -36,7 +35,7 @@ public class KeyValuePurgeOptions {
      * @return the threshold
      */
     public long getDeleteMarkersThresholdMillis() {
-        return deleteMarkersThresholdMillis;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -44,7 +43,7 @@ public class KeyValuePurgeOptions {
      * @return a key value purge options builder
      */
     public static Builder builder() {
-        return new Builder();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -53,12 +52,14 @@ public class KeyValuePurgeOptions {
      * <p>{@code new KeyValuePurgeOptions.Builder().build()} will create a new KeyValuePurgeOptions.</p>
      */
     public static class Builder {
+
         private long deleteMarkersThresholdMillis = DEFAULT_THRESHOLD_MILLIS;
 
         /**
          * Construct an instance of the builder
          */
-        public Builder() {}
+        public Builder() {
+        }
 
         /**
          * Set the delete marker threshold.
@@ -68,9 +69,7 @@ public class KeyValuePurgeOptions {
          * @return The builder
          */
         public Builder deleteMarkersThreshold(Duration deleteMarkersThreshold) {
-            this.deleteMarkersThresholdMillis = deleteMarkersThreshold == null
-                ? DEFAULT_THRESHOLD_MILLIS : deleteMarkersThreshold.toMillis();
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -81,8 +80,7 @@ public class KeyValuePurgeOptions {
          * @return The builder
          */
         public Builder deleteMarkersThreshold(long deleteMarkersThresholdMillis) {
-            this.deleteMarkersThresholdMillis = deleteMarkersThresholdMillis;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -90,8 +88,7 @@ public class KeyValuePurgeOptions {
          * @return The builder
          */
         public Builder deleteMarkersNoThreshold() {
-            this.deleteMarkersThresholdMillis = -1;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -99,13 +96,7 @@ public class KeyValuePurgeOptions {
          * @return the options
          */
         public KeyValuePurgeOptions build() {
-            if (deleteMarkersThresholdMillis < 0) {
-                deleteMarkersThresholdMillis = -1;
-            }
-            else if (deleteMarkersThresholdMillis == 0) {
-                deleteMarkersThresholdMillis = DEFAULT_THRESHOLD_MILLIS;
-            }
-            return new KeyValuePurgeOptions(this);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

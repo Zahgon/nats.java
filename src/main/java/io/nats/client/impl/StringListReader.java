@@ -10,11 +10,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import io.nats.client.support.JsonValue;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,14 +27,10 @@ abstract class StringListReader extends AbstractListReader {
 
     @Override
     void processItems(List<JsonValue> items) {
-        for (JsonValue v : items) {
-            if (v.string != null) {
-                strings.add(v.string);
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     List<String> getStrings() {
-        return strings;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

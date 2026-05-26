@@ -10,11 +10,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import org.jspecify.annotations.Nullable;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,9 +20,14 @@ import java.util.Map;
  * Represents the replay policy of a consumer.
  */
 public enum ReplayPolicy {
-    /** instant policy */
+
+    /**
+     * instant policy
+     */
     Instant("instant"),
-    /** original policy */
+    /**
+     * original policy
+     */
     Original("original");
 
     private String policy;
@@ -35,7 +38,7 @@ public enum ReplayPolicy {
 
     @Override
     public String toString() {
-        return policy;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private static final Map<String, ReplayPolicy> strEnumHash = new HashMap<>();
@@ -53,6 +56,6 @@ public enum ReplayPolicy {
      */
     @Nullable
     public static ReplayPolicy get(String value) {
-        return strEnumHash.get(value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

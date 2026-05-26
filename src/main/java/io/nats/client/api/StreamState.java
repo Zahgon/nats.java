@@ -10,19 +10,16 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.support.JsonValue;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import static io.nats.client.support.ApiConstants.*;
 import static io.nats.client.support.JsonValueUtils.*;
 
@@ -30,18 +27,31 @@ import static io.nats.client.support.JsonValueUtils.*;
  * Object representing the state of a stream
  */
 public class StreamState {
+
     private final long msgs;
+
     private final long bytes;
+
     private final long firstSeq;
+
     private final long lastSeq;
+
     private final long consumerCount;
+
     private final long subjectCount;
+
     private final long deletedCount;
+
     private final ZonedDateTime firstTime;
+
     private final ZonedDateTime lastTime;
+
     private final List<Subject> subjects;
+
     private final List<Long> deletedStreamSequences;
+
     private final LostStreamData lostStreamData;
+
     private final Map<String, Long> subjectMap;
 
     StreamState(JsonValue vStreamState) {
@@ -56,7 +66,6 @@ public class StreamState {
         deletedCount = readLong(vStreamState, NUM_DELETED, 0);
         deletedStreamSequences = readLongList(vStreamState, DELETED);
         lostStreamData = LostStreamData.optionalInstance(readValue(vStreamState, LOST));
-
         subjects = new ArrayList<>();
         subjectMap = new HashMap<>();
         JsonValue vSubjects = readValue(vStreamState, SUBJECTS);
@@ -77,7 +86,7 @@ public class StreamState {
      * @return the message count
      */
     public long getMsgCount() {
-        return msgs;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -86,7 +95,7 @@ public class StreamState {
      * @return the byte count
      */
     public long getByteCount() {
-        return bytes;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -94,7 +103,7 @@ public class StreamState {
      * @return a sequence number
      */
     public long getFirstSequence() {
-        return firstSeq;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -104,7 +113,7 @@ public class StreamState {
      */
     @Nullable
     public ZonedDateTime getFirstTime() {
-        return firstTime;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -113,7 +122,7 @@ public class StreamState {
      * @return a sequence number
      */
     public long getLastSequence() {
-        return lastSeq;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -123,7 +132,7 @@ public class StreamState {
      */
     @Nullable
     public ZonedDateTime getLastTime() {
-        return lastTime;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -132,7 +141,7 @@ public class StreamState {
      * @return the consumer count
      */
     public long getConsumerCount() {
-        return consumerCount;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -141,7 +150,7 @@ public class StreamState {
      * @return the subject count
      */
     public long getSubjectCount() {
-        return subjectCount;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -151,7 +160,7 @@ public class StreamState {
      */
     @NonNull
     public List<Subject> getSubjects() {
-        return subjects;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -160,7 +169,7 @@ public class StreamState {
      */
     @NonNull
     public Map<String, Long> getSubjectMap() {
-        return subjectMap;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -169,7 +178,7 @@ public class StreamState {
      * @return the deleted count
      */
     public long getDeletedCount() {
-        return deletedCount;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -179,7 +188,7 @@ public class StreamState {
      */
     @NonNull
     public List<Long> getDeleted() {
-        return deletedStreamSequences;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -188,24 +197,11 @@ public class StreamState {
      */
     @Nullable
     public LostStreamData getLostStreamData() {
-        return lostStreamData;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return "StreamState{" +
-            "msgs=" + msgs +
-            ", bytes=" + bytes +
-            ", firstSeq=" + firstSeq +
-            ", lastSeq=" + lastSeq +
-            ", consumerCount=" + consumerCount +
-            ", firstTime=" + firstTime +
-            ", lastTime=" + lastTime +
-            ", subjectCount=" + subjectCount +
-            ", subjects=" + subjects +
-            ", deletedCount=" + deletedCount +
-            ", deleteds=" + deletedStreamSequences +
-            ", lostStreamData=" + lostStreamData +
-            '}';
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

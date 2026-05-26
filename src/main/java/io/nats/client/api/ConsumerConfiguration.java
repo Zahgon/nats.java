@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.PullSubscribeOptions;
@@ -18,11 +17,9 @@ import io.nats.client.PushSubscribeOptions;
 import io.nats.client.support.*;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.*;
-
 import static io.nats.client.support.ApiConstants.*;
 import static io.nats.client.support.JsonUtils.beginJson;
 import static io.nats.client.support.JsonUtils.endJson;
@@ -38,6 +35,7 @@ import static io.nats.client.support.Validator.*;
  * <P> By default this will create a <b>pull consumer</b> unless {@link ConsumerConfiguration.Builder#deliverSubject(String) ConsumerConfiguration.Builder.deliverSubject(String) } is set.
  */
 public class ConsumerConfiguration implements JsonSerializable {
+
     /**
      * The default deliver policy for consumers
      */
@@ -114,36 +112,69 @@ public class ConsumerConfiguration implements JsonSerializable {
     public static final long MIN_IDLE_HEARTBEAT_MILLIS = MIN_IDLE_HEARTBEAT.toMillis();
 
     protected final DeliverPolicy deliverPolicy;
+
     protected final AckPolicy ackPolicy;
+
     protected final ReplayPolicy replayPolicy;
+
     protected final String description;
+
     protected final String durable;
+
     protected final String name;
+
     protected final String deliverSubject;
+
     protected final String deliverGroup;
+
     protected final String sampleFrequency;
+
     protected final ZonedDateTime startTime;
+
     protected final Duration ackWait;
+
     protected final Duration idleHeartbeat;
+
     protected final Duration maxExpires;
+
     protected final Duration inactiveThreshold;
-    protected final Long startSeq; // server side this is unsigned
+
+    // server side this is unsigned
+    protected final Long startSeq;
+
     protected final Integer maxDeliver;
-    protected final Long rateLimit; // server side this is unsigned
+
+    // server side this is unsigned
+    protected final Long rateLimit;
+
     protected final Integer maxAckPending;
+
     protected final Integer maxPullWaiting;
+
     protected final Integer maxBatch;
+
     protected final Long maxBytes;
+
     protected final Integer numReplicas;
+
     protected final ZonedDateTime pauseUntil;
+
     protected final Boolean flowControl;
+
     protected final Boolean headersOnly;
+
     protected final Boolean memStorage;
+
     protected final List<Duration> backoff;
+
     protected final Map<String, String> metadata;
+
     protected final List<String> filterSubjects;
+
     protected final List<String> priorityGroups;
+
     protected final PriorityPolicy priorityPolicy;
+
     protected final Duration priorityTimeout;
 
     protected ConsumerConfiguration(ConsumerConfiguration cc) {
@@ -182,12 +213,10 @@ public class ConsumerConfiguration implements JsonSerializable {
     }
 
     // For the builder
-    protected ConsumerConfiguration(Builder b)
-    {
+    protected ConsumerConfiguration(Builder b) {
         this.deliverPolicy = b.deliverPolicy;
         this.ackPolicy = b.ackPolicy;
         this.replayPolicy = b.replayPolicy;
-
         this.description = b.description;
         this.durable = b.durable;
         this.name = b.name;
@@ -199,7 +228,6 @@ public class ConsumerConfiguration implements JsonSerializable {
         this.idleHeartbeat = b.idleHeartbeat;
         this.maxExpires = b.maxExpires;
         this.inactiveThreshold = b.inactiveThreshold;
-
         this.startSeq = b.startSeq;
         this.maxDeliver = b.maxDeliver;
         this.rateLimit = b.rateLimit;
@@ -209,15 +237,12 @@ public class ConsumerConfiguration implements JsonSerializable {
         this.maxBytes = b.maxBytes;
         this.numReplicas = b.numReplicas;
         this.pauseUntil = b.pauseUntil;
-
         this.flowControl = b.flowControl;
         this.headersOnly = b.headersOnly;
         this.memStorage = b.memStorage;
-
         this.backoff = b.backoff;
         this.metadata = b.metadata;
         this.filterSubjects = b.filterSubjects;
-
         this.priorityGroups = b.priorityGroups;
         this.priorityPolicy = b.priorityPolicy;
         this.priorityTimeout = b.priorityTimeout;
@@ -229,51 +254,8 @@ public class ConsumerConfiguration implements JsonSerializable {
      */
     @Override
     @NonNull
-	public String toJson() {
-        StringBuilder sb = beginJson();
-        JsonUtils.addField(sb, DESCRIPTION, description);
-        JsonUtils.addField(sb, DURABLE_NAME, durable);
-        JsonUtils.addField(sb, NAME, name);
-        JsonUtils.addField(sb, DELIVER_SUBJECT, deliverSubject);
-        JsonUtils.addField(sb, DELIVER_GROUP, deliverGroup);
-        JsonUtils.addField(sb, DELIVER_POLICY, GetOrDefault(deliverPolicy).toString());
-        JsonUtils.addFieldWhenGtZero(sb, OPT_START_SEQ, startSeq);
-        JsonUtils.addField(sb, OPT_START_TIME, startTime);
-        JsonUtils.addField(sb, ACK_POLICY, GetOrDefault(ackPolicy).toString());
-        JsonUtils.addFieldAsNanos(sb, ACK_WAIT, ackWait);
-        JsonUtils.addFieldWhenGtZero(sb, MAX_DELIVER, maxDeliver);
-        JsonUtils.addField(sb, MAX_ACK_PENDING, maxAckPending);
-        JsonUtils.addField(sb, REPLAY_POLICY, GetOrDefault(replayPolicy).toString());
-        JsonUtils.addField(sb, SAMPLE_FREQ, sampleFrequency);
-        JsonUtils.addFieldWhenGtZero(sb, RATE_LIMIT_BPS, rateLimit);
-        JsonUtils.addFieldAsNanos(sb, IDLE_HEARTBEAT, idleHeartbeat);
-        JsonUtils.addFldWhenTrue(sb, FLOW_CONTROL, flowControl);
-        JsonUtils.addField(sb, ApiConstants.MAX_WAITING, maxPullWaiting);
-        JsonUtils.addFldWhenTrue(sb, HEADERS_ONLY, headersOnly);
-        JsonUtils.addField(sb, MAX_BATCH, maxBatch);
-        JsonUtils.addField(sb, MAX_BYTES, maxBytes);
-        JsonUtils.addFieldAsNanos(sb, MAX_EXPIRES, maxExpires);
-        JsonUtils.addFieldAsNanos(sb, INACTIVE_THRESHOLD, inactiveThreshold);
-        JsonUtils.addDurations(sb, BACKOFF, backoff);
-        JsonUtils.addField(sb, NUM_REPLICAS, numReplicas);
-        JsonUtils.addField(sb, PAUSE_UNTIL, pauseUntil);
-        JsonUtils.addField(sb, MEM_STORAGE, memStorage);
-        JsonUtils.addField(sb, METADATA, metadata);
-        if (filterSubjects != null) {
-            if (filterSubjects.size() > 1) {
-                JsonUtils.addStrings(sb, FILTER_SUBJECTS, filterSubjects);
-            }
-            else if (filterSubjects.size() == 1) {
-                JsonUtils.addField(sb, FILTER_SUBJECT, filterSubjects.get(0));
-            }
-        }
-        JsonUtils.addStrings(sb, PRIORITY_GROUPS, priorityGroups);
-        if (priorityPolicy != null && priorityPolicy != DEFAULT_PRIORITY_POLICY) {
-            JsonUtils.addField(sb, PRIORITY_POLICY, priorityPolicy.toString());
-        }
-        JsonUtils.addFieldAsNanos(sb, PRIORITY_TIMEOUT, priorityTimeout);
-
-        return endJson(sb).toString();
+    public String toJson() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -282,7 +264,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      */
     @Nullable
     public String getDescription() {
-        return description;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -291,7 +273,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      */
     @Nullable
     public String getDurable() {
-        return durable;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -300,7 +282,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      */
     @Nullable
     public String getName() {
-        return name;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -309,7 +291,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      */
     @Nullable
     public String getDeliverSubject() {
-        return deliverSubject;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -318,7 +300,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      */
     @Nullable
     public String getDeliverGroup() {
-        return deliverGroup;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -327,7 +309,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      */
     @NonNull
     public DeliverPolicy getDeliverPolicy() {
-        return GetOrDefault(deliverPolicy);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -335,7 +317,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      * @return the start sequence.
      */
     public long getStartSequence() {
-        return getOrUnsetUlong(startSeq);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -344,7 +326,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      */
     @Nullable
     public ZonedDateTime getStartTime() {
-        return startTime;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -353,7 +335,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      */
     @NonNull
     public AckPolicy getAckPolicy() {
-        return GetOrDefault(ackPolicy);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -362,7 +344,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      */
     @Nullable
     public Duration getAckWait() {
-        return ackWait;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -370,7 +352,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      * @return the max delivery amount.
      */
     public long getMaxDeliver() {
-        return getOrUnset(maxDeliver);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -381,7 +363,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      */
     @Nullable
     public String getFilterSubject() {
-        return filterSubjects == null || filterSubjects.size() != 1 ? null : filterSubjects.get(0);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -390,7 +372,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      */
     @Nullable
     public List<String> getFilterSubjects() {
-        return filterSubjects;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -402,7 +384,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      */
     @Nullable
     public List<String> getPriorityGroups() {
-        return priorityGroups;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -410,7 +392,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      * @return true if there are multiple filter subjects
      */
     public boolean hasMultipleFilterSubjects() {
-        return filterSubjects != null && filterSubjects.size() > 1;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -419,7 +401,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      */
     @NonNull
     public ReplayPolicy getReplayPolicy() {
-        return GetOrDefault(replayPolicy);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -427,7 +409,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      * @return the rate limit in bits per second
      */
     public long getRateLimit() {
-        return getOrUnsetUlong(rateLimit);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -435,7 +417,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      * @return maximum ack pending.
      */
     public long getMaxAckPending() {
-        return getOrUnset(maxAckPending);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -444,7 +426,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      */
     @Nullable
     public String getSampleFrequency() {
-        return sampleFrequency;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -453,7 +435,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      */
     @Nullable
     public Duration getIdleHeartbeat() {
-        return idleHeartbeat;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -461,9 +443,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      * @return the flow control mode
      */
     public boolean isFlowControl() {
-        // The way the builder and json reading works it's never false if it's not null
-        // but this way I can make code coverage happy and not assume.
-        return Boolean.TRUE.equals(flowControl);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -471,7 +451,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      * @return the max pull waiting
      */
     public long getMaxPullWaiting() {
-        return getOrUnset(maxPullWaiting);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -479,7 +459,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      * @return the flow control mode
      */
     public boolean isHeadersOnly() {
-        return headersOnly != null && headersOnly;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -487,7 +467,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      * @return the mem storage mode
      */
     public boolean isMemStorage() {
-        return memStorage != null && memStorage;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -495,7 +475,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      * @return the max batch size
      */
     public long getMaxBatch() {
-        return getOrUnset(maxBatch);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -503,7 +483,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      * @return the max byte size
      */
     public long getMaxBytes() {
-        return getOrUnset(maxBytes);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -512,7 +492,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      */
     @Nullable
     public Duration getMaxExpires() {
-        return maxExpires;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -521,7 +501,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      */
     @Nullable
     public Duration getInactiveThreshold() {
-        return inactiveThreshold;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -530,7 +510,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      */
     @NonNull
     public List<Duration> getBackoff() {
-        return backoff == null ? Collections.emptyList() : backoff;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -539,14 +519,16 @@ public class ConsumerConfiguration implements JsonSerializable {
      */
     @NonNull
     public Map<String, String> getMetadata() {
-        return metadata == null ? Collections.emptyMap() : metadata;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Get the number of consumer replicas.
      * @return the replicas count
      */
-    public int getNumReplicas() { return getOrUnset(numReplicas); }
+    public int getNumReplicas() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
     /**
      * Get the time until the consumer is paused.
@@ -554,7 +536,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      */
     @Nullable
     public ZonedDateTime getPauseUntil() {
-        return pauseUntil;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -565,7 +547,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      */
     @NonNull
     public PriorityPolicy getPriorityPolicy() {
-        return GetOrDefault(priorityPolicy);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -575,7 +557,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      */
     @Nullable
     public Duration getPriorityTimeout() {
-        return priorityTimeout;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -583,7 +565,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      * @return true if the policy was set, false if the policy was not set
      */
     public boolean deliverPolicyWasSet() {
-        return deliverPolicy != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -591,7 +573,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      * @return true if the policy was set, false if the policy was not set
      */
     public boolean ackPolicyWasSet() {
-        return ackPolicy != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -599,7 +581,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      * @return true if the policy was set, false if the policy was not set
      */
     public boolean replayPolicyWasSet() {
-        return replayPolicy != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -607,7 +589,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      * @return true if the start sequence was set by the user
      */
     public boolean startSeqWasSet() {
-        return startSeq != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -615,7 +597,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      * @return true if max deliver was set by the user
      */
     public boolean maxDeliverWasSet() {
-        return maxDeliver != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -623,7 +605,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      * @return true if rate limit was set by the user
      */
     public boolean rateLimitWasSet() {
-        return rateLimit != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -631,7 +613,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      * @return true if mac ack pending was set by the user
      */
     public boolean maxAckPendingWasSet() {
-        return maxAckPending != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -639,7 +621,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      * @return true if max pull waiting was set by the user
      */
     public boolean maxPullWaitingWasSet() {
-        return maxPullWaiting != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -647,7 +629,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      * @return true if max batch was set by the user
      */
     public boolean maxBatchWasSet() {
-        return maxBatch != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -655,7 +637,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      * @return true if max bytes was set by the user
      */
     public boolean maxBytesWasSet() {
-        return maxBytes != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -663,7 +645,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      * @return true if the policy was set, false if the policy was not set
      */
     public boolean flowControlWasSet() {
-        return flowControl != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -671,7 +653,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      * @return true if the policy was set, false if the policy was not set
      */
     public boolean headersOnlyWasSet() {
-        return headersOnly != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -679,7 +661,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      * @return true if the policy was set, false if the policy was not set
      */
     public boolean memStorageWasSet() {
-        return memStorage != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -687,7 +669,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      * @return true if num replicas was set by the user
      */
     public boolean numReplicasWasSet() {
-        return numReplicas != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -695,7 +677,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      * @return true if num backoff was set by the user
      */
     public boolean backoffWasSet() {
-        return backoff != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -703,7 +685,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      * @return true if num metadata was set by the user
      */
     public boolean metadataWasSet() {
-        return metadata != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -711,7 +693,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      * @return true if the policy was set, false if the policy was not set
      */
     public boolean priorityPolicyWasSet() {
-        return priorityPolicy != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -719,7 +701,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      * @return true if the timeout was set, false if the timeout was not set
      */
     public boolean priorityTimeoutWasSet() {
-        return priorityTimeout != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -727,7 +709,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      * @return a publish options builder
      */
     public static Builder builder() {
-        return new Builder();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -736,7 +718,7 @@ public class ConsumerConfiguration implements JsonSerializable {
      * @return a publish options builder
      */
     public static Builder builder(ConsumerConfiguration cc) {
-        return cc == null ? new Builder() : new Builder(cc);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -744,52 +726,78 @@ public class ConsumerConfiguration implements JsonSerializable {
      * create a default set of options if no methods are calls.
      *
      * <p>{@code new ConsumerConfiguration.Builder().build()} will create a default ConsumerConfiguration.
-     *
      */
     public static class Builder {
+
         private DeliverPolicy deliverPolicy;
+
         private AckPolicy ackPolicy;
+
         private ReplayPolicy replayPolicy;
 
         private String description;
+
         private String durable;
+
         private String name;
+
         private String deliverSubject;
+
         private String deliverGroup;
+
         private String sampleFrequency;
 
         private ZonedDateTime startTime;
+
         private Duration ackWait;
+
         private Duration idleHeartbeat;
+
         private Duration maxExpires;
+
         private Duration inactiveThreshold;
 
         private Long startSeq;
+
         private Integer maxDeliver;
+
         private Long rateLimit;
+
         private Integer maxAckPending;
+
         private Integer maxPullWaiting;
+
         private Integer maxBatch;
+
         private Long maxBytes;
+
         private Integer numReplicas;
+
         private ZonedDateTime pauseUntil;
 
         private Boolean flowControl;
+
         private Boolean headersOnly;
+
         private Boolean memStorage;
 
         private List<Duration> backoff;
+
         private Map<String, String> metadata;
+
         private List<String> filterSubjects;
 
         private List<String> priorityGroups;
+
         private PriorityPolicy priorityPolicy;
+
         private Duration priorityTimeout;
 
         /**
          * Construct the builder
          */
-        public Builder() {}
+        public Builder() {
+        }
 
         /**
          * Construct the builder and initialize values with the existing ConsumerConfiguration
@@ -800,20 +808,17 @@ public class ConsumerConfiguration implements JsonSerializable {
                 this.deliverPolicy = cc.deliverPolicy;
                 this.ackPolicy = cc.ackPolicy;
                 this.replayPolicy = cc.replayPolicy;
-
                 this.description = cc.description;
                 this.durable = cc.durable;
                 this.name = cc.name;
                 this.deliverSubject = cc.deliverSubject;
                 this.deliverGroup = cc.deliverGroup;
                 this.sampleFrequency = cc.sampleFrequency;
-
                 this.startTime = cc.startTime;
                 this.ackWait = cc.ackWait;
                 this.idleHeartbeat = cc.idleHeartbeat;
                 this.maxExpires = cc.maxExpires;
                 this.inactiveThreshold = cc.inactiveThreshold;
-
                 this.startSeq = cc.startSeq;
                 this.maxDeliver = cc.maxDeliver;
                 this.rateLimit = cc.rateLimit;
@@ -823,11 +828,9 @@ public class ConsumerConfiguration implements JsonSerializable {
                 this.maxBytes = cc.maxBytes;
                 this.numReplicas = cc.numReplicas;
                 this.pauseUntil = cc.pauseUntil;
-
                 this.flowControl = cc.flowControl;
                 this.headersOnly = cc.headersOnly;
                 this.memStorage = cc.memStorage;
-
                 if (cc.backoff != null) {
                     this.backoff = new ArrayList<>(cc.backoff);
                 }
@@ -837,7 +840,6 @@ public class ConsumerConfiguration implements JsonSerializable {
                 if (cc.filterSubjects != null) {
                     this.filterSubjects = new ArrayList<>(cc.filterSubjects);
                 }
-
                 if (cc.priorityGroups != null) {
                     this.priorityGroups = new ArrayList<>(cc.priorityGroups);
                 }
@@ -853,7 +855,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @throws JsonParseException if there is a problem parsing the json
          */
         public Builder json(String json) throws JsonParseException {
-            return jsonValue(JsonParser.parse(json));
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -862,73 +864,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return the builder
          */
         public Builder jsonValue(JsonValue jsonValue) {
-            deliverPolicy(DeliverPolicy.get(readString(jsonValue, DELIVER_POLICY)));
-            ackPolicy(AckPolicy.get(readString(jsonValue, ACK_POLICY)));
-
-            replayPolicy(ReplayPolicy.get(readString(jsonValue, REPLAY_POLICY)));
-
-            description(readString(jsonValue, DESCRIPTION));
-            durable(readString(jsonValue, DURABLE_NAME));
-            name(readString(jsonValue, NAME));
-            deliverSubject(readString(jsonValue, DELIVER_SUBJECT));
-            deliverGroup(readString(jsonValue, DELIVER_GROUP));
-            sampleFrequency(readString(jsonValue, SAMPLE_FREQ));
-            startTime(readDate(jsonValue, OPT_START_TIME));
-            ackWait(readNanos(jsonValue, ACK_WAIT));
-            maxExpires(readNanos(jsonValue, MAX_EXPIRES));
-            inactiveThreshold(readNanos(jsonValue, INACTIVE_THRESHOLD));
-
-            startSequence(readLong(jsonValue, OPT_START_SEQ));
-            maxDeliver(readLong(jsonValue, MAX_DELIVER, INTEGER_UNSET));
-            rateLimit(readLong(jsonValue, RATE_LIMIT_BPS));
-            maxAckPending(readLong(jsonValue, MAX_ACK_PENDING));
-            maxPullWaiting(readLong(jsonValue, MAX_WAITING));
-            maxBatch(readLong(jsonValue, MAX_BATCH));
-            maxBytes(readLong(jsonValue, MAX_BYTES));
-
-            Integer r = readInteger(jsonValue, NUM_REPLICAS);
-            if (r != null) {
-                if (r == 0) {
-                    numReplicas = 0;
-                }
-                else {
-                    numReplicas(r);
-                }
-            }
-
-            pauseUntil(readDate(jsonValue, PAUSE_UNTIL));
-
-            Duration idleHeartbeat = readNanos(jsonValue, IDLE_HEARTBEAT);
-            if (idleHeartbeat != null) {
-                if (readBoolean(jsonValue, FLOW_CONTROL, false)) {
-                    flowControl(idleHeartbeat);
-                }
-                else {
-                    idleHeartbeat(idleHeartbeat);
-                }
-            }
-
-            headersOnly(readBoolean(jsonValue, HEADERS_ONLY, null));
-            memStorage(readBoolean(jsonValue, MEM_STORAGE, null));
-
-            //noinspection DataFlowIssue readNanosList with false ensures not null;
-            backoff(readNanosList(jsonValue, BACKOFF, false).toArray(new Duration[0]));
-
-            metadata(readStringStringMap(jsonValue, METADATA));
-
-            String fs = emptyAsNull(readString(jsonValue, FILTER_SUBJECT));
-            if (fs == null) {
-                filterSubjects(readOptionalStringList(jsonValue, FILTER_SUBJECTS));
-            }
-            else {
-                filterSubject(fs);
-            }
-
-            priorityGroups(readOptionalStringList(jsonValue, PRIORITY_GROUPS));
-            priorityPolicy(PriorityPolicy.get(readString(jsonValue, PRIORITY_POLICY)));
-            priorityTimeout(readNanos(jsonValue, PRIORITY_TIMEOUT));
-
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -937,8 +873,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return the builder
          */
         public Builder description(String description) {
-            this.description = emptyAsNull(description);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -948,8 +883,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return the builder
          */
         public Builder durable(String durable) {
-            this.durable = validateDurable(durable, false);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -959,8 +893,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return the builder
          */
         public Builder name(String name) {
-            this.name = validateConsumerName(name, false);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -969,8 +902,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder deliverPolicy(DeliverPolicy policy) {
-            this.deliverPolicy = policy;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -980,8 +912,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return the builder
          */
         public Builder deliverSubject(String subject) {
-            this.deliverSubject = emptyAsNull(subject);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -990,8 +921,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return the builder
          */
         public Builder deliverGroup(String group) {
-            this.deliverGroup = emptyAsNull(group);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1000,8 +930,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder startSequence(Long sequence) {
-            this.startSeq = normalizeUlong(sequence);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1010,8 +939,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder startSequence(long sequence) {
-            this.startSeq = normalizeUlong(sequence);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1020,8 +948,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder startTime(ZonedDateTime startTime) {
-            this.startTime = startTime;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1030,8 +957,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder ackPolicy(AckPolicy policy) {
-            this.ackPolicy = policy;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1040,8 +966,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder ackWait(Duration timeout) {
-            this.ackWait = normalize(timeout);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1050,8 +975,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder ackWait(long timeoutMillis) {
-            this.ackWait = normalizeDuration(timeoutMillis);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1060,8 +984,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder maxDeliver(Long maxDeliver) {
-            this.maxDeliver = normalize(maxDeliver, MAX_DELIVER_MIN);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1070,8 +993,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder maxDeliver(long maxDeliver) {
-            this.maxDeliver = normalize(maxDeliver, MAX_DELIVER_MIN);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1081,13 +1003,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder filterSubject(String filterSubject) {
-            if (nullOrEmpty(filterSubject)) {
-                this.filterSubjects = null;
-            }
-            else {
-                this.filterSubjects = Collections.singletonList(filterSubject);
-            }
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1097,11 +1013,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder filterSubjects(String... filterSubjects) {
-            if (nullOrEmpty(filterSubjects)) {
-                this.filterSubjects = null;
-                return this;
-            }
-            return _filterSubjects(Arrays.asList(filterSubjects));
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1111,11 +1023,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder filterSubjects(List<String> filterSubjects) {
-            if (nullOrEmpty(filterSubjects)) {
-                this.filterSubjects = null;
-                return this;
-            }
-            return _filterSubjects(filterSubjects);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         private Builder _filterSubjects(@NonNull List<String> filterSubjects) {
@@ -1137,8 +1045,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder replayPolicy(ReplayPolicy policy) {
-            this.replayPolicy = policy;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1147,8 +1054,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder sampleFrequency(String frequency) {
-            this.sampleFrequency = emptyAsNull(frequency);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1157,8 +1063,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder rateLimit(Long bitsPerSecond) {
-            this.rateLimit = normalizeUlong(bitsPerSecond);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1167,8 +1072,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder rateLimit(long bitsPerSecond) {
-            this.rateLimit = normalizeUlong(bitsPerSecond);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1177,8 +1081,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder maxAckPending(Long maxAckPending) {
-            this.maxAckPending = normalize(maxAckPending, STANDARD_MIN);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1187,8 +1090,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder maxAckPending(long maxAckPending) {
-            this.maxAckPending = normalize(maxAckPending, STANDARD_MIN);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1197,22 +1099,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder idleHeartbeat(Duration idleHeartbeat) {
-            if (idleHeartbeat == null) {
-                this.idleHeartbeat = null;
-            }
-            else {
-                long nanos = idleHeartbeat.toNanos();
-                if (nanos <= DURATION_UNSET_LONG) {
-                    this.idleHeartbeat = DURATION_UNSET;
-                }
-                else if (nanos < MIN_IDLE_HEARTBEAT_NANOS) {
-                    throw new IllegalArgumentException("Duration must be greater than or equal to " + MIN_IDLE_HEARTBEAT_NANOS + " nanos.");
-                }
-                else {
-                    this.idleHeartbeat = idleHeartbeat;
-                }
-            }
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1221,16 +1108,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder idleHeartbeat(long idleHeartbeatMillis) {
-            if (idleHeartbeatMillis <= DURATION_UNSET_LONG) {
-                this.idleHeartbeat = DURATION_UNSET;
-            }
-            else if (idleHeartbeatMillis < MIN_IDLE_HEARTBEAT_MILLIS) {
-                throw new IllegalArgumentException("Duration must be greater than or equal to " + MIN_IDLE_HEARTBEAT_MILLIS + " milliseconds.");
-            }
-            else {
-                this.idleHeartbeat = Duration.ofMillis(idleHeartbeatMillis);
-            }
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1239,8 +1117,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder flowControl(Duration idleHeartbeat) {
-            this.flowControl = true;
-            return idleHeartbeat(idleHeartbeat);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1249,8 +1126,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder flowControl(long idleHeartbeatMillis) {
-            this.flowControl = true;
-            return idleHeartbeat(idleHeartbeatMillis);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1259,8 +1135,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder maxExpires(Duration maxExpires) {
-            this.maxExpires = normalize(maxExpires);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1269,8 +1144,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder maxExpires(long maxExpires) {
-            this.maxExpires = normalizeDuration(maxExpires);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1279,8 +1153,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder inactiveThreshold(Duration inactiveThreshold) {
-            this.inactiveThreshold = normalize(inactiveThreshold);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1289,8 +1162,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder inactiveThreshold(long inactiveThreshold) {
-            this.inactiveThreshold = normalizeDuration(inactiveThreshold);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1300,8 +1172,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder maxPullWaiting(Long maxPullWaiting) {
-            this.maxPullWaiting = normalize(maxPullWaiting, STANDARD_MIN);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1310,8 +1181,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder maxPullWaiting(long maxPullWaiting) {
-            this.maxPullWaiting = normalize(maxPullWaiting, STANDARD_MIN);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1320,8 +1190,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder maxBatch(Long maxBatch) {
-            this.maxBatch = normalize(maxBatch, STANDARD_MIN);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1330,8 +1199,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder maxBatch(long maxBatch) {
-            this.maxBatch = normalize(maxBatch, STANDARD_MIN);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1340,8 +1208,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder maxBytes(Long maxBytes) {
-            this.maxBytes = normalizeLong(maxBytes);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1350,8 +1217,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder maxBytes(long maxBytes) {
-            this.maxBytes = normalizeLong(maxBytes);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1361,9 +1227,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder numReplicas(Integer numReplicas) {
-            this.numReplicas = numReplicas == null || numReplicas <= INTEGER_UNSET
-                ? null : validateNumberOfReplicas(numReplicas);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1372,8 +1236,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder pauseUntil(ZonedDateTime pauseUntil) {
-            this.pauseUntil = pauseUntil;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1383,8 +1246,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder headersOnly(Boolean headersOnly) {
-            this.headersOnly = headersOnly;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1394,8 +1256,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder memStorage(Boolean memStorage) {
-            this.memStorage = memStorage;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1405,24 +1266,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder backoff(Duration... backoffs) {
-            if (nullOrEmpty(backoffs)) {
-                this.backoff = null;
-            }
-            else {
-                this.backoff = new ArrayList<>();
-                for (Duration d : backoffs) {
-                    if (d != null) {
-                        if (d.toNanos() < 0) {
-                            throw new IllegalArgumentException("Backoff cannot be less than 0");
-                        }
-                        this.backoff.add(d);
-                    }
-                }
-                if (this.backoff.size() == 0) {
-                    this.backoff = null;
-                }
-            }
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1432,19 +1276,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder backoff(long... backoffsMillis) {
-            if (backoffsMillis == null || backoffsMillis.length == 0) {
-                backoff = null;
-            }
-            else {
-                backoff = new ArrayList<>();
-                for (long ms : backoffsMillis) {
-                    if (ms < 0) {
-                        throw new IllegalArgumentException("Backoff cannot be less than 0");
-                    }
-                    this.backoff.add(Duration.ofMillis(ms));
-                }
-            }
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1453,8 +1285,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder metadata(Map<String, String> metadata) {
-            this.metadata = metadata == null || metadata.isEmpty() ? null : new HashMap<>(metadata);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1464,11 +1295,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder priorityGroups(String... priorityGroups) {
-            if (nullOrEmpty(priorityGroups)) {
-                this.priorityGroups = null;
-                return this;
-            }
-            return _priorityGroups(Arrays.asList(priorityGroups));
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1478,11 +1305,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder priorityGroups(List<String> priorityGroups) {
-            if (nullOrEmpty(priorityGroups)) {
-                this.priorityGroups = null;
-                return this;
-            }
-            return _priorityGroups(priorityGroups);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         private Builder _priorityGroups(@NonNull List<String> priorityGroups) {
@@ -1504,8 +1327,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder priorityPolicy(PriorityPolicy policy) {
-            this.priorityPolicy = policy;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1514,8 +1336,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder priorityTimeout(Duration priorityTimeout) {
-            this.priorityTimeout = normalize(priorityTimeout);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1524,8 +1345,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return Builder
          */
         public Builder priorityTimeout(long priorityTimeoutMillis) {
-            this.priorityTimeout = normalizeDuration(priorityTimeoutMillis);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1533,8 +1353,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return The consumer configuration.
          */
         public ConsumerConfiguration build() {
-            validateMustMatchIfBothSupplied(name, durable, JsConsumerNameDurableMismatch);
-            return new ConsumerConfiguration(this);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1542,7 +1361,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return The PushSubscribeOptions.
          */
         public PushSubscribeOptions buildPushSubscribeOptions() {
-            return PushSubscribeOptions.builder().configuration(build()).build();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1555,7 +1374,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return The PushSubscribeOptions.
          */
         public PushSubscribeOptions buildPushSubscribeOptions(String stream) {
-            return PushSubscribeOptions.builder().configuration(build()).stream(stream).build();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1563,7 +1382,7 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return The PullSubscribeOptions.
          */
         public PullSubscribeOptions buildPullSubscribeOptions() {
-            return PullSubscribeOptions.builder().configuration(build()).build();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1576,74 +1395,66 @@ public class ConsumerConfiguration implements JsonSerializable {
          * @return The PullSubscribeOptions.
          */
         public PullSubscribeOptions buildPullSubscribeOptions(String stream) {
-            return PullSubscribeOptions.builder().configuration(build()).stream(stream).build();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     @Override
     public String toString() {
-        return "ConsumerConfiguration " + toJson();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    protected static int getOrUnset(Integer val)
-    {
-        return val == null ? INTEGER_UNSET : val;
+    protected static int getOrUnset(Integer val) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    protected static long getOrUnset(Long val)
-    {
-        return val == null ? LONG_UNSET : val;
+    protected static long getOrUnset(Long val) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    protected static long getOrUnsetUlong(Long val)
-    {
-        return val == null || val < 0 ? ULONG_UNSET : val;
+    protected static long getOrUnsetUlong(Long val) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    protected static Duration getOrUnset(Duration val)
-    {
-        return val == null ? DURATION_UNSET : val;
+    protected static Duration getOrUnset(Duration val) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected static Integer normalize(Long l, int min) {
-        if (l == null) {
-            return null;
-        }
-
-        if (l < min) {
-            return INTEGER_UNSET;
-        }
-
-        if (l > Integer.MAX_VALUE) {
-            return Integer.MAX_VALUE;
-        }
-
-        return l.intValue();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected static Long normalizeLong(Long l) {
-        return l == null ? null : l <= LONG_UNSET ? LONG_UNSET : l;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    protected static Long normalizeUlong(Long u)
-    {
-        return u == null ? null : u <= ULONG_UNSET ? ULONG_UNSET : u;
+    protected static Long normalizeUlong(Long u) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    protected static Duration normalize(Duration d)
-    {
-        return d == null ? null : d.toNanos() <= DURATION_UNSET_LONG ? DURATION_UNSET : d;
+    protected static Duration normalize(Duration d) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    protected static Duration normalizeDuration(long millis)
-    {
-        return millis <= DURATION_UNSET_LONG ? DURATION_UNSET : Duration.ofMillis(millis);
+    protected static Duration normalizeDuration(long millis) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    protected static DeliverPolicy GetOrDefault(DeliverPolicy p) { return p == null ? DEFAULT_DELIVER_POLICY : p; }
-    protected static AckPolicy GetOrDefault(AckPolicy p) { return p == null ? DEFAULT_ACK_POLICY : p; }
-    protected static ReplayPolicy GetOrDefault(ReplayPolicy p) { return p == null ? DEFAULT_REPLAY_POLICY : p; }
-    protected static PriorityPolicy GetOrDefault(PriorityPolicy p) { return p == null ? DEFAULT_PRIORITY_POLICY : p; }
+    protected static DeliverPolicy GetOrDefault(DeliverPolicy p) {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    protected static AckPolicy GetOrDefault(AckPolicy p) {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    protected static ReplayPolicy GetOrDefault(ReplayPolicy p) {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    protected static PriorityPolicy GetOrDefault(PriorityPolicy p) {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
     /**
      * Not used

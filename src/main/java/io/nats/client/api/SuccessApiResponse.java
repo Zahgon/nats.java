@@ -10,11 +10,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.Message;
-
 import static io.nats.client.support.ApiConstants.SUCCESS;
 import static io.nats.client.support.JsonValueUtils.readBoolean;
 
@@ -22,6 +20,7 @@ import static io.nats.client.support.JsonValueUtils.readBoolean;
  * A response indicating a successful api call
  */
 public class SuccessApiResponse extends ApiResponse<SuccessApiResponse> {
+
     boolean success;
 
     /**
@@ -33,8 +32,7 @@ public class SuccessApiResponse extends ApiResponse<SuccessApiResponse> {
         Boolean b = readBoolean(jv, SUCCESS, null);
         if (b == null) {
             success = !hasError();
-        }
-        else {
+        } else {
             success = b;
         }
     }
@@ -44,6 +42,6 @@ public class SuccessApiResponse extends ApiResponse<SuccessApiResponse> {
      * @return true if the call was successful
      */
     public boolean getSuccess() {
-        return success;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

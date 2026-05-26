@@ -10,12 +10,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import io.nats.client.support.IncomingHeadersProcessor;
 import io.nats.client.support.Status;
-
 import static io.nats.client.support.NatsJetStreamConstants.JS_ACK_SUBJECT_PREFIX;
 import static io.nats.client.support.NatsJetStreamConstants.JS_FC_SUBJECT_PREFIX;
 
@@ -23,15 +21,23 @@ import static io.nats.client.support.NatsJetStreamConstants.JS_FC_SUBJECT_PREFIX
 // Incoming Message Factory - internal use only
 // ----------------------------------------------------------------------------------------------------
 class IncomingMessageFactory {
+
     private final String sid;
+
     private final String subject;
+
     private final String replyTo;
+
     private final int protocolLineLength;
+
     private final boolean utf8mode;
 
     private byte[] data;
+
     private Headers headers;
+
     private Status status;
+
     private int headerLen;
 
     // Create an incoming message for a subscriber
@@ -45,32 +51,14 @@ class IncomingMessageFactory {
     }
 
     void setHeaders(IncomingHeadersProcessor ihp) {
-        headers = ihp.getHeaders();
-        status = ihp.getStatus();
-        headerLen = ihp.getSerializedLength();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void setData(byte[] data) {
-        this.data = data;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     NatsMessage getMessage() {
-        NatsMessage message;
-        if (status != null) {
-            message = new StatusMessage(status);
-        }
-        else if (replyTo != null && (replyTo.startsWith(JS_ACK_SUBJECT_PREFIX) || replyTo.startsWith(JS_FC_SUBJECT_PREFIX))) {
-            message = new NatsJetStreamMessage(data);
-        }
-        else {
-            message = new IncomingMessage(data);
-        }
-        message.sid = sid;
-        message.subject = subject;
-        message.replyTo = replyTo;
-        message.headers = headers;
-        message.headerLen = headerLen;
-        message.sizeInBytes = protocolLineLength + headerLen + message.dataLen + 4; // Two CRLFs
-        return message;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

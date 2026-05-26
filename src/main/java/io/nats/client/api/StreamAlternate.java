@@ -10,16 +10,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.support.JsonValue;
 import io.nats.client.support.JsonValueUtils;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import java.util.List;
-
 import static io.nats.client.support.ApiConstants.*;
 import static io.nats.client.support.JsonValueUtils.readString;
 
@@ -27,12 +24,15 @@ import static io.nats.client.support.JsonValueUtils.readString;
  * The Stream Alternate
  */
 public class StreamAlternate {
+
     private final String name;
+
     private final String domain;
+
     private final String cluster;
 
     static List<StreamAlternate> optionalListOf(JsonValue vSourceInfos) {
-        return JsonValueUtils.optionalListOf(vSourceInfos, StreamAlternate::new);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     StreamAlternate(JsonValue vLost) {
@@ -47,7 +47,7 @@ public class StreamAlternate {
      */
     @NonNull
     public String getName() {
-        return name;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -56,7 +56,7 @@ public class StreamAlternate {
      */
     @Nullable
     public String getDomain() {
-        return domain;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -65,6 +65,6 @@ public class StreamAlternate {
      */
     @NonNull
     public String getCluster() {
-        return cluster;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -10,48 +10,199 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import io.nats.client.StatisticsCollector;
 
 public class NoOpStatistics implements StatisticsCollector {
-    @Override public void setAdvancedTracking(boolean trackAdvanced) {}
-    @Override public void incrementPingCount() {}
-    @Override public void incrementReconnects() {}
-    @Override public void incrementDroppedCount() {}
-    @Override public void incrementOkCount() {}
-    @Override public void incrementErrCount() {}
-    @Override public void incrementExceptionCount() {}
-    @Override public void incrementRequestsSent() {}
-    @Override public void incrementRepliesReceived() {}
-    @Override public void incrementDuplicateRepliesReceived() {}
-    @Override public void incrementOrphanRepliesReceived() {}
-    @Override public void incrementIn(long bytes) {}
-    @Override public void incrementOut(long bytes) {}
-    @Override public void incrementInMsgs() {}
-    @Override public void incrementOutMsgs() {}
-    @Override public void incrementInBytes(long bytes) {}
-    @Override public void incrementOutBytes(long bytes) {}
-    @Override public void incrementFlushCounter() {}
-    @Override public void incrementOutstandingRequests() {}
-    @Override public void decrementOutstandingRequests() {}
-    @Override public void registerRead(long bytes) {}
-    @Override public void registerWrite(long bytes) {}
-    @Override public long getPings() { return 0; }
-    @Override public long getReconnects() { return 0; }
-    @Override public long getDroppedCount() { return 0; }
-    @Override public long getOKs() { return 0; }
-    @Override public long getErrs() { return 0; }
-    @Override public long getExceptions() { return 0; }
-    @Override public long getRequestsSent() { return 0; }
-    @Override public long getRepliesReceived() { return 0; }
-    @Override public long getDuplicateRepliesReceived() { return 0; }
-    @Override public long getOrphanRepliesReceived() { return 0; }
-    @Override public long getInMsgs() { return 0; }
-    @Override public long getOutMsgs() { return 0; }
-    @Override public long getInBytes() { return 0; }
-    @Override public long getOutBytes() { return 0; }
-    @Override public long getFlushCounter() { return 0; }
-    @Override public long getOutstandingRequests() { return 0; }
+
+    @Override
+    public void setAdvancedTracking(boolean trackAdvanced) {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public void incrementPingCount() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public void incrementReconnects() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public void incrementDroppedCount() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public void incrementOkCount() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public void incrementErrCount() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public void incrementExceptionCount() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public void incrementRequestsSent() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public void incrementRepliesReceived() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public void incrementDuplicateRepliesReceived() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public void incrementOrphanRepliesReceived() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public void incrementIn(long bytes) {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public void incrementOut(long bytes) {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public void incrementInMsgs() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public void incrementOutMsgs() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public void incrementInBytes(long bytes) {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public void incrementOutBytes(long bytes) {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public void incrementFlushCounter() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public void incrementOutstandingRequests() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public void decrementOutstandingRequests() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public void registerRead(long bytes) {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public void registerWrite(long bytes) {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public long getPings() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public long getReconnects() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public long getDroppedCount() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public long getOKs() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public long getErrs() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public long getExceptions() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public long getRequestsSent() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public long getRepliesReceived() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public long getDuplicateRepliesReceived() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public long getOrphanRepliesReceived() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public long getInMsgs() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public long getOutMsgs() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public long getInBytes() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public long getOutBytes() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public long getFlushCounter() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
+
+    @Override
+    public long getOutstandingRequests() {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 }

@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client;
 
 /**
@@ -21,6 +20,7 @@ package io.nats.client;
  * See {@link Statistics} for accessing the collected metrics.
  */
 public interface StatisticsCollector extends Statistics {
+
     /**
      * Sets whether advanced stats are/should be tracked.
      * @param trackAdvanced the advanced tracking flag. set to true to turn on advanced tracking
@@ -87,8 +87,7 @@ public interface StatisticsCollector extends Statistics {
      * @param bytes the number of bytes
      */
     default void incrementIn(long bytes) {
-        incrementInMsgs();
-        incrementInBytes(bytes);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -97,8 +96,7 @@ public interface StatisticsCollector extends Statistics {
      * @param bytes the number of bytes
      */
     default void incrementOut(long bytes) {
-        incrementOutMsgs();
-        incrementOutBytes(bytes);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**

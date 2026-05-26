@@ -10,35 +10,52 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client;
 
 /**
- * Applications can use a ConnectionListener to track the status of a {@link Connection Connection}. The 
+ * Applications can use a ConnectionListener to track the status of a {@link Connection Connection}. The
  * listener is configured in the {@link Options Options} at creation time.
  */
 public interface ConnectionListener {
+
     /**
      * Enum for connection events
      */
     enum Events {
-        /** The connection has successfully completed the handshake with the nats-server. */
+
+        /**
+         * The connection has successfully completed the handshake with the nats-server.
+         */
         CONNECTED(true, "opened"),
-        /** The connection is permanently closed, either by manual action or failed reconnects. */
+        /**
+         * The connection is permanently closed, either by manual action or failed reconnects.
+         */
         CLOSED(true, "closed"),
-        /** The connection lost its connection, but may try to reconnect if configured to. */
+        /**
+         * The connection lost its connection, but may try to reconnect if configured to.
+         */
         DISCONNECTED(true, "disconnected"),
-        /** The connection was connected, lost its connection and successfully reconnected. */
+        /**
+         * The connection was connected, lost its connection and successfully reconnected.
+         */
         RECONNECTED(true, "reconnected"),
-        /** The connection was reconnected and the server has been notified of all subscriptions. */
+        /**
+         * The connection was reconnected and the server has been notified of all subscriptions.
+         */
         RESUBSCRIBED(false, "subscriptions re-established"),
-        /** The connection was made aware of new servers from the current server connection. */
+        /**
+         * The connection was made aware of new servers from the current server connection.
+         */
         DISCOVERED_SERVERS(false, "discovered servers"),
-        /** Server Sent a lame duck mode. */
+        /**
+         * Server Sent a lame duck mode.
+         */
         LAME_DUCK(false, "lame duck mode");
 
         private final boolean connectionEvent;
+
         private final String event;
+
         private final String natsEvent;
 
         /**
@@ -51,8 +68,7 @@ public interface ConnectionListener {
             this.event = event;
             if (connectionEvent) {
                 this.natsEvent = "nats: connection " + event;
-            }
-            else {
+            } else {
                 this.natsEvent = "nats: " + event;
             }
         }
@@ -62,7 +78,7 @@ public interface ConnectionListener {
          * @return the flag
          */
         public boolean isConnectionEvent() {
-            return connectionEvent;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -70,7 +86,7 @@ public interface ConnectionListener {
          * @return the text
          */
         public String getEvent() {
-            return event;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -78,14 +94,14 @@ public interface ConnectionListener {
          * @return the text
          */
         public String getNatsEvent() {
-            return natsEvent;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
          * @return the string value for this event
          */
         public String toString() {
-            return this.natsEvent;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -111,6 +127,6 @@ public interface ConnectionListener {
      * @param uriDetails extra details about the uri related to this connection event
      */
     default void connectionEvent(Connection conn, Events type, Long time, String uriDetails) {
-        connectionEvent(conn, type);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

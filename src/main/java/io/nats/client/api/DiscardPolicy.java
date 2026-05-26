@@ -10,11 +10,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import org.jspecify.annotations.Nullable;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,9 +20,14 @@ import java.util.Map;
  * Stream discard policies
  */
 public enum DiscardPolicy {
-    /** discard new messages */
+
+    /**
+     * discard new messages
+     */
     New("new"),
-    /** discard old messages */
+    /**
+     * discard old messages
+     */
     Old("old");
 
     private final String policy;
@@ -35,7 +38,7 @@ public enum DiscardPolicy {
 
     @Override
     public String toString() {
-        return policy;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private static final Map<String, DiscardPolicy> strEnumHash = new HashMap<>();
@@ -53,6 +56,6 @@ public enum DiscardPolicy {
      */
     @Nullable
     public static DiscardPolicy get(String value) {
-        return strEnumHash.get(value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

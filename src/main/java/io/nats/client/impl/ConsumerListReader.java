@@ -10,15 +10,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import io.nats.client.api.ConsumerInfo;
 import io.nats.client.support.JsonValue;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import static io.nats.client.support.ApiConstants.CONSUMERS;
 
 class ConsumerListReader extends AbstractListReader {
@@ -32,12 +29,10 @@ class ConsumerListReader extends AbstractListReader {
 
     @Override
     protected void processItems(List<JsonValue> items) {
-        for (JsonValue v : items) {
-            consumers.add(new ConsumerInfo(v));
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public List<ConsumerInfo> getConsumers() {
-        return consumers;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

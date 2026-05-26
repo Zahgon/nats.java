@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.support.JsonSerializable;
@@ -19,13 +18,11 @@ import io.nats.client.support.JsonValue;
 import io.nats.client.support.JsonValueUtils;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-
 import static io.nats.client.JetStreamOptions.convertDomainToPrefix;
 import static io.nats.client.support.ApiConstants.*;
 import static io.nats.client.support.JsonUtils.beginJson;
@@ -38,12 +35,19 @@ import static io.nats.client.support.Validator.nullOrEmpty;
  * A base class for sources
  */
 public abstract class SourceBase implements JsonSerializable {
+
     private final String name;
+
     private final long startSeq;
+
     private final ZonedDateTime startTime;
+
     private final String filterSubject;
+
     private final External external;
+
     private final List<SubjectTransform> subjectTransforms;
+
     private final ConsumerSource consumerSource;
 
     SourceBase(JsonValue jv) {
@@ -73,15 +77,7 @@ public abstract class SourceBase implements JsonSerializable {
     @Override
     @NonNull
     public String toJson() {
-        StringBuilder sb = beginJson();
-        JsonUtils.addField(sb, NAME, name);
-        JsonUtils.addFieldWhenGreaterThan(sb, OPT_START_SEQ, startSeq, 0);
-        JsonUtils.addField(sb, OPT_START_TIME, startTime);
-        JsonUtils.addField(sb, FILTER_SUBJECT, filterSubject);
-        JsonUtils.addField(sb, EXTERNAL, external);
-        JsonUtils.addJsons(sb, SUBJECT_TRANSFORMS, subjectTransforms);
-        JsonUtils.addField(sb, CONSUMER, consumerSource);
-        return endJson(sb).toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -90,7 +86,7 @@ public abstract class SourceBase implements JsonSerializable {
      */
     @NonNull
     public String getSourceName() {
-        return name;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -99,7 +95,7 @@ public abstract class SourceBase implements JsonSerializable {
      */
     @NonNull
     public String getName() {
-        return name;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -107,7 +103,7 @@ public abstract class SourceBase implements JsonSerializable {
      * @return the start sequence
      */
     public long getStartSeq() {
-        return startSeq;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -116,7 +112,7 @@ public abstract class SourceBase implements JsonSerializable {
      */
     @Nullable
     public ZonedDateTime getStartTime() {
-        return startTime;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -125,7 +121,7 @@ public abstract class SourceBase implements JsonSerializable {
      */
     @Nullable
     public String getFilterSubject() {
-        return filterSubject;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -134,7 +130,7 @@ public abstract class SourceBase implements JsonSerializable {
      */
     @Nullable
     public External getExternal() {
-        return external;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -143,7 +139,7 @@ public abstract class SourceBase implements JsonSerializable {
      */
     @Nullable
     public List<SubjectTransform> getSubjectTransforms() {
-        return subjectTransforms;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -152,12 +148,12 @@ public abstract class SourceBase implements JsonSerializable {
      */
     @Nullable
     public ConsumerSource getConsumerSource() {
-        return consumerSource;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return JsonUtils.toKey(getClass()) + toJson();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -165,12 +161,19 @@ public abstract class SourceBase implements JsonSerializable {
      * @param <T> the actual source type
      */
     public abstract static class SourceBaseBuilder<T> {
+
         String name;
+
         long startSeq;
+
         ZonedDateTime startTime;
+
         String filterSubject;
+
         External external;
+
         List<SubjectTransform> subjectTransforms = new ArrayList<>();
+
         ConsumerSource consumer;
 
         abstract T getThis();
@@ -178,7 +181,8 @@ public abstract class SourceBase implements JsonSerializable {
         /**
          * Construct an instance of the builder
          */
-        public SourceBaseBuilder() {}
+        public SourceBaseBuilder() {
+        }
 
         /**
          * Construct an instance of the builder from a copy of another object that extends SourceBase
@@ -187,7 +191,8 @@ public abstract class SourceBase implements JsonSerializable {
         public SourceBaseBuilder(SourceBase base) {
             this.name = base.name;
             this.startSeq = base.startSeq;
-            this.startTime = base.startTime; // zdt is immutable so copy is fine
+            // zdt is immutable so copy is fine
+            this.startTime = base.startTime;
             this.filterSubject = base.filterSubject;
             this.external = base.external == null ? null : new External(base.external);
             this.subjectTransforms = base.getSubjectTransforms() == null ? null : new ArrayList<>(base.getSubjectTransforms());
@@ -200,8 +205,7 @@ public abstract class SourceBase implements JsonSerializable {
          * @return the builder
          */
         public T sourceName(String name) {
-            this.name = name;
-            return getThis();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -210,8 +214,7 @@ public abstract class SourceBase implements JsonSerializable {
          * @return the builder
          */
         public T name(String name) {
-            this.name = name;
-            return getThis();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -220,8 +223,7 @@ public abstract class SourceBase implements JsonSerializable {
          * @return the builder
          */
         public T startSeq(long startSeq) {
-            this.startSeq = startSeq;
-            return getThis();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -230,8 +232,7 @@ public abstract class SourceBase implements JsonSerializable {
          * @return the builder
          */
         public T startTime(ZonedDateTime startTime) {
-            this.startTime = startTime;
-            return getThis();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -240,8 +241,7 @@ public abstract class SourceBase implements JsonSerializable {
          * @return the builder
          */
         public T filterSubject(String filterSubject) {
-            this.filterSubject = filterSubject;
-            return getThis();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -250,8 +250,7 @@ public abstract class SourceBase implements JsonSerializable {
          * @return the builder
          */
         public T external(External external) {
-            this.external = external;
-            return getThis();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -260,9 +259,7 @@ public abstract class SourceBase implements JsonSerializable {
          * @return the builder
          */
         public T domain(String domain) {
-            String prefix = convertDomainToPrefix(domain);
-            external = prefix == null ? null : External.builder().api(prefix).build();
-            return getThis();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -271,11 +268,7 @@ public abstract class SourceBase implements JsonSerializable {
          * @return the builder
          */
         public T subjectTransforms(SubjectTransform... subjectTransforms) {
-            if (nullOrEmpty(subjectTransforms)) {
-                this.subjectTransforms = null;
-                return getThis();
-            }
-            return _subjectTransforms(Arrays.asList(subjectTransforms));
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -284,11 +277,7 @@ public abstract class SourceBase implements JsonSerializable {
          * @return the builder
          */
         public T subjectTransforms(List<SubjectTransform> subjectTransforms) {
-            if (nullOrEmpty(subjectTransforms)) {
-                this.subjectTransforms = null;
-                return getThis();
-            }
-            return _subjectTransforms(subjectTransforms);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         private T _subjectTransforms(@NonNull List<SubjectTransform> subjectTransforms) {
@@ -310,37 +299,17 @@ public abstract class SourceBase implements JsonSerializable {
          * @return the builder
          */
         public T consumerSource(ConsumerSource consumer) {
-            this.consumer = consumer;
-            return getThis();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        SourceBase that = (SourceBase) o;
-
-        if (startSeq != that.startSeq) return false;
-        if (!Objects.equals(name, that.name)) return false;
-        if (!Objects.equals(startTime, that.startTime)) return false;
-        if (!Objects.equals(filterSubject, that.filterSubject))
-            return false;
-        if (!Objects.equals(external, that.external)) return false;
-        if (!listsAreEquivalent(subjectTransforms, that.subjectTransforms)) return false;
-        return Objects.equals(consumerSource, that.consumerSource);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int hashCode() {
-        int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + Long.hashCode(startSeq);
-        result = 31 * result + (startTime != null ? startTime.hashCode() : 0);
-        result = 31 * result + (filterSubject != null ? filterSubject.hashCode() : 0);
-        result = 31 * result + (external != null ? external.hashCode() : 0);
-        result = 31 * result + (subjectTransforms != null ? subjectTransforms.hashCode() : 0);
-        result = 31 * result + (consumerSource != null ? consumerSource.hashCode() : 0);
-        return result;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

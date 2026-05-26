@@ -10,12 +10,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import io.nats.client.*;
 import io.nats.client.api.ConsumerInfo;
-
 import java.io.IOException;
 import java.time.Duration;
 
@@ -30,21 +28,7 @@ class NatsIterableConsumer extends NatsMessageConsumer implements IterableConsum
      */
     @Override
     public Message nextMessage(Duration timeout) throws InterruptedException, JetStreamStatusCheckedException {
-        try {
-            Message msg = sub.nextMessage(timeout);
-            if (msg != null) {
-                updateProcessed(msg);
-            }
-            return msg;
-        }
-        catch (JetStreamStatusException e) {
-            throw new JetStreamStatusCheckedException(e);
-        }
-        catch (IllegalStateException i) {
-            // this happens if the consumer is stopped, since it is
-            // drained/unsubscribed, so don't pass it on if it's expected
-            return null;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -52,6 +36,6 @@ class NatsIterableConsumer extends NatsMessageConsumer implements IterableConsum
      */
     @Override
     public Message nextMessage(long timeoutMillis) throws InterruptedException, JetStreamStatusCheckedException {
-        return nextMessage(Duration.ofMillis(timeoutMillis));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

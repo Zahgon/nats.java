@@ -10,15 +10,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.support.JsonValue;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import java.util.List;
-
 import static io.nats.client.support.ApiConstants.BYTES;
 import static io.nats.client.support.ApiConstants.MSGS;
 import static io.nats.client.support.JsonValueUtils.readLong;
@@ -28,13 +25,14 @@ import static io.nats.client.support.JsonValueUtils.readLongList;
  * Information about lost stream data
  */
 public class LostStreamData {
+
     private final List<Long> messages;
+
     private final Long bytes;
 
     static LostStreamData optionalInstance(JsonValue vLost) {
-        return vLost == null ? null : new LostStreamData(vLost);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 
     LostStreamData(JsonValue vLost) {
         messages = readLongList(vLost, MSGS);
@@ -47,7 +45,7 @@ public class LostStreamData {
      */
     @NonNull
     public List<Long> getMessages() {
-        return messages;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -56,14 +54,11 @@ public class LostStreamData {
      */
     @Nullable
     public Long getBytes() {
-        return bytes;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return "LostStreamData{" +
-            "messages=" + messages +
-            ", bytes=" + bytes +
-            '}';
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

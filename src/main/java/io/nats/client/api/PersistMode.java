@@ -10,12 +10,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,9 +21,14 @@ import java.util.Map;
  * Stream persist modes
  */
 public enum PersistMode {
-    /** default mode */
+
+    /**
+     * default mode
+     */
     Default("default"),
-    /** async mode */
+    /**
+     * async mode
+     */
     Async("async");
 
     private final String mode;
@@ -40,12 +43,12 @@ public enum PersistMode {
      */
     @NonNull
     public String getMode() {
-        return mode;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return mode;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private static final Map<String, PersistMode> strEnumHash = new HashMap<>();
@@ -63,6 +66,6 @@ public enum PersistMode {
      */
     @Nullable
     public static PersistMode get(String value) {
-        return strEnumHash.get(value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

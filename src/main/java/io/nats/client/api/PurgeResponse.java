@@ -10,11 +10,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.Message;
-
 import static io.nats.client.support.ApiConstants.PURGED;
 import static io.nats.client.support.ApiConstants.SUCCESS;
 import static io.nats.client.support.JsonValueUtils.readBoolean;
@@ -26,6 +24,7 @@ import static io.nats.client.support.JsonValueUtils.readLong;
 public class PurgeResponse extends ApiResponse<PurgeResponse> {
 
     private final boolean success;
+
     private final long purged;
 
     /**
@@ -43,7 +42,7 @@ public class PurgeResponse extends ApiResponse<PurgeResponse> {
      * @return the result flag
      */
     public boolean isSuccess() {
-        return success;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -64,6 +63,6 @@ public class PurgeResponse extends ApiResponse<PurgeResponse> {
      * @return the count
      */
     public long getPurged() {
-        return purged;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

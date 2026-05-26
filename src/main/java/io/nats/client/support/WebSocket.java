@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.support;
 
 import java.io.IOException;
@@ -30,27 +29,32 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
-
 import static io.nats.client.support.Encoding.base64BasicEncodeToString;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class WebSocket extends Socket {
+
     private static final int MAX_LINE_LEN = 8192;
+
     private static final int MAX_HTTP_HEADERS = 100;
+
     private static final String WEBSOCKET_RESPONSE_LINE = "HTTP/1.1 101 Switching Protocols";
+
     private static final String DEFAULT_PATH = "/";
 
     private final Socket wrappedSocket;
+
     private final WebsocketInputStream in;
+
     private final WebsocketOutputStream out;
+
     private final ReentrantLock closeLock;
 
     public WebSocket(Socket wrappedSocket, String host, List<Consumer<HttpRequest>> interceptors) throws IOException {
         this(wrappedSocket, host, interceptors, null);
     }
 
-    public WebSocket(Socket wrappedSocket, String host, List<Consumer<HttpRequest>> interceptors, String path)
-            throws IOException {
+    public WebSocket(Socket wrappedSocket, String host, List<Consumer<HttpRequest>> interceptors, String path) throws IOException {
         closeLock = new ReentrantLock();
         this.wrappedSocket = wrappedSocket;
         handshake(wrappedSocket, host, interceptors, getPathOrDefault(path, DEFAULT_PATH));
@@ -58,34 +62,23 @@ public class WebSocket extends Socket {
         this.out = new WebsocketOutputStream(wrappedSocket.getOutputStream(), true);
     }
 
-    private static void handshake(Socket socket, String host, List<Consumer<HttpRequest>> interceptors, String path)
-            throws IOException {
+    private static void handshake(Socket socket, String host, List<Consumer<HttpRequest>> interceptors, String path) throws IOException {
         InputStream in = socket.getInputStream();
         OutputStream out = socket.getOutputStream();
         HttpRequest request = new HttpRequest().uri(path);
-
         // The value of this header field MUST be a
         // nonce consisting of a randomly selected 16-byte value that has
         // been base64-encoded
         byte[] keyBytes = new byte[16];
         new SecureRandom().nextBytes(keyBytes);
         String key = base64BasicEncodeToString(keyBytes);
-
-        request.getHeaders()
-            .add("Host", host)
-            .add("Upgrade", "websocket")
-            .add("Connection", "Upgrade")
-            .add("Sec-WebSocket-Key", key)
-            .add("Sec-WebSocket-Protocol", "nats")
-            .add("Sec-WebSocket-Version", "13");
-            // TODO: Support Sec-WebSocket-Extensions: permessage-deflate
-            // TODO: Support Nats-No-Masking: TRUE
-
+        request.getHeaders().add("Host", host).add("Upgrade", "websocket").add("Connection", "Upgrade").add("Sec-WebSocket-Key", key).add("Sec-WebSocket-Protocol", "nats").add("Sec-WebSocket-Version", "13");
+        // TODO: Support Sec-WebSocket-Extensions: permessage-deflate
+        // TODO: Support Nats-No-Masking: TRUE
         for (Consumer<HttpRequest> interceptor : interceptors) {
             interceptor.accept(request);
         }
         out.write(request.toString().getBytes(UTF_8));
-
         // rfc6455 4.1 "The client MUST validate the server's response as follows:"
         byte[] buffer = new byte[MAX_LINE_LEN];
         String responseLine = readLine(buffer, in);
@@ -110,22 +103,18 @@ public class WebSocket extends Socket {
                 if (headers.size() >= MAX_HTTP_HEADERS) {
                     throw new IllegalStateException("Exceeded max HTTP headers=" + MAX_HTTP_HEADERS);
                 }
-                headers.put(
-                    line.substring(0, colon).trim().toLowerCase(),
-                    line.substring(colon + 1).trim());
+                headers.put(line.substring(0, colon).trim().toLowerCase(), line.substring(colon + 1).trim());
             } else {
                 throw new IllegalStateException("Expected HTTP header to contain ':', but got " + line);
             }
         }
         // 2. Expect `Upgrade: websocket`
         if (!"websocket".equalsIgnoreCase(headers.get("upgrade"))) {
-            throw new IllegalStateException(
-                "Expected HTTP `Upgrade: websocket` header");
+            throw new IllegalStateException("Expected HTTP `Upgrade: websocket` header");
         }
         // 3. Expect `Connection: Upgrade`
         if (!"upgrade".equalsIgnoreCase(headers.get("connection"))) {
-            throw new IllegalStateException(
-                "Expected HTTP `Connection: Upgrade` header");
+            throw new IllegalStateException("Expected HTTP `Connection: Upgrade` header");
         }
         // 4. Sec-WebSocket-Accept: base64(sha1(key + "258EAF..."))
         MessageDigest sha1;
@@ -139,8 +128,7 @@ public class WebSocket extends Socket {
         String acceptKey = base64BasicEncodeToString(sha1.digest());
         String gotAcceptKey = headers.get("sec-websocket-accept");
         if (!acceptKey.equals(gotAcceptKey)) {
-            throw new IllegalStateException(
-                "Expected HTTP `Sec-WebSocket-Accept: " + acceptKey + ", but got " + gotAcceptKey);
+            throw new IllegalStateException("Expected HTTP `Sec-WebSocket-Accept: " + acceptKey + ", but got " + gotAcceptKey);
         }
         // 5 & 6 are not valid, since nats-server doesn't
         // implement extensions or protocols.
@@ -151,22 +139,19 @@ public class WebSocket extends Socket {
         int lastCh = -1;
         while (true) {
             int ch = in.read();
-            switch (ch) {
-            case -1:
-                // Premature EOF (everything should be terminated with \n)
-                return new String(buffer, 0, offset, StandardCharsets.ISO_8859_1);
-            case '\n':
-                // Found \n, remove \r if it is there:
-                return new String(
-                    buffer,
-                    0,
-                    '\r' == lastCh ? offset - 1 : offset, StandardCharsets.ISO_8859_1);
+            switch(ch) {
+                case -1:
+                    // Premature EOF (everything should be terminated with \n)
+                    return new String(buffer, 0, offset, StandardCharsets.ISO_8859_1);
+                case '\n':
+                    // Found \n, remove \r if it is there:
+                    return new String(buffer, 0, '\r' == lastCh ? offset - 1 : offset, StandardCharsets.ISO_8859_1);
             }
             // Line length exceeded:
             if (offset >= buffer.length) {
                 return null;
             }
-            buffer[offset++] = (byte)ch;
+            buffer[offset++] = (byte) ch;
             lastCh = ch;
         }
     }
@@ -189,208 +174,201 @@ public class WebSocket extends Socket {
 
     @Override
     public InputStream getInputStream() throws IOException {
-        return in;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public OutputStream getOutputStream() throws IOException {
-        return out;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void connect(SocketAddress addr) throws IOException {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void connect(SocketAddress addr, int port) throws IOException {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void bind(SocketAddress addr) throws IOException {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public SocketChannel getChannel() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public InetAddress getInetAddress() {
-        return wrappedSocket.getInetAddress();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public InetAddress getLocalAddress() {
-        return wrappedSocket.getLocalAddress();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int getPort() {
-        return wrappedSocket.getPort();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int getLocalPort() {
-        return wrappedSocket.getLocalPort();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public SocketAddress getRemoteSocketAddress() {
-        return wrappedSocket.getRemoteSocketAddress();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public SocketAddress getLocalSocketAddress() {
-        return wrappedSocket.getLocalSocketAddress();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void setTcpNoDelay(boolean on) throws SocketException {
-        wrappedSocket.setTcpNoDelay(on);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean getTcpNoDelay() throws SocketException {
-        return wrappedSocket.getTcpNoDelay();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void setSoLinger(boolean on, int linger) throws SocketException {
-        wrappedSocket.setSoLinger(on, linger);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int getSoLinger() throws SocketException {
-        return wrappedSocket.getSoLinger();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void sendUrgentData(int data) throws IOException {
-        wrappedSocket.sendUrgentData(data);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void setOOBInline(boolean on) throws SocketException {
-        wrappedSocket.setOOBInline(on);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean getOOBInline() throws SocketException {
-        return wrappedSocket.getOOBInline();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void setSoTimeout(int timeout) throws SocketException {
-        wrappedSocket.setSoTimeout(timeout);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int getSoTimeout() throws SocketException {
-        return wrappedSocket.getSoTimeout();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void setSendBufferSize(int size) throws SocketException {
-        wrappedSocket.setSendBufferSize(size);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int getSendBufferSize() throws SocketException {
-        return wrappedSocket.getSendBufferSize();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void setReceiveBufferSize(int size) throws SocketException {
-        wrappedSocket.setReceiveBufferSize(size);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int getReceiveBufferSize() throws SocketException {
-        return wrappedSocket.getReceiveBufferSize();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void setKeepAlive(boolean on) throws SocketException {
-        wrappedSocket.setKeepAlive(on);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean getKeepAlive() throws SocketException {
-        return wrappedSocket.getKeepAlive();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void setTrafficClass(int tc) throws SocketException {
-        wrappedSocket.setTrafficClass(tc);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int getTrafficClass() throws SocketException {
-        return wrappedSocket.getTrafficClass();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void setReuseAddress(boolean on) throws SocketException {
-        wrappedSocket.setReuseAddress(on);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean getReuseAddress() throws SocketException {
-        return wrappedSocket.getReuseAddress();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void close() throws IOException {
-        closeLock.lock();
-        try {
-            // TODO: send websocket close:
-            wrappedSocket.close();
-        }
-        finally {
-            closeLock.unlock();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void shutdownInput() throws IOException {
-        wrappedSocket.shutdownInput();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void shutdownOutput() throws IOException {
-        wrappedSocket.shutdownOutput();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean isConnected() {
-        return wrappedSocket.isConnected();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean isBound() {
-        return wrappedSocket.isBound();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean isClosed() {
-        return wrappedSocket.isClosed();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean isInputShutdown() {
-        return wrappedSocket.isInputShutdown();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean isOutputShutdown() {
-        return wrappedSocket.isOutputShutdown();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void setPerformancePreferences(int connectionTime, int latency, int bandwidth) {
-        wrappedSocket.setPerformancePreferences(connectionTime, latency, bandwidth);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

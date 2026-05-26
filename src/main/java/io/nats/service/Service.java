@@ -10,14 +10,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.service;
 
 import io.nats.client.Connection;
 import io.nats.client.Dispatcher;
 import io.nats.client.support.DateTimeUtils;
 import io.nats.client.support.JsonUtils;
-
 import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -27,7 +25,6 @@ import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantLock;
-
 import static io.nats.client.support.ApiConstants.*;
 import static io.nats.client.support.JsonUtils.endJson;
 import static io.nats.client.support.Validator.nullOrEmpty;
@@ -39,34 +36,47 @@ import static io.nats.client.support.Validator.nullOrEmpty;
  * When multiple instances of a service endpoints are active they work in a queue, meaning only one listener responds to any given request.
  */
 public class Service {
+
     /**
      * Constant for the PING service
      */
     public static final String SRV_PING = "PING";
+
     /**
      * Constant for the INFO service
      */
     public static final String SRV_INFO = "INFO";
+
     /**
      * Constant for the STATS service
      */
     public static final String SRV_STATS = "STATS";
+
     /**
      * Constant of the service prefix
      */
     public static final String DEFAULT_SERVICE_PREFIX = "$SRV.";
 
     private final Connection conn;
+
     private final Duration drainTimeout;
+
     private final ConcurrentHashMap<String, EndpointContext> serviceContexts;
+
     private final List<EndpointContext> discoveryContexts;
+
     private final List<Dispatcher> dInternals;
+
     private final AtomicReference<ZonedDateTime> startTimeRef;
+
     private final CompletableFuture<Boolean> startedFuture;
+
     private final PingResponse pingResponse;
+
     private final InfoResponse infoResponse;
 
     private final ReentrantLock startStopLock;
+
     private CompletableFuture<Boolean> runningIndicator;
 
     Service(ServiceBuilder b) {
@@ -77,22 +87,18 @@ public class Service {
         startStopLock = new ReentrantLock();
         startTimeRef = new AtomicReference<>(DateTimeUtils.DEFAULT_TIME);
         startedFuture = new CompletableFuture<>();
-
         // build responses first. info needs to be available when adding service endpoints.
         pingResponse = new PingResponse(id, b.name, b.version, b.metadata);
         infoResponse = new InfoResponse(id, b.name, b.version, b.metadata, b.description);
-
         // set up the service contexts
         // ? do we need an internal dispatcher for any user endpoints !! addServiceEndpoint deals with it
         serviceContexts = new ConcurrentHashMap<>();
         addServiceEndpoints(b.serviceEndpoints.values());
-
         Dispatcher dTemp = null;
         if (b.pingDispatcher == null || b.infoDispatcher == null || b.statsDispatcher == null) {
             dTemp = conn.createDispatcher();
             dInternals.add(dTemp);
         }
-
         discoveryContexts = new ArrayList<>();
         addDiscoveryContexts(SRV_PING, pingResponse, b.pingDispatcher, dTemp);
         addDiscoveryContexts(SRV_INFO, infoResponse, b.infoDispatcher, dTemp);
@@ -104,9 +110,7 @@ public class Service {
      * @param serviceEndpoints one or more service endpoints to be added
      */
     public void addServiceEndpoints(ServiceEndpoint... serviceEndpoints) {
-        if (!nullOrEmpty(serviceEndpoints)) {
-            _addServiceEndpoints(Arrays.asList(serviceEndpoints));
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -114,9 +118,7 @@ public class Service {
      * @param serviceEndpoints service endpoints to be added
      */
     public void addServiceEndpoints(Collection<ServiceEndpoint> serviceEndpoints) {
-        if (!nullOrEmpty(serviceEndpoints)) {
-            _addServiceEndpoints(serviceEndpoints);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private void _addServiceEndpoints(Collection<ServiceEndpoint> serviceEndpoints) {
@@ -134,35 +136,25 @@ public class Service {
                             dInternals.add(dTemp);
                         }
                         ctx = new EndpointContext(conn, dTemp, false, se);
-                    }
-                    else {
+                    } else {
                         ctx = new EndpointContext(conn, null, false, se);
                     }
                     serviceContexts.put(se.getName(), ctx);
-
                     // if the service is already started, start the newly added context
                     if (runningIndicator != null) {
                         ctx.start();
                     }
                 }
             }
-        }
-        finally {
+        } finally {
             startStopLock.unlock();
         }
     }
 
     private void addDiscoveryContexts(String discoveryName, Dispatcher dUser, Dispatcher dInternal, ServiceMessageHandler handler) {
-        Endpoint[] endpoints = new Endpoint[] {
-            internalEndpoint(discoveryName, null, null),
-            internalEndpoint(discoveryName, pingResponse.getName(), null),
-            internalEndpoint(discoveryName, pingResponse.getName(), pingResponse.getId())
-        };
-
+        Endpoint[] endpoints = new Endpoint[] { internalEndpoint(discoveryName, null, null), internalEndpoint(discoveryName, pingResponse.getName(), null), internalEndpoint(discoveryName, pingResponse.getName(), pingResponse.getId()) };
         for (Endpoint endpoint : endpoints) {
-            discoveryContexts.add(
-                new EndpointContext(conn, dInternal, true,
-                    new ServiceEndpoint(endpoint, handler, dUser)));
+            discoveryContexts.add(new EndpointContext(conn, dInternal, true, new ServiceEndpoint(endpoint, handler, dUser)));
         }
     }
 
@@ -189,13 +181,7 @@ public class Service {
     }
 
     static String toDiscoverySubject(String discoveryName, String optionalServiceNameSegment, String optionalServiceIdSegment) {
-        if (nullOrEmpty(optionalServiceIdSegment)) {
-            if (nullOrEmpty(optionalServiceNameSegment)) {
-                return DEFAULT_SERVICE_PREFIX + discoveryName;
-            }
-            return DEFAULT_SERVICE_PREFIX + discoveryName + "." + optionalServiceNameSegment;
-        }
-        return DEFAULT_SERVICE_PREFIX + discoveryName + "." + optionalServiceNameSegment + "." + optionalServiceIdSegment;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -203,24 +189,7 @@ public class Service {
      * @return a future that can be held to see if another thread called stop
      */
     public CompletableFuture<Boolean> startService() {
-        startStopLock.lock();
-        try {
-            if (runningIndicator == null) {
-                runningIndicator = new CompletableFuture<>();
-                for (EndpointContext ctx : serviceContexts.values()) {
-                    ctx.start();
-                }
-                for (EndpointContext ctx : discoveryContexts) {
-                    ctx.start();
-                }
-                startTimeRef.set(DateTimeUtils.gmtNow());
-                startedFuture.complete(true);
-            }
-            return runningIndicator;
-        }
-        finally {
-            startStopLock.unlock();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -228,14 +197,14 @@ public class Service {
      * @return the instance
      */
     public static ServiceBuilder builder() {
-        return new ServiceBuilder();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Stop the service by draining.
      */
     public void stop() {
-        stop(true, null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -243,7 +212,7 @@ public class Service {
      * @param t the error cause
      */
     public void stop(Throwable t) {
-        stop(true, t);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -251,7 +220,7 @@ public class Service {
      * @param drain the flag indicating to drain or not
      */
     public void stop(boolean drain) {
-        stop(drain, null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -260,83 +229,14 @@ public class Service {
      * @param t the optional error cause. If supplied, mark the future that was received from the start method that the service completed exceptionally
      */
     public void stop(boolean drain, Throwable t) {
-        startStopLock.lock();
-        try {
-            if (runningIndicator != null) {
-                if (drain) {
-                    List<CompletableFuture<Boolean>> futures = new ArrayList<>();
-
-                    for (Dispatcher d : dInternals) {
-                        try {
-                            futures.add(d.drain(drainTimeout));
-                        }
-                        catch (Exception e) { /* nothing I can really do, we are stopping anyway */ }
-                    }
-
-                    for (EndpointContext c : serviceContexts.values()) {
-                        if (c.isNotInternalDispatcher()) {
-                            try {
-                                futures.add(c.drain(drainTimeout));
-                            }
-                            catch (Exception e) { /* nothing I can really do, we are stopping anyway */ }
-                        }
-                    }
-
-                    for (EndpointContext c : discoveryContexts) {
-                        if (c.isNotInternalDispatcher()) {
-                            try {
-                                futures.add(c.drain(drainTimeout));
-                            }
-                            catch (Exception e) { /* nothing I can really do, we are stopping anyway */ }
-                        }
-                    }
-
-                    // make sure drain is done before closing dispatcher
-                    long drainTimeoutMillis = drainTimeout.toMillis();
-                    for (CompletableFuture<Boolean> f : futures) {
-                        try {
-                            f.get(drainTimeoutMillis, TimeUnit.MILLISECONDS);
-                        }
-                        catch (Exception ignore) {
-                            // don't care if it completes successfully or not, just that it's done.
-                        }
-                    }
-                }
-
-                // close internal dispatchers
-                for (Dispatcher d : dInternals) {
-                    conn.closeDispatcher(d);
-                }
-
-                // ok we are done
-                if (t == null) {
-                    runningIndicator.complete(true);
-                }
-                else {
-                    runningIndicator.completeExceptionally(t);
-                }
-                runningIndicator = null; // we don't need a copy anymore
-            }
-        }
-        finally {
-            startStopLock.unlock();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Reset the statistics for the endpoints
      */
     public void reset() {
-        if (isStarted()) {
-            // has actually been started if the ref has been set
-            startTimeRef.set(DateTimeUtils.gmtNow());
-        }
-        for (EndpointContext c : discoveryContexts) {
-            c.reset();
-        }
-        for (EndpointContext c : serviceContexts.values()) {
-            c.reset();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -344,7 +244,7 @@ public class Service {
      * @return the id
      */
     public String getId() {
-        return infoResponse.getId();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -352,7 +252,7 @@ public class Service {
      * @return the name
      */
     public String getName() {
-        return infoResponse.getName();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -360,7 +260,7 @@ public class Service {
      * @return the version
      */
     public String getVersion() {
-        return infoResponse.getVersion();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -368,7 +268,7 @@ public class Service {
      * @return the description
      */
     public String getDescription() {
-        return infoResponse.getDescription();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -376,7 +276,7 @@ public class Service {
      * @return true if started
      */
     public boolean isStarted() {
-        return startedFuture.isDone();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -386,16 +286,7 @@ public class Service {
      * @return true if started by the timeout
      */
     public boolean isStarted(long timeout, TimeUnit unit) {
-        try {
-            return startedFuture.get(timeout, unit);
-        }
-        catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            return false;
-        }
-        catch (ExecutionException | TimeoutException e) {
-            return false;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -403,7 +294,7 @@ public class Service {
      * @return the drain timeout setting
      */
     public Duration getDrainTimeout() {
-        return drainTimeout;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -411,7 +302,7 @@ public class Service {
      * @return the ping response
      */
     public PingResponse getPingResponse() {
-        return pingResponse;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -419,7 +310,7 @@ public class Service {
      * @return the info response
      */
     public InfoResponse getInfoResponse() {
-        return infoResponse;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -427,12 +318,7 @@ public class Service {
      * @return the stats response
      */
     public StatsResponse getStatsResponse() {
-        List<EndpointStats> endpointStats = new ArrayList<>();
-        for (EndpointContext c : serviceContexts.values()) {
-            endpointStats.add(c.getEndpointStats());
-        }
-        // StatsResponse handles a start time of DateTimeUtils.DEFAULT_TIME
-        return new StatsResponse(pingResponse, startTimeRef.get(), endpointStats);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -441,18 +327,11 @@ public class Service {
      * @return the EndpointStats or null if the name is not found.
      */
     public EndpointStats getEndpointStats(String endpointName) {
-        EndpointContext c = serviceContexts.get(endpointName);
-        return c == null ? null : c.getEndpointStats();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = JsonUtils.beginJsonPrefixed("\"Service\":");
-        JsonUtils.addField(sb, ID, infoResponse.getId());
-        JsonUtils.addField(sb, NAME, infoResponse.getName());
-        JsonUtils.addField(sb, VERSION, infoResponse.getVersion());
-        JsonUtils.addField(sb, DESCRIPTION, infoResponse.getDescription());
-        JsonUtils.addField(sb, STARTED, startTimeRef.get());
-        return endJson(sb).toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

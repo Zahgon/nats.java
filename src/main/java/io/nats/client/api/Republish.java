@@ -10,14 +10,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.support.JsonSerializable;
 import io.nats.client.support.JsonValue;
 import io.nats.client.support.Validator;
 import org.jspecify.annotations.NonNull;
-
 import static io.nats.client.support.ApiConstants.*;
 import static io.nats.client.support.JsonUtils.*;
 import static io.nats.client.support.JsonValueUtils.readBoolean;
@@ -27,12 +25,15 @@ import static io.nats.client.support.JsonValueUtils.readString;
  * Republish Configuration
  */
 public class Republish implements JsonSerializable {
+
     private final String source;
+
     private final String destination;
+
     private final boolean headersOnly;
 
     static Republish optionalInstance(JsonValue vRepublish) {
-        return vRepublish == null ? null : new Republish(vRepublish);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     Republish(JsonValue vRepublish) {
@@ -61,7 +62,7 @@ public class Republish implements JsonSerializable {
      */
     @NonNull
     public String getSource() {
-        return source;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -70,7 +71,7 @@ public class Republish implements JsonSerializable {
      */
     @NonNull
     public String getDestination() {
-        return destination;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -78,17 +79,13 @@ public class Republish implements JsonSerializable {
      * @return headersOnly
      */
     public boolean isHeadersOnly() {
-        return headersOnly;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     @NonNull
     public String toJson() {
-        StringBuilder sb = beginJson();
-        addField(sb, SRC, source);
-        addField(sb, DEST, destination);
-        addFldWhenTrue(sb, HEADERS_ONLY, headersOnly);
-        return endJson(sb).toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -96,21 +93,25 @@ public class Republish implements JsonSerializable {
      * @return the builder.
      */
     public static Builder builder() {
-        return new Builder();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Placement can be created using a Builder.
      */
     public static class Builder {
+
         private String source;
+
         private String destination;
+
         private boolean headersOnly;
 
         /**
          * Construct an instance of the builder
          */
-        public Builder() {}
+        public Builder() {
+        }
 
         /**
          * Set the Published Subject-matching filter
@@ -118,17 +119,16 @@ public class Republish implements JsonSerializable {
          * @return the builder
          */
         public Builder source(String source) {
-            this.source = source;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
+
         /**
          * Set the RePublish Subject template
          * @param destination the destination
          * @return the builder
          */
         public Builder destination(String destination) {
-            this.destination = destination;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -137,8 +137,7 @@ public class Republish implements JsonSerializable {
          * @return Builder
          */
         public Builder headersOnly(Boolean headersOnly) {
-            this.headersOnly = headersOnly;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -146,7 +145,7 @@ public class Republish implements JsonSerializable {
          * @return the Placement
          */
         public Republish build() {
-            return new Republish(source, destination, headersOnly);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

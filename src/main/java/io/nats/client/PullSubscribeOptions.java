@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client;
 
 /**
@@ -18,6 +17,7 @@ package io.nats.client;
  * Options are set using the {@link PullSubscribeOptions.Builder} or static helper methods.
  */
 public class PullSubscribeOptions extends SubscribeOptions {
+
     /**
      * An instance of PullSubscribeOptions with the default options
      */
@@ -32,7 +32,7 @@ public class PullSubscribeOptions extends SubscribeOptions {
      * @return push subscribe options builder
      */
     public static Builder builder() {
-        return new Builder();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -48,7 +48,7 @@ public class PullSubscribeOptions extends SubscribeOptions {
      * @return push subscribe options
      */
     public static PullSubscribeOptions bind(String stream, String name) {
-        return new Builder().stream(stream).name(name).bind(true).build();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -65,23 +65,24 @@ public class PullSubscribeOptions extends SubscribeOptions {
      * @return push subscribe options
      */
     public static PullSubscribeOptions fastBind(String stream, String name) {
-        return new Builder().stream(stream).name(name).fastBind(true).build();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * PullSubscribeOptions can be created using a Builder. The builder supports chaining and will
      * create a default set of options if no methods are calls.
      */
-    public static class Builder
-            extends SubscribeOptions.Builder<Builder, PullSubscribeOptions> {
+    public static class Builder extends SubscribeOptions.Builder<Builder, PullSubscribeOptions> {
+
         /**
          * Construct an instance of the builder
          */
-        public Builder() {}
+        public Builder() {
+        }
 
         @Override
         protected Builder getThis() {
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -90,7 +91,7 @@ public class PullSubscribeOptions extends SubscribeOptions {
          */
         @Override
         public PullSubscribeOptions build() {
-            return new PullSubscribeOptions(this);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -105,8 +106,7 @@ public class PullSubscribeOptions extends SubscribeOptions {
          * @param fastBind whether to fast bind or not
          */
         public Builder fastBind(boolean fastBind) {
-            this.fastBind = fastBind;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

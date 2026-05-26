@@ -10,13 +10,16 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.support;
 
 public class ServerVersion implements Comparable<ServerVersion> {
+
     final Integer major;
+
     final Integer minor;
+
     final Integer patch;
+
     final String extra;
 
     public ServerVersion(String v) {
@@ -28,25 +31,21 @@ public class ServerVersion implements Comparable<ServerVersion> {
             String[] split;
             if (v.startsWith("v")) {
                 split = v.substring(1).replace("-", ".").split("\\Q.\\E");
-            }
-            else {
+            } else {
                 split = v.replace("-", ".").split("\\Q.\\E");
             }
             mjr = Integer.parseInt(split[0]);
             mnr = Integer.parseInt(split[1]);
             ptch = split.length < 3 ? -1 : Integer.parseInt(split[2]);
-
             for (int i = 3; i < split.length; i++) {
                 if (i == 3) {
                     xtra = "-" + split[i];
-                }
-                else {
+                } else {
                     //noinspection StringConcatenationInLoop
                     xtra = xtra + "." + split[i];
                 }
             }
-        }
-        catch (NumberFormatException nfe) {
+        } catch (NumberFormatException nfe) {
             mjr = -1;
         }
         if (mjr == -1) {
@@ -54,8 +53,7 @@ public class ServerVersion implements Comparable<ServerVersion> {
             minor = -1;
             patch = -1;
             extra = null;
-        }
-        else {
+        } else {
             major = mjr;
             minor = mnr;
             patch = ptch;
@@ -65,49 +63,31 @@ public class ServerVersion implements Comparable<ServerVersion> {
 
     @Override
     public String toString() {
-        return major + "." + minor + "." + patch + (extra == null ? "" : extra);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int compareTo(ServerVersion o) {
-        int c = major.compareTo(o.major);
-        if (c == 0) {
-            c = minor.compareTo(o.minor);
-            if (c == 0) {
-                c = patch.compareTo(o.patch);
-                if (c == 0) {
-                    if (extra == null) {
-                        c = o.extra == null ? 0 : 1;
-                    }
-                    else if (o.extra == null) {
-                        c = -1;
-                    }
-                    else {
-                        c = extra.compareTo(o.extra);
-                    }
-                }
-            }
-        }
-        return c;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static boolean isNewer(String v, String than) {
-        return new ServerVersion(v).compareTo(new ServerVersion(than)) > 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static boolean isSame(String v, String than) {
-        return new ServerVersion(v).compareTo(new ServerVersion(than)) == 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static boolean isOlder(String v, String than) {
-        return new ServerVersion(v).compareTo(new ServerVersion(than)) < 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static boolean isSameOrOlder(String v, String than) {
-        return new ServerVersion(v).compareTo(new ServerVersion(than)) <= 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static boolean isSameOrNewer(String v, String than) {
-        return new ServerVersion(v).compareTo(new ServerVersion(than)) >= 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

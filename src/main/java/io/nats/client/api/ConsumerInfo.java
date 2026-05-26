@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.Message;
@@ -18,11 +17,9 @@ import io.nats.client.support.DateTimeUtils;
 import io.nats.client.support.JsonValue;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.List;
-
 import static io.nats.client.support.ApiConstants.*;
 import static io.nats.client.support.JsonValueUtils.*;
 import static io.nats.client.support.NatsConstants.UNDEFINED;
@@ -33,20 +30,35 @@ import static io.nats.client.support.NatsConstants.UNDEFINED;
 public class ConsumerInfo extends ApiResponse<ConsumerInfo> {
 
     private final String stream;
+
     private final String name;
+
     private final ConsumerConfiguration configuration;
+
     private final ZonedDateTime created;
+
     private final SequenceInfo delivered;
+
     private final SequenceInfo ackFloor;
+
     private final long numPending;
+
     private final long numWaiting;
+
     private final long numAckPending;
+
     private final long numRedelivered;
+
     private final boolean paused;
+
     private final Duration pauseRemaining;
+
     private final ClusterInfo clusterInfo;
+
     private final boolean pushBound;
+
     private final ZonedDateTime timestamp;
+
     private final List<PriorityGroupState> priorityGroupStates;
 
     /**
@@ -80,30 +92,23 @@ public class ConsumerInfo extends ApiResponse<ConsumerInfo> {
             pushBound = false;
             timestamp = null;
             priorityGroupStates = null;
-        }
-        else {
-            JsonValue jvConfig = nullValueIsError(this.jv, CONFIG, JsonValue.EMPTY_MAP) ;
+        } else {
+            JsonValue jvConfig = nullValueIsError(this.jv, CONFIG, JsonValue.EMPTY_MAP);
             configuration = ConsumerConfiguration.builder().jsonValue(jvConfig).build();
-
             stream = nullStringIsError(this.jv, STREAM_NAME);
             name = nullStringIsError(this.jv, NAME);
             created = nullDateIsError(this.jv, CREATED);
-
             delivered = new SequenceInfo(readObject(this.jv, DELIVERED));
             ackFloor = new SequenceInfo(readObject(this.jv, ACK_FLOOR));
-
             numAckPending = readLong(this.jv, NUM_ACK_PENDING, 0);
             numRedelivered = readLong(this.jv, NUM_REDELIVERED, 0);
             numPending = readLong(this.jv, NUM_PENDING, 0);
             numWaiting = readLong(this.jv, NUM_WAITING, 0);
             paused = readBoolean(this.jv, PAUSED, false);
             pauseRemaining = readNanos(this.jv, PAUSE_REMAINING);
-
             clusterInfo = ClusterInfo.optionalInstance(readValue(this.jv, CLUSTER));
             pushBound = readBoolean(this.jv, PUSH_BOUND);
-
             timestamp = readDate(this.jv, TIMESTAMP);
-
             priorityGroupStates = PriorityGroupState.optionalListOf(readObject(this.jv, PRIORITY_GROUPS));
         }
     }
@@ -114,7 +119,7 @@ public class ConsumerInfo extends ApiResponse<ConsumerInfo> {
      */
     @NonNull
     public ConsumerConfiguration getConsumerConfiguration() {
-        return configuration;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -123,7 +128,7 @@ public class ConsumerInfo extends ApiResponse<ConsumerInfo> {
      */
     @NonNull
     public String getName() {
-        return name;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -132,7 +137,7 @@ public class ConsumerInfo extends ApiResponse<ConsumerInfo> {
      */
     @NonNull
     public String getStreamName() {
-        return stream;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -141,7 +146,7 @@ public class ConsumerInfo extends ApiResponse<ConsumerInfo> {
      */
     @NonNull
     public ZonedDateTime getCreationTime() {
-        return created;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -150,7 +155,7 @@ public class ConsumerInfo extends ApiResponse<ConsumerInfo> {
      */
     @NonNull
     public SequenceInfo getDelivered() {
-        return delivered;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -159,7 +164,7 @@ public class ConsumerInfo extends ApiResponse<ConsumerInfo> {
      */
     @NonNull
     public SequenceInfo getAckFloor() {
-        return ackFloor;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -167,7 +172,7 @@ public class ConsumerInfo extends ApiResponse<ConsumerInfo> {
      * @return the number of pending messages
      */
     public long getNumPending() {
-        return numPending;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -175,7 +180,7 @@ public class ConsumerInfo extends ApiResponse<ConsumerInfo> {
      * @return the number of waiting messages
      */
     public long getNumWaiting() {
-        return numWaiting;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -183,7 +188,7 @@ public class ConsumerInfo extends ApiResponse<ConsumerInfo> {
      * @return the number of messages
      */
     public long getNumAckPending() {
-        return numAckPending;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -191,7 +196,7 @@ public class ConsumerInfo extends ApiResponse<ConsumerInfo> {
      * @return the number of redeliveries
      */
     public long getRedelivered() {
-        return numRedelivered;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -199,7 +204,7 @@ public class ConsumerInfo extends ApiResponse<ConsumerInfo> {
      * @return true if paused
      */
     public boolean getPaused() {
-        return paused;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -208,7 +213,7 @@ public class ConsumerInfo extends ApiResponse<ConsumerInfo> {
      */
     @Nullable
     public Duration getPauseRemaining() {
-        return pauseRemaining;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -217,7 +222,7 @@ public class ConsumerInfo extends ApiResponse<ConsumerInfo> {
      */
     @Nullable
     public ClusterInfo getClusterInfo() {
-        return clusterInfo;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -225,7 +230,7 @@ public class ConsumerInfo extends ApiResponse<ConsumerInfo> {
      * @return the flag
      */
     public boolean isPushBound() {
-        return pushBound;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -234,7 +239,7 @@ public class ConsumerInfo extends ApiResponse<ConsumerInfo> {
      */
     @Nullable
     public ZonedDateTime getTimestamp() {
-        return timestamp;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -243,7 +248,7 @@ public class ConsumerInfo extends ApiResponse<ConsumerInfo> {
      */
     @Nullable
     public List<PriorityGroupState> getPriorityGroupStates() {
-        return priorityGroupStates;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -252,6 +257,6 @@ public class ConsumerInfo extends ApiResponse<ConsumerInfo> {
      * @return the calculated amount
      */
     public long getCalculatedPending() {
-        return numPending + delivered.getConsumerSequence();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

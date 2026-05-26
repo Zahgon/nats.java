@@ -10,19 +10,16 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.support.*;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
 import static io.nats.client.support.ApiConstants.*;
 import static io.nats.client.support.JsonUtils.beginJson;
 import static io.nats.client.support.JsonUtils.endJson;
@@ -37,11 +34,17 @@ import static io.nats.client.support.Validator.nullOrEmpty;
 public class OrderedConsumerConfiguration implements JsonSerializable {
 
     private final List<String> filterSubjects;
+
     private DeliverPolicy deliverPolicy;
+
     private Long startSequence;
+
     private ZonedDateTime startTime;
+
     private ReplayPolicy replayPolicy;
+
     private Boolean headersOnly;
+
     private String consumerNamePrefix;
 
     /**
@@ -75,7 +78,8 @@ public class OrderedConsumerConfiguration implements JsonSerializable {
      */
     public OrderedConsumerConfiguration(@NonNull JsonValue jv) throws JsonParseException {
         this();
-        filterSubjects(readStringList(jv, FILTER_SUBJECTS)); // readStringList won't return null but can return empty
+        // readStringList won't return null but can return empty
+        filterSubjects(readStringList(jv, FILTER_SUBJECTS));
         deliverPolicy(DeliverPolicy.get(readString(jv, DELIVER_POLICY)));
         startSequence(readLong(jv, OPT_START_SEQ, ConsumerConfiguration.LONG_UNSET));
         startTime(readDate(jv, OPT_START_TIME));
@@ -90,18 +94,7 @@ public class OrderedConsumerConfiguration implements JsonSerializable {
     @Override
     @NonNull
     public String toJson() {
-        StringBuilder sb = beginJson();
-        JsonUtils.addStrings(sb, FILTER_SUBJECTS, filterSubjects); // filter will always have at least a GREATER_THAN
-        if (deliverPolicy != null) {
-            JsonUtils.addField(sb, DELIVER_POLICY, deliverPolicy.toString());
-        }
-        JsonUtils.addFieldWhenGtZero(sb, OPT_START_SEQ, startSequence);
-        JsonUtils.addField(sb, OPT_START_TIME, startTime);
-        if (replayPolicy != null) {
-            JsonUtils.addField(sb, REPLAY_POLICY, replayPolicy.toString());
-        }
-        JsonUtils.addFldWhenTrue(sb, HEADERS_ONLY, headersOnly);
-        return endJson(sb).toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -111,7 +104,7 @@ public class OrderedConsumerConfiguration implements JsonSerializable {
      * @return The Builder
      */
     public OrderedConsumerConfiguration filterSubject(String filterSubject) {
-        return nullOrEmpty(filterSubjects) ? _clearFilterSubjects() : _filterSubjects(Collections.singletonList(filterSubject));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -121,7 +114,7 @@ public class OrderedConsumerConfiguration implements JsonSerializable {
      * @return The Builder
      */
     public OrderedConsumerConfiguration filterSubjects(String... filterSubjects) {
-        return nullOrEmpty(filterSubjects) ? _clearFilterSubjects() : _filterSubjects(Arrays.asList(filterSubjects));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -131,7 +124,7 @@ public class OrderedConsumerConfiguration implements JsonSerializable {
      * @return The Builder
      */
     public OrderedConsumerConfiguration filterSubjects(List<String> filterSubjects) {
-        return nullOrEmpty(filterSubjects) ? _clearFilterSubjects() : _filterSubjects(filterSubjects);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private OrderedConsumerConfiguration _clearFilterSubjects() {
@@ -160,8 +153,7 @@ public class OrderedConsumerConfiguration implements JsonSerializable {
      * @return The Builder
      */
     public OrderedConsumerConfiguration deliverPolicy(DeliverPolicy deliverPolicy) {
-        this.deliverPolicy = deliverPolicy;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -170,8 +162,7 @@ public class OrderedConsumerConfiguration implements JsonSerializable {
      * @return The Builder
      */
     public OrderedConsumerConfiguration startSequence(long startSequence) {
-        this.startSequence = startSequence < 1 ? ConsumerConfiguration.LONG_UNSET : startSequence;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -180,8 +171,7 @@ public class OrderedConsumerConfiguration implements JsonSerializable {
      * @return The Builder
      */
     public OrderedConsumerConfiguration startTime(ZonedDateTime startTime) {
-        this.startTime = startTime;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -190,8 +180,7 @@ public class OrderedConsumerConfiguration implements JsonSerializable {
      * @return The Builder
      */
     public OrderedConsumerConfiguration replayPolicy(ReplayPolicy replayPolicy) {
-        this.replayPolicy = replayPolicy;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -201,8 +190,7 @@ public class OrderedConsumerConfiguration implements JsonSerializable {
      * @return The Builder
      */
     public OrderedConsumerConfiguration headersOnly(Boolean headersOnly) {
-        this.headersOnly = headersOnly;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -211,8 +199,7 @@ public class OrderedConsumerConfiguration implements JsonSerializable {
      * @return The Builder
      */
     public OrderedConsumerConfiguration consumerNamePrefix(String consumerNamePrefix) {
-        this.consumerNamePrefix = emptyAsNull(consumerNamePrefix);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -223,7 +210,7 @@ public class OrderedConsumerConfiguration implements JsonSerializable {
      */
     @Nullable
     public String getFilterSubject() {
-        return filterSubjects.size() != 1 ? null : filterSubjects.get(0);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -232,7 +219,7 @@ public class OrderedConsumerConfiguration implements JsonSerializable {
      */
     @NonNull
     public List<String> getFilterSubjects() {
-        return filterSubjects;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -240,7 +227,7 @@ public class OrderedConsumerConfiguration implements JsonSerializable {
      * @return true if there are multiple filter subjects
      */
     public boolean hasMultipleFilterSubjects() {
-        return filterSubjects.size() > 1;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -249,7 +236,7 @@ public class OrderedConsumerConfiguration implements JsonSerializable {
      */
     @Nullable
     public DeliverPolicy getDeliverPolicy() {
-        return deliverPolicy;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -258,7 +245,7 @@ public class OrderedConsumerConfiguration implements JsonSerializable {
      */
     @Nullable
     public Long getStartSequence() {
-        return startSequence;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -267,7 +254,7 @@ public class OrderedConsumerConfiguration implements JsonSerializable {
      */
     @Nullable
     public ZonedDateTime getStartTime() {
-        return startTime;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -276,7 +263,7 @@ public class OrderedConsumerConfiguration implements JsonSerializable {
      */
     @Nullable
     public ReplayPolicy getReplayPolicy() {
-        return replayPolicy;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -285,7 +272,7 @@ public class OrderedConsumerConfiguration implements JsonSerializable {
      */
     @Nullable
     public Boolean getHeadersOnly() {
-        return headersOnly;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -293,7 +280,7 @@ public class OrderedConsumerConfiguration implements JsonSerializable {
      * @return the flow control mode
      */
     public boolean isHeadersOnly() {
-        return headersOnly != null && headersOnly;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -302,6 +289,6 @@ public class OrderedConsumerConfiguration implements JsonSerializable {
      */
     @Nullable
     public String getConsumerNamePrefix() {
-        return consumerNamePrefix;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import io.nats.client.*;
@@ -21,13 +20,11 @@ import io.nats.client.api.PriorityPolicy;
 import io.nats.client.support.Validator;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import java.io.IOException;
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantLock;
-
 import static io.nats.client.BaseConsumeOptions.DEFAULT_EXPIRES_IN_MILLIS;
 import static io.nats.client.BaseConsumeOptions.MIN_EXPIRES_MILLS;
 import static io.nats.client.ConsumeOptions.DEFAULT_CONSUME_OPTIONS;
@@ -36,16 +33,25 @@ import static io.nats.client.ConsumeOptions.DEFAULT_CONSUME_OPTIONS;
  * Implementation of Consumer Context
  */
 public class NatsConsumerContext implements ConsumerContext, SimplifiedSubscriptionMaker {
+
     private final ReentrantLock stateLock;
+
     private final NatsStreamContext streamCtx;
+
     private final boolean ordered;
+
     private final ConsumerConfiguration initialOrderedConsumerConfig;
+
     private final PullSubscribeOptions unorderedBindPso;
 
     private final AtomicReference<ConsumerInfo> cachedConsumerInfo;
+
     private final AtomicReference<String> consumerName;
+
     private final AtomicLong highestSeq;
+
     private final AtomicReference<Dispatcher> defaultDispatcher;
+
     private final AtomicReference<NatsMessageConsumerBase> lastConsumer;
 
     NatsConsumerContext(@NonNull NatsStreamContext sc, @Nullable ConsumerInfo unorderedConsumerInfo, @Nullable OrderedConsumerConfiguration occ) {
@@ -62,26 +68,17 @@ public class NatsConsumerContext implements ConsumerContext, SimplifiedSubscript
             cachedConsumerInfo.set(unorderedConsumerInfo);
             consumerName.set(unorderedConsumerInfo.getName());
             unorderedBindPso = PullSubscribeOptions.fastBind(sc.streamName, unorderedConsumerInfo.getName());
-        }
-        else if (occ != null) {
+        } else if (occ != null) {
             ordered = true;
-            initialOrderedConsumerConfig = ConsumerConfiguration.builder()
-                .name(occ.getConsumerNamePrefix())
-                .filterSubjects(occ.getFilterSubjects())
-                .deliverPolicy(occ.getDeliverPolicy())
-                .startSequence(occ.getStartSequence())
-                .startTime(occ.getStartTime())
-                .replayPolicy(occ.getReplayPolicy())
-                .headersOnly(occ.getHeadersOnly())
-                .build();
+            initialOrderedConsumerConfig = ConsumerConfiguration.builder().name(occ.getConsumerNamePrefix()).filterSubjects(occ.getFilterSubjects()).deliverPolicy(occ.getDeliverPolicy()).startSequence(occ.getStartSequence()).startTime(occ.getStartTime()).replayPolicy(occ.getReplayPolicy()).headersOnly(occ.getHeadersOnly()).build();
             unorderedBindPso = null;
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("Internal Error, must be ordered or unordered.");
         }
     }
 
     static class OrderedPullSubscribeOptionsBuilder extends PullSubscribeOptions.Builder {
+
         OrderedPullSubscribeOptionsBuilder(String streamName, ConsumerConfiguration cc) {
             stream(streamName);
             configuration(cc);
@@ -90,44 +87,8 @@ public class NatsConsumerContext implements ConsumerContext, SimplifiedSubscript
     }
 
     @Override
-    public NatsJetStreamPullSubscription subscribe(@Nullable MessageHandler messageHandler,
-                                                   @Nullable Dispatcher userDispatcher,
-                                                   @SuppressWarnings("ClassEscapesDefinedScope") @Nullable PullMessageManager optionalPmm,
-                                                   @Nullable Long optionalInactiveThreshold)
-        throws IOException, JetStreamApiException
-    {
-        PullSubscribeOptions pso;
-        if (ordered) {
-            NatsMessageConsumerBase lastCon = lastConsumer.get();
-            if (lastCon != null) {
-                highestSeq.set(Math.max(highestSeq.get(), lastCon.pmm.lastStreamSeq));
-            }
-            ConsumerConfiguration cc = streamCtx.js.consumerConfigurationForOrdered(initialOrderedConsumerConfig, highestSeq.get(), null, optionalInactiveThreshold).build();
-            pso = new OrderedPullSubscribeOptionsBuilder(streamCtx.streamName, cc).build();
-        }
-        else {
-            pso = unorderedBindPso;
-        }
-
-        NatsJetStreamPullSubscription sub;
-        if (messageHandler == null) {
-            sub = (NatsJetStreamPullSubscription) streamCtx.js.createSubscription(
-                null, null, pso, null, null, null, false, optionalPmm);
-        }
-        else {
-            Dispatcher d = userDispatcher;
-            if (d == null) {
-                d = defaultDispatcher.get();
-                if (d == null) {
-                    d = streamCtx.js.conn.createDispatcher();
-                    defaultDispatcher.set(d);
-                }
-            }
-            sub = (NatsJetStreamPullSubscription) streamCtx.js.createSubscription(
-                null, null, pso, null, (NatsDispatcher) d, messageHandler, false, optionalPmm);
-        }
-        consumerName.set(sub.getConsumerName());
-        return sub;
+    public NatsJetStreamPullSubscription subscribe(@Nullable MessageHandler messageHandler, @Nullable Dispatcher userDispatcher, @SuppressWarnings("ClassEscapesDefinedScope") @Nullable PullMessageManager optionalPmm, @Nullable Long optionalInactiveThreshold) throws IOException, JetStreamApiException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private void checkState() throws IOException {
@@ -154,7 +115,7 @@ public class NatsConsumerContext implements ConsumerContext, SimplifiedSubscript
      */
     @Override
     public String getConsumerName() {
-        return consumerName.get();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -163,10 +124,7 @@ public class NatsConsumerContext implements ConsumerContext, SimplifiedSubscript
     @Override
     @NonNull
     public ConsumerInfo getConsumerInfo() throws IOException, JetStreamApiException {
-        ConsumerInfo ci = streamCtx.jsm.getConsumerInfo(streamCtx.streamName, consumerName.get());
-        cachedConsumerInfo.set(ci);
-        consumerName.set(ci.getName());
-        return ci;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -175,7 +133,7 @@ public class NatsConsumerContext implements ConsumerContext, SimplifiedSubscript
     @Override
     @Nullable
     public ConsumerInfo getCachedConsumerInfo() {
-        return cachedConsumerInfo.get();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -184,7 +142,7 @@ public class NatsConsumerContext implements ConsumerContext, SimplifiedSubscript
     @Override
     @Nullable
     public Message next() throws IOException, InterruptedException, JetStreamStatusCheckedException, JetStreamApiException {
-        return next(DEFAULT_EXPIRES_IN_MILLIS);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -193,9 +151,7 @@ public class NatsConsumerContext implements ConsumerContext, SimplifiedSubscript
     @Override
     @Nullable
     public Message next(@Nullable Duration maxWait) throws IOException, InterruptedException, JetStreamStatusCheckedException, JetStreamApiException {
-        return maxWait == null || maxWait.isZero() || maxWait.isNegative()
-            ? next(DEFAULT_EXPIRES_IN_MILLIS)
-            : next(maxWait.toMillis());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -204,33 +160,7 @@ public class NatsConsumerContext implements ConsumerContext, SimplifiedSubscript
     @Override
     @Nullable
     public Message next(long maxWaitMillis) throws IOException, InterruptedException, JetStreamStatusCheckedException, JetStreamApiException {
-        if (maxWaitMillis < MIN_EXPIRES_MILLS) {
-            throw new IllegalArgumentException("Max wait must be at least " + MIN_EXPIRES_MILLS + " milliseconds.");
-        }
-
-        NatsNextConsumer nnc = null;
-        try {
-            stateLock.lock();
-            checkState();
-            checkNotPinned("Next");
-
-            try {
-                nnc = new NatsNextConsumer(this, cachedConsumerInfo.get(), maxWaitMillis);
-                trackConsume(nnc); // this has to be done after the nnc is fully set up
-            }
-            catch (Exception e) {
-                if (nnc != null) {
-                    nnc.fullClose();
-                }
-                return null;
-            }
-        }
-        finally {
-            stateLock.unlock();
-        }
-
-        // intentionally outside the lock
-        return nnc.getMessage();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -239,7 +169,7 @@ public class NatsConsumerContext implements ConsumerContext, SimplifiedSubscript
     @Override
     @NonNull
     public FetchConsumer fetchMessages(int maxMessages) throws IOException, JetStreamApiException {
-        return fetch(FetchConsumeOptions.builder().maxMessages(maxMessages).build());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -248,7 +178,7 @@ public class NatsConsumerContext implements ConsumerContext, SimplifiedSubscript
     @Override
     @NonNull
     public FetchConsumer fetchBytes(int maxBytes) throws IOException, JetStreamApiException {
-        return fetch(FetchConsumeOptions.builder().maxBytes(maxBytes).build());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -257,16 +187,7 @@ public class NatsConsumerContext implements ConsumerContext, SimplifiedSubscript
     @Override
     @NonNull
     public FetchConsumer fetch(@NonNull FetchConsumeOptions fetchConsumeOptions) throws IOException, JetStreamApiException {
-        Validator.required(fetchConsumeOptions, "Fetch Consume Options");
-        try {
-            stateLock.lock();
-            checkState();
-            checkNotPinned("Fetch");
-            return (FetchConsumer)trackConsume(new NatsFetchConsumer(this, cachedConsumerInfo.get(), fetchConsumeOptions));
-        }
-        finally {
-            stateLock.unlock();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -275,7 +196,7 @@ public class NatsConsumerContext implements ConsumerContext, SimplifiedSubscript
     @Override
     @NonNull
     public IterableConsumer iterate() throws IOException, JetStreamApiException {
-        return iterate(DEFAULT_CONSUME_OPTIONS);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -284,15 +205,7 @@ public class NatsConsumerContext implements ConsumerContext, SimplifiedSubscript
     @Override
     @NonNull
     public IterableConsumer iterate(@NonNull ConsumeOptions consumeOptions) throws IOException, JetStreamApiException {
-        Validator.required(consumeOptions, "Consume Options");
-        try {
-            stateLock.lock();
-            checkState();
-            return (IterableConsumer) trackConsume(new NatsIterableConsumer(this, cachedConsumerInfo.get(), consumeOptions));
-        }
-        finally {
-            stateLock.unlock();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -301,7 +214,7 @@ public class NatsConsumerContext implements ConsumerContext, SimplifiedSubscript
     @Override
     @NonNull
     public MessageConsumer consume(@NonNull MessageHandler handler) throws IOException, JetStreamApiException {
-        return consume(DEFAULT_CONSUME_OPTIONS, null, handler);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -309,9 +222,8 @@ public class NatsConsumerContext implements ConsumerContext, SimplifiedSubscript
      */
     @Override
     @NonNull
-    public MessageConsumer consume(@Nullable Dispatcher dispatcher,
-                                   @NonNull MessageHandler handler) throws IOException, JetStreamApiException {
-        return consume(DEFAULT_CONSUME_OPTIONS, dispatcher, handler);
+    public MessageConsumer consume(@Nullable Dispatcher dispatcher, @NonNull MessageHandler handler) throws IOException, JetStreamApiException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -319,9 +231,8 @@ public class NatsConsumerContext implements ConsumerContext, SimplifiedSubscript
      */
     @Override
     @NonNull
-    public MessageConsumer consume(@NonNull ConsumeOptions consumeOptions,
-                                   @NonNull MessageHandler handler) throws IOException, JetStreamApiException {
-        return consume(consumeOptions, null, handler);
+    public MessageConsumer consume(@NonNull ConsumeOptions consumeOptions, @NonNull MessageHandler handler) throws IOException, JetStreamApiException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -329,33 +240,12 @@ public class NatsConsumerContext implements ConsumerContext, SimplifiedSubscript
      */
     @Override
     @NonNull
-    public MessageConsumer consume(@NonNull ConsumeOptions consumeOptions,
-                                   @Nullable Dispatcher userDispatcher,
-                                   @NonNull MessageHandler handler)
-        throws IOException, JetStreamApiException
-    {
-        Validator.required(consumeOptions, "Consume Options");
-        Validator.required(handler, "Message Handler");
-        try {
-            stateLock.lock();
-            checkState();
-            return trackConsume(new NatsMessageConsumer(this, cachedConsumerInfo.get(), consumeOptions, userDispatcher, handler));
-        }
-        finally {
-            stateLock.unlock();
-        }
+    public MessageConsumer consume(@NonNull ConsumeOptions consumeOptions, @Nullable Dispatcher userDispatcher, @NonNull MessageHandler handler) throws IOException, JetStreamApiException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean unpin(String group) throws IOException, JetStreamApiException {
-        String name = consumerName.get();
-        if (name == null) {
-            ConsumerInfo ci = cachedConsumerInfo.get();
-            if (ci == null) {
-                ci = getConsumerInfo();
-            }
-            name = ci.getName();
-        }
-        return streamCtx.jsm.unpinConsumer(streamCtx.streamName, name, group);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

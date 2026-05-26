@@ -17,7 +17,6 @@ import io.nats.client.support.JsonUtils;
 import io.nats.client.support.JsonValue;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import static io.nats.client.support.ApiConstants.LINK;
 import static io.nats.client.support.ApiConstants.MAX_CHUNK_SIZE;
 import static io.nats.client.support.JsonUtils.beginJson;
@@ -31,6 +30,7 @@ import static io.nats.client.support.JsonValueUtils.readValue;
 public class ObjectMetaOptions implements JsonSerializable {
 
     private final ObjectLink link;
+
     private final int chunkSize;
 
     private ObjectMetaOptions(Builder b) {
@@ -46,10 +46,7 @@ public class ObjectMetaOptions implements JsonSerializable {
     @Override
     @NonNull
     public String toJson() {
-        StringBuilder sb = beginJson();
-        JsonUtils.addField(sb, LINK, link);
-        JsonUtils.addField(sb, MAX_CHUNK_SIZE, chunkSize);
-        return endJson(sb).toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -57,7 +54,7 @@ public class ObjectMetaOptions implements JsonSerializable {
      * @return true if it has data
      */
     boolean hasData() {
-        return link != null || chunkSize > 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -66,7 +63,7 @@ public class ObjectMetaOptions implements JsonSerializable {
      */
     @Nullable
     public ObjectLink getLink() {
-        return link;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -74,28 +71,31 @@ public class ObjectMetaOptions implements JsonSerializable {
      * @return the chunk size in bytes
      */
     public int getChunkSize() {
-        return chunkSize;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     static Builder builder() {
-        return new Builder();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     static Builder builder(ObjectMetaOptions om) {
-        return new Builder(om);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * The builder for ObjectMetaOptions
      */
     public static class Builder {
+
         ObjectLink link;
+
         int chunkSize;
 
         /**
          * Construct an ObjectMetaOptions.Builder
          */
-        public Builder() {}
+        public Builder() {
+        }
 
         /**
          * Construct an ObjectMetaOptions.Builder as a copy of existing options
@@ -112,8 +112,7 @@ public class ObjectMetaOptions implements JsonSerializable {
          * @return the builder
          */
         public Builder link(ObjectLink link) {
-            this.link = link;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -122,8 +121,7 @@ public class ObjectMetaOptions implements JsonSerializable {
          * @return the builder
          */
         public Builder chunkSize(int chunkSize) {
-            this.chunkSize = chunkSize;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -131,33 +129,22 @@ public class ObjectMetaOptions implements JsonSerializable {
          * @return the ObjectMetaOptions instance
          */
         public ObjectMetaOptions build() {
-            return new ObjectMetaOptions(this);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ObjectMetaOptions options = (ObjectMetaOptions) o;
-
-        if (chunkSize != options.chunkSize) return false;
-        return link != null ? link.equals(options.link) : options.link == null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int hashCode() {
-        int result = link != null ? link.hashCode() : 0;
-        result = 31 * result + chunkSize;
-        return result;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return "ObjectMetaOptions{" +
-            "link=" + link +
-            ", chunkSize=" + chunkSize +
-            '}';
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

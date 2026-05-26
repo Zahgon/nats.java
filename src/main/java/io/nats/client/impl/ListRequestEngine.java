@@ -10,15 +10,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.impl;
 
 import io.nats.client.JetStreamApiException;
 import io.nats.client.Message;
 import io.nats.client.api.ApiResponse;
-
 import java.nio.charset.StandardCharsets;
-
 import static io.nats.client.support.ApiConstants.*;
 import static io.nats.client.support.JsonValueUtils.readInteger;
 
@@ -26,8 +23,11 @@ class ListRequestEngine extends ApiResponse<ListRequestEngine> {
 
     private static final String OFFSET_JSON_START = "{\"offset\":";
 
-    protected int total = Integer.MAX_VALUE; // so always has the first "at least one more"
+    // so always has the first "at least one more"
+    protected int total = Integer.MAX_VALUE;
+
     protected int limit = 0;
+
     protected int lastOffset = 0;
 
     ListRequestEngine() {
@@ -46,7 +46,7 @@ class ListRequestEngine extends ApiResponse<ListRequestEngine> {
     }
 
     boolean hasMore() {
-        return total > nextOffset();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private byte[] noFilterJson() {
@@ -54,21 +54,14 @@ class ListRequestEngine extends ApiResponse<ListRequestEngine> {
     }
 
     byte[] internalNextJson() {
-        return hasMore() ? noFilterJson() : null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     byte[] internalNextJson(String fieldName, String filter) {
-        if (hasMore()) {
-            if (filter == null) {
-                return noFilterJson();
-            }
-            return (OFFSET_JSON_START + nextOffset()
-                    + ",\"" + fieldName + "\":\"" + filter + "\"}").getBytes(StandardCharsets.UTF_8);
-        }
-        return null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     int nextOffset() {
-        return lastOffset + limit;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

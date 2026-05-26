@@ -10,13 +10,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.support.JsonSerializable;
 import io.nats.client.support.JsonUtils;
 import org.jspecify.annotations.NonNull;
-
 import static io.nats.client.support.ApiConstants.*;
 import static io.nats.client.support.JsonUtils.*;
 
@@ -24,10 +22,10 @@ import static io.nats.client.support.JsonUtils.*;
  * Object used to make a request to create a consumer. Used Internally
  */
 public class ConsumerCreateRequest implements JsonSerializable {
+
     public enum Action {
-        Create("create"),
-        Update("update"),
-        CreateOrUpdate(null);
+
+        Create("create"), Update("update"), CreateOrUpdate(null);
 
         public final String actionText;
 
@@ -37,7 +35,9 @@ public class ConsumerCreateRequest implements JsonSerializable {
     }
 
     private final String streamName;
+
     private final ConsumerConfiguration config;
+
     private final Action action;
 
     public ConsumerCreateRequest(String streamName, ConsumerConfiguration config) {
@@ -54,36 +54,27 @@ public class ConsumerCreateRequest implements JsonSerializable {
 
     @NonNull
     public String getStreamName() {
-        return streamName;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @NonNull
     public ConsumerConfiguration getConfig() {
-        return config;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @NonNull
     public Action getAction() {
-        return action;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     @NonNull
     public String toJson() {
-        StringBuilder sb = beginJson();
-
-        addField(sb, STREAM_NAME, streamName);
-        JsonUtils.addField(sb, ACTION, action.actionText);
-        JsonUtils.addField(sb, CONFIG, config);
-
-        return endJson(sb).toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return "ConsumerCreateRequest{" +
-                "streamName='" + streamName + '\'' +
-                ", " + config +
-                '}';
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

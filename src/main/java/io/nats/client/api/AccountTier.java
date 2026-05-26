@@ -10,12 +10,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package io.nats.client.api;
 
 import io.nats.client.support.JsonValue;
 import org.jspecify.annotations.NonNull;
-
 import static io.nats.client.support.ApiConstants.*;
 import static io.nats.client.support.JsonValueUtils.*;
 
@@ -25,11 +23,17 @@ import static io.nats.client.support.JsonValueUtils.*;
 public class AccountTier {
 
     private final long memory;
+
     private final long storage;
+
     private final long reservedMemory;
+
     private final long reservedStorage;
+
     private final int streams;
+
     private final int consumers;
+
     private final AccountLimits limits;
 
     AccountTier(JsonValue vAccountTier) {
@@ -47,7 +51,7 @@ public class AccountTier {
      * @return the memory storage in bytes
      */
     public long getMemoryBytes() {
-        return memory;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -55,7 +59,7 @@ public class AccountTier {
      * @return the storage in bytes
      */
     public long getStorageBytes() {
-        return storage;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -63,7 +67,7 @@ public class AccountTier {
      * @return the memory usage in bytes
      */
     public long getReservedMemory() {
-        return (int)reservedMemory;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -71,7 +75,7 @@ public class AccountTier {
      * @return the disk usage in bytes
      */
     public long getReservedStorage() {
-        return reservedStorage;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -79,7 +83,7 @@ public class AccountTier {
      * @return the memory usage in bytes
      */
     public long getReservedMemoryBytes() {
-        return reservedMemory;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -87,7 +91,7 @@ public class AccountTier {
      * @return the disk usage in bytes
      */
     public long getReservedStorageBytes() {
-        return reservedStorage;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -95,7 +99,7 @@ public class AccountTier {
      * @return the number of streams
      */
     public int getStreams() {
-        return streams;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -103,7 +107,7 @@ public class AccountTier {
      * @return the number of consumers
      */
     public int getConsumers() {
-        return consumers;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -112,7 +116,7 @@ public class AccountTier {
      */
     @NonNull
     public AccountLimits getLimits() {
-        return limits;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -122,7 +126,7 @@ public class AccountTier {
      */
     @Deprecated
     public int getMemory() {
-        return (int)memory;
+        return (int) memory;
     }
 
     /**
@@ -132,6 +136,6 @@ public class AccountTier {
      */
     @Deprecated
     public int getStorage() {
-        return (int)storage;
+        return (int) storage;
     }
 }
